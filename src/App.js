@@ -3,22 +3,27 @@ import logo from "./logo.svg";
 import "./App.css";
 import store from "./store";
 import { Provider } from "react-redux";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import Login from "./components/Login";
+import Market from "./components/Market";
+import Account from "./components/Account";
 
 class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <div className="App">
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <p>
-              Edit <code>src/App.js</code> and save to reload.
-            </p>
-            <Login />
-          </header>
-        </div>
+        <BrowserRouter>
+          <div className="App">
+            <div className="container">
+              <Switch>
+                <Route exact path="/" component={Market} />
+                <Route path="/market/:symbol" component={Market} />
+                <Route path="/account" component={Account} />
+                <Route component={Market} />
+              </Switch>
+            </div>
+          </div>
+        </BrowserRouter>
       </Provider>
     );
   }
