@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./Menu.scss";
-import { Link, NavLink, withRouter } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 // import { connect } from "react-redux";
 
 const logo = require("../images/logo.svg");
@@ -33,7 +33,7 @@ class Menu extends Component {
                   <span>Odin Trade</span>
                 </Link>
 
-                <div className="items">
+                <div className="items d-none d-md-flex">
                   {this.items.map((item, index) => (
                     <NavLink
                       key={index}
@@ -63,4 +63,4 @@ class Menu extends Component {
 //  getChartData
 // };
 
-export default withRouter(Menu);
+export default Menu;

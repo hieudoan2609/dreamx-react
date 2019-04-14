@@ -17,12 +17,14 @@ class App extends Component {
 
           <div className="container">
             <div className="row">
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <Route path="/market/:symbol" component={Market} />
-                <Route path="/account" component={Account} />
-                <Route component={NotFound} />
-              </Switch>
+              <div className="col-12">
+                <Switch>
+                  <Route exact path="/" component={Home} />
+                  <Route path="/market/:symbol" component={Market} />
+                  <Route path="/account" component={Account} />
+                  <Route component={NotFound} />
+                </Switch>
+              </div>
             </div>
           </div>
         </div>
