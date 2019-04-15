@@ -9,7 +9,7 @@ import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 import Menu from "./components/Menu";
 import Loading from "./components/Loading";
-import { toggleTheme, loadTheme } from "./actions";
+import { toggleTheme, loadTheme, initializeApp } from "./actions";
 
 const logo = require("./images/logo.svg");
 
@@ -31,6 +31,7 @@ const navItems = [
 class App extends Component {
   componentWillMount = () => {
     this.props.loadTheme();
+    this.props.initializeApp();
   };
 
   render() {
@@ -74,7 +75,8 @@ const mapStateToProps = ({ app }) => {
 
 const mapActionsToProps = {
   toggleTheme,
-  loadTheme
+  loadTheme,
+  initializeApp
 };
 
 export default connect(

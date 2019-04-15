@@ -1,13 +1,18 @@
+$dark-primary: #EA6C2C;
+$light-text: rgba(0, 0, 0, 0.7);
 $light-bg: #f8f9fa;
 $dark-bg: #232d44;
+$dark-text: rgba(255, 255, 255, 0.7);
 
 .App {
   min-height: 100vh;
   &.light {
     background-color: $light-bg;
+    color: $light-text;
   }
   &.dark {
-    background-color: $dark-bg
+    background-color: $dark-bg;
+    color: $dark-text;
   }
 }
 

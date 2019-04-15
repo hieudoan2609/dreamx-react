@@ -1,4 +1,4 @@
-import { APP_TOGGLE_THEME } from "../actions/types";
+import { APP_TOGGLE_THEME, APP_INITIALIZE } from "../actions/types";
 
 export const toggleTheme = () => {
   return async (dispatch, getState) => {
@@ -24,4 +24,10 @@ export const loadTheme = () => {
   };
 };
 
-// export const initializeApp = () => {}
+export const initializeApp = () => {
+  return async dispatch => {
+    dispatch({
+      type: APP_INITIALIZE
+    });
+  };
+};

@@ -6,7 +6,12 @@ import "./Loading.scss";
 class Loading extends Component {
   render() {
     return (
-      <div className={`Loading ${this.props.type} ${this.props.theme}`}>
+      <div
+        className={`Loading 
+          ${this.props.type} 
+          ${this.props.theme} 
+          ${this.props.active ? "active" : ""}`}
+      >
         <ion-icon name="hourglass" />
       </div>
     );
