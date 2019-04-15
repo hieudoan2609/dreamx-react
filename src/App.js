@@ -31,7 +31,7 @@ const navItems = [
 class App extends Component {
   componentWillMount = () => {
     this.props.loadTheme();
-    this.props.initializeApp();
+    // this.props.initializeApp();
   };
 
   render() {

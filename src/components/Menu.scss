@@ -1,3 +1,4 @@
+$shadow: 0px 5px 15px rgba(1, 1, 1, 0.1);
 $inactive-grey: rgba(0, 0, 0, 0.54);
 $primary-blue: #303f9f;
 $background-grey: #f5f5f5;
@@ -6,11 +7,15 @@ $dark-text: hsla(0,0%,100%,.7);
 $dark-primary: #EA6C2C;
 
 .Menu {
-  position: relative;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
   z-index: 10000;
   display: flex;
   align-items: center;
   flex: 1;
+  box-shadow: $shadow;
   .container {
     .wrapper {
       display: flex;
@@ -100,6 +105,7 @@ $dark-primary: #EA6C2C;
       }
     }
     ion-icon[name="bulb"] {
+      line-height: 0;
       font-size: 24px;
       cursor: pointer;
       color: $dark-text;

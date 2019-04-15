@@ -13,13 +13,14 @@ $orange: #EA6C2C;
   top: 0px;
   left: 0px;
   right: 0px;
-  bottom: 0px;
+  height: 100vh;
   z-index: 9999;
   display: none;
   justify-content: center;
   align-items: center;
   ion-icon[name="hourglass"] {
     animation: spin 500ms ease-in-out infinite;
+    line-height: 0;
   }
   &.active {
     display: flex;
