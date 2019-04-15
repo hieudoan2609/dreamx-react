@@ -1,14 +1,32 @@
-import { APP_TOGGLE_THEME, APP_INITIALIZE } from "../actions/types";
+import {
+  APP_TOGGLE_THEME,
+  APP_INITIALIZE,
+  APP_LOADING,
+  APP_LOADED
+} from "../actions/types";
 
 const INITIAL_STATE = {
   theme: "dark",
-  loading: true
+  loading: true,
+  contractAddress: "",
+  networkId: 0,
+  networkName: ""
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case APP_INITIALIZE:
+    case APP_LOADED:
       return { ...state, loading: false };
+    case APP_LOADING:
+      return { ...state, loading: true };
+    case APP_INITIALIZE:
+      return {
+        ...state,
+        contractAddress: action.payload.address,
+        networkId: action.payload.networkId,
+        networkName: action.payload.networkName,
+        loading: false
+      };
     case APP_TOGGLE_THEME:
       return { ...state, theme: action.payload.theme };
     default:

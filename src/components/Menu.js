@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import "./Menu.scss";
 import { Link, NavLink, withRouter } from "react-router-dom";
 // import { connect } from "react-redux";
+
+import "./Menu.scss";
 
 class Menu extends Component {
   state = {

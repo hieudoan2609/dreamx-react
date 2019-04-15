@@ -1,9 +1,15 @@
 import React, { Component } from "react";
 // import { connect } from "react-redux";
 
+import Login from "./Login";
+
 class Account extends Component {
   render() {
-    return <p>Account</p>;
+    return (
+      <div className="Account">
+        <Login />
+      </div>
+    );
   }
 }
 
