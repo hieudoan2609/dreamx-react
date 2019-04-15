@@ -18,6 +18,9 @@ $orange: #EA6C2C;
   display: flex;
   justify-content: center;
   align-items: center;
+  ion-icon[name="hourglass"] {
+    animation: spin 500ms ease-in-out infinite;
+  }
   &.dark {
     background-color: $dark-bg;
     ion-icon[name="hourglass"] {
@@ -32,4 +35,13 @@ $orange: #EA6C2C;
       color: $inactive-grey;
     }
   }
+}
+
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(180deg);
+    }
 }
