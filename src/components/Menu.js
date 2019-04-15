@@ -1,14 +1,30 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import "./Menu.scss";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, withRouter } from "react-router-dom";
 // import { connect } from "react-redux";
 
 class Menu extends Component {
+  state = {
+    mobileMenuHidden: true
+  };
+
+  toggleMobileMenu = () => {
+    this.setState({ mobileMenuHidden: !this.state.mobileMenuHidden });
+  };
+
+  componentDidUpdate(prevProps) {
+    if (this.props.location.pathname !== prevProps.location.pathname) {
+      this.setState({ mobileMenuHidden: true });
+    }
+  }
+
   render() {
+    const mobileMenuHiddenClass = this.state.mobileMenuHidden ? "hidden" : "";
+
     return (
       <div className={`Menu ${this.props.theme}`}>
-        <div className="container">
+        <div className="desktop container">
           <div className="row">
             <div className="col-12">
               <div className="wrapper">
@@ -33,11 +49,37 @@ class Menu extends Component {
                   </div>
                 </div>
 
-                <div className="pull-right">
+                <div className="pull-right d-none d-md-flex">
                   <ion-icon name="bulb" onClick={this.props.toggleTheme} />
+                </div>
+
+                <div className="pull-right d-flex d-md-none">
+                  <ion-icon name="menu" onClick={this.toggleMobileMenu} />
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className={`mobile ${mobileMenuHiddenClass}`}>
+          <div className="items">
+            {this.props.navItems.map((item, index) => (
+              <NavLink
+                key={index}
+                to={item.pathname}
+                className="item"
+                activeClassName="active"
+                exact={true}
+              >
+                {item.label}
+              </NavLink>
+            ))}
+
+            <ion-icon
+              className="item"
+              name="bulb"
+              onClick={this.props.toggleTheme}
+            />
           </div>
         </div>
       </div>
@@ -59,4 +101,4 @@ Menu.propTypes = {
   toggleTheme: PropTypes.func.isRequired
 };
 
-export default Menu;
+export default withRouter(Menu);
