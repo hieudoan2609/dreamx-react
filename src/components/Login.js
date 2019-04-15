@@ -6,8 +6,6 @@ import { accountLogin, accountLogout } from "../actions";
 import "./Login.scss";
 import Button from "./Button";
 
-const metamask = require("../images/metamask-icon.svg");
-
 class Login extends Component {
   render() {
     if (this.props.account.loading) {
@@ -75,8 +73,8 @@ class Login extends Component {
           <div className="card-body">
             <h5 className="card-title">Wrong network detected</h5>
             <p className="card-text">
-              Please set MetaMask's network to {this.props.exchange.networkName}{" "}
-              and try again.
+              Please set MetaMask's network to {this.props.app.networkName} and
+              try again.
             </p>
             <Button
               onClick={this.props.accountLogin}

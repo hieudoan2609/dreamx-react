@@ -15,6 +15,7 @@ $dark-secondary-shade: #1f283d;
   box-shadow: $shadow;
   border: 0px;
   box-sizing: border-box;
+  min-height: 200px;
   &.light {
     background-color: $light-secondary-tint;
     color: $light-text;
@@ -22,5 +23,11 @@ $dark-secondary-shade: #1f283d;
   &.dark {
     background-color: $dark-secondary-tint;
     color: $dark-text;
+  }
+  .card-body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 }

@@ -13,7 +13,7 @@ export const accountLogin = () => {
       type: ACCOUNT_LOADING
     });
 
-    const { exchange } = getState();
+    const { app } = getState();
 
     if (!window.ethereum || (window.ethereum && !window.ethereum.isMetaMask)) {
       dispatch({
@@ -22,7 +22,7 @@ export const accountLogin = () => {
       return;
     }
 
-    if (window.ethereum.networkVersion !== exchange.networkId) {
+    if (window.ethereum.networkVersion !== app.networkId) {
       dispatch({
         type: ACCOUNT_METAMASK_WRONGNETWORK
       });

@@ -7,7 +7,12 @@ import "./Button.scss";
 class Button extends Component {
   render() {
     return (
-      <div className={`Button ${this.props.theme}`}>{this.props.children}</div>
+      <div
+        onClick={this.props.onClick}
+        className={`Button ${this.props.theme}`}
+      >
+        {this.props.children}
+      </div>
     );
   }
 }
