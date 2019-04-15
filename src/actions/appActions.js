@@ -23,3 +23,5 @@ export const loadTheme = () => {
     }
   };
 };
+
+// export const initializeApp = () => {}

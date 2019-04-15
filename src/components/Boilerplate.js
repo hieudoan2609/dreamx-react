@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 // import { connect } from "react-redux";
+// import PropTypes from "prop-types";
 
 class Boilerplate extends Component {
   render() {
@@ -13,6 +14,12 @@ class Boilerplate extends Component {
 
 // const mapActionsToProps = {
 //  getChartData
+// };
+
+// Boilerplate.propTypes = {
+//   logo: PropTypes.string.isRequired,
+//   navItems: PropTypes.array.isRequired, // [ { label, pathname }, ... ]
+//   toggleTheme: PropTypes.func.isRequired
 // };
 
 export default Boilerplate;

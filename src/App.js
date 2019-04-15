@@ -8,6 +8,7 @@ import Account from "./components/Account";
 import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 import Menu from "./components/Menu";
+import Loading from "./components/Loading";
 import { toggleTheme, loadTheme } from "./actions";
 
 const logo = require("./images/logo.svg");
@@ -40,11 +41,18 @@ class App extends Component {
             logo={logo}
             navItems={navItems}
             toggleTheme={this.props.toggleTheme}
+            theme={this.props.app.theme}
           />
 
           <div className="container">
             <div className="row">
               <div className="col-12">
+                <Loading
+                  active={this.props.app.loading}
+                  type="fixed"
+                  theme={this.props.app.theme}
+                />
+
                 <Switch>
                   <Route exact path="/" component={Home} />
                   <Route path="/market/:symbol" component={Market} />

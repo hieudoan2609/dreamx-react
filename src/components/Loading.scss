@@ -1,0 +1,35 @@
+$light-bg: #f8f9fa;
+$dark-bg: #232d44;
+$inactive-grey: rgba(0, 0, 0, 0.54);
+$orange: #EA6C2C;
+
+.Loading {
+  &.fixed {
+    position: fixed;
+  }
+  &.absolute {
+    position: absolute;
+  }
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &.dark {
+    background-color: $dark-bg;
+    ion-icon[name="hourglass"] {
+      font-size: 40px;
+      color: $orange;
+    }
+  }
+  &.light {
+    background-color: $light-bg;
+    ion-icon[name="hourglass"] {
+      font-size: 40px;
+      color: $inactive-grey;
+    }
+  }
+}

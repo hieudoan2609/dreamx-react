@@ -1,7 +1,8 @@
 import { APP_TOGGLE_THEME } from "../actions/types";
 
 const INITIAL_STATE = {
-  theme: "light"
+  theme: "dark",
+  loading: true
 };
 
 export default (state = INITIAL_STATE, action) => {
