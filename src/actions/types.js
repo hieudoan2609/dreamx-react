@@ -1,1 +1,3 @@
 export const ACCOUNT_LOGIN = "ACCOUNT_LOGIN";
+
+export const APP_TOGGLE_THEME = "APP_TOGGLE_THEME";

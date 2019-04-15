@@ -1,26 +1,10 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import "./Menu.scss";
 import { Link, NavLink } from "react-router-dom";
 // import { connect } from "react-redux";
 
-const logo = require("../images/logo.svg");
-
 class Menu extends Component {
-  items = [
-    {
-      label: "Home",
-      pathname: "/"
-    },
-    {
-      label: "Market",
-      pathname: "/market/ETH_NJA"
-    },
-    {
-      label: "Account",
-      pathname: "/account"
-    }
-  ];
-
   render() {
     return (
       <div className="menu bg-white">
@@ -28,23 +12,29 @@ class Menu extends Component {
           <div className="row">
             <div className="col-12">
               <div className="wrapper">
-                <Link to="/" className="brand">
-                  <img width={20} src={logo} alt="" />
-                  <span>Odin Trade</span>
-                </Link>
+                <div className="pull-left">
+                  <Link to="/" className="brand">
+                    <img width={20} src={this.props.logo} alt="" />
+                    <span>Odin Trade</span>
+                  </Link>
 
-                <div className="items d-none d-md-flex">
-                  {this.items.map((item, index) => (
-                    <NavLink
-                      key={index}
-                      to={item.pathname}
-                      className="item"
-                      activeClassName="active"
-                      exact={true}
-                    >
-                      {item.label}
-                    </NavLink>
-                  ))}
+                  <div className="items d-none d-md-flex">
+                    {this.props.navItems.map((item, index) => (
+                      <NavLink
+                        key={index}
+                        to={item.pathname}
+                        className="item"
+                        activeClassName="active"
+                        exact={true}
+                      >
+                        {item.label}
+                      </NavLink>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pull-right">
+                  <ion-icon name="bulb" onClick={this.props.toggleTheme} />
                 </div>
               </div>
             </div>
@@ -59,8 +49,14 @@ class Menu extends Component {
 //  return { chart };
 // };
 
-// const mapDispatchToProps = {
+// const mapActionsToProps = {
 //  getChartData
 // };
+
+Menu.propTypes = {
+  logo: PropTypes.string.isRequired,
+  navItems: PropTypes.array.isRequired, // [ { label, pathname }, ... ]
+  toggleTheme: PropTypes.func.isRequired
+};
 
 export default Menu;

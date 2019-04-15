@@ -1,5 +1,14 @@
+$light-bg: #f8f9fa;
+$dark-bg: #232d44;
+
 .App {
   min-height: 100vh;
+  &.light {
+    background-color: $light-bg;
+  }
+  &.dark {
+    background-color: $dark-bg
+  }
 }
 
 .App-logo {
