@@ -7,7 +7,7 @@ import {
   ACCOUNT_LOADED
 } from "../actions/types";
 
-export const accountLogin = () => {
+export const accountLoginAsync = () => {
   return async (dispatch, getState) => {
     dispatch({
       type: ACCOUNT_LOADING

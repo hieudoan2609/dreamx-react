@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Loading from "./Loading";
 
-import { accountLogin, accountLogout } from "../actions";
+import { accountLoginAsync, accountLogout } from "../actions";
 import "./Login.scss";
 import Button from "./Button";
 
@@ -77,7 +77,7 @@ class Login extends Component {
               try again.
             </p>
             <Button
-              onClick={this.props.accountLogin}
+              onClick={this.props.accountLoginAsync}
               theme={this.props.app.theme}
             >
               Try again
@@ -95,7 +95,7 @@ class Login extends Component {
             Connect to MetaMask to manage your account.
           </p>
           <Button
-            onClick={this.props.accountLogin}
+            onClick={this.props.accountLoginAsync}
             theme={this.props.app.theme}
           >
             Connect
@@ -111,7 +111,7 @@ const mapStateToProps = ({ account, app }) => {
 };
 
 const mapActionsToProps = {
-  accountLogin,
+  accountLoginAsync,
   accountLogout
 };
 

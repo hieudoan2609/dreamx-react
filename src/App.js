@@ -9,7 +9,12 @@ import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 import Menu from "./components/Menu";
 import Loading from "./components/Loading";
-import { toggleTheme, loadTheme, initializeAppAsync } from "./actions";
+import {
+  toggleTheme,
+  loadTheme,
+  initializeAppAsync,
+  accountLoginAsync
+} from "./actions";
 
 const logo = require("./images/logo.svg");
 
@@ -32,6 +37,7 @@ class App extends Component {
   componentWillMount = async () => {
     this.props.loadTheme();
     await this.props.initializeAppAsync();
+    await this.props.accountLoginAsync();
   };
 
   render() {
@@ -76,7 +82,8 @@ const mapStateToProps = ({ app }) => {
 const mapActionsToProps = {
   toggleTheme,
   loadTheme,
-  initializeAppAsync
+  initializeAppAsync,
+  accountLoginAsync
 };
 
 export default connect(
