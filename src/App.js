@@ -9,7 +9,7 @@ import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 import Menu from "./components/Menu";
 import Loading from "./components/Loading";
-import { toggleTheme, loadTheme, initializeApp } from "./actions";
+import { toggleTheme, loadTheme, initializeAppAsync } from "./actions";
 
 const logo = require("./images/logo.svg");
 
@@ -29,9 +29,9 @@ const navItems = [
 ];
 
 class App extends Component {
-  componentWillMount = () => {
+  componentWillMount = async () => {
     this.props.loadTheme();
-    this.props.initializeApp();
+    await this.props.initializeAppAsync();
   };
 
   render() {
@@ -76,7 +76,7 @@ const mapStateToProps = ({ app }) => {
 const mapActionsToProps = {
   toggleTheme,
   loadTheme,
-  initializeApp
+  initializeAppAsync
 };
 
 export default connect(

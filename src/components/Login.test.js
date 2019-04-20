@@ -147,3 +147,25 @@ it("when log out", async () => {
 
   expect(container).toMatchSnapshot();
 });
+
+// it.only("persists login state", async () => {
+//   global.ethereum = {
+//     networkVersion: "1",
+//     isMetaMask: true,
+//     enable: jest.fn(() => {
+//       return new Promise((resolve, reject) => {
+//         resolve(["0x4e30dba9762aba125f5ab81647edebff9f9df7a7"]);
+//       });
+//     })
+//   };
+
+//   const { getByText, container } = render(
+//     <Provider store={store}>
+//       <Login />
+//     </Provider>
+//   );
+
+//   expect(await waitForElement(() => getByText(/Welcome!/i))).toBeTruthy();
+
+//   // expect(container).toMatchSnapshot();
+// });

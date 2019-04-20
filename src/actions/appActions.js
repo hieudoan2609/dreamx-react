@@ -27,7 +27,7 @@ export const loadTheme = () => {
   };
 };
 
-export const initializeApp = () => {
+export const initializeAppAsync = () => {
   return async dispatch => {
     const res = await axios.get(
       "https://api.odin.trade/return_contract_address"
