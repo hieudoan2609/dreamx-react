@@ -5,7 +5,6 @@ $dark-bg: #232d44;
 $dark-text: rgba(255, 255, 255, 0.7);
 
 .App {
-  min-height: 2000px;
   &.light {
     background-color: $light-bg;
     color: $light-text;
