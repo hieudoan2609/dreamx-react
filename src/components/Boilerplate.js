@@ -22,4 +22,9 @@ class Boilerplate extends Component {
 //   toggleTheme: PropTypes.func.isRequired
 // };
 
+// Boilerplate.propTypes = {
+//   navItems: PropTypes.array.isRequired, // [ { label, pathname }, ... ]
+//   toggleTheme: PropTypes.func.isRequired
+// };
+
 export default Boilerplate;

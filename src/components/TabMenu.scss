@@ -1,0 +1,39 @@
+$shadow: 0px 5px 15px rgba(1, 1, 1, 0.1);
+$light-text: rgba(0, 0, 0, 0.54);
+$light-primary: #303f9f;
+$light-secondary: #f5f5f5;
+$light-secondary-tint: white;
+$light-secondary-shade: #dcdcdc;
+$dark-text: hsla(0,0%,100%,.7);
+$dark-primary: #EA6C2C;
+$dark-secondary: #232d44;
+$dark-secondary-tint: #384256;
+$dark-secondary-shade: #1f283d;
+
+.TabMenu {
+  display: flex;
+  .item {
+    flex: 1;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    padding: 15px 0px;
+    box-sizing: border-box;
+    cursor: pointer;
+    user-select: none;
+  }
+  &.light {
+    .item {
+      &.active {
+        border-bottom: 1px solid $light-primary;
+      }
+    }
+  }
+  &.dark {
+    .item {
+      &.active {
+        border-bottom: 1px solid $dark-primary;
+      }
+    }
+  }
+}

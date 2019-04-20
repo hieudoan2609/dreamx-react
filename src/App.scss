@@ -1,17 +1,23 @@
+$shadow: 0px 5px 15px rgba(1, 1, 1, 0.1);
+$light-text: rgba(0, 0, 0, 0.54);
+$light-primary: #303f9f;
+$light-secondary: #f5f5f5;
+$light-secondary-tint: white;
+$light-secondary-shade: #dcdcdc;
+$dark-text: hsla(0,0%,100%,.7);
 $dark-primary: #EA6C2C;
-$light-text: rgba(0, 0, 0, 0.7);
-$light-bg: #f8f9fa;
-$dark-bg: #232d44;
-$dark-text: rgba(255, 255, 255, 0.7);
+$dark-secondary: #232d44;
+$dark-secondary-tint: #384256;
+$dark-secondary-shade: #1f283d;
 
 .App {
   min-height: 100vh;
   &.light {
-    background-color: $light-bg;
+    background-color: $light-secondary;
     color: $light-text;
   }
   &.dark {
-    background-color: $dark-bg;
+    background-color: $dark-secondary;
     color: $dark-text;
   }
   > .container {
@@ -46,5 +52,20 @@ $dark-text: rgba(255, 255, 255, 0.7);
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+.card {
+  box-shadow: $shadow;
+  border: 0px;
+  box-sizing: border-box;
+  overflow: hidden;
+  &.light {
+    background-color: $light-secondary-tint;
+    color: $light-text;
+  }
+  &.dark {
+    background-color: $dark-secondary-tint;
+    color: $dark-text;
   }
 }
