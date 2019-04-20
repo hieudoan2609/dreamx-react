@@ -25,6 +25,7 @@ $dark-secondary-shade: #1f283d;
   &.light {
     .item {
       &.active {
+        color: $light-primary;
         border-bottom: 1px solid $light-primary;
       }
     }
@@ -32,6 +33,7 @@ $dark-secondary-shade: #1f283d;
   &.dark {
     .item {
       &.active {
+        color: $dark-primary;
         border-bottom: 1px solid $dark-primary;
       }
     }
