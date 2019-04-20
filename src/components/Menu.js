@@ -97,7 +97,6 @@ class Menu extends Component {
 // };
 
 Menu.propTypes = {
-  logo: PropTypes.string.isRequired,
   navItems: PropTypes.array.isRequired, // [ { label, pathname }, ... ]
   toggleTheme: PropTypes.func.isRequired
 };
