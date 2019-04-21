@@ -5,6 +5,11 @@ import PropTypes from "prop-types";
 import "./SearchTable.scss";
 
 class SearchTable extends Component {
+  state = {
+    order: "desc",
+    orderBy: this.props.defaultOrderBy
+  };
+
   formatNameToUserFriendly = name => {
     return name
       .split(/(?=[A-Z])/)
@@ -35,9 +40,17 @@ class SearchTable extends Component {
                 {Object.keys(this.props.data[0]).map(col => (
                   <th scope="col" key={col}>
                     <div className="body">
-                      <div className="icon">
-                        <ion-icon name="arrow-dropdown" />
-                      </div>
+                      {this.state.orderBy === col && (
+                        <div className="icon">
+                          {this.state.order === "desc" && (
+                            <ion-icon name="arrow-dropdown" />
+                          )}
+                          {this.state.order === "asc" && (
+                            <ion-icon name="arrow-dropup" />
+                          )}
+                        </div>
+                      )}
+
                       <div className="text">
                         {this.formatNameToUserFriendly(col)}
                       </div>
@@ -73,7 +86,8 @@ class SearchTable extends Component {
 SearchTable.propTypes = {
   theme: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired, // [ { column: value, ... }, ... ]
-  searchInputPlaceholder: PropTypes.string.isRequired
+  searchInputPlaceholder: PropTypes.string.isRequired,
+  defaultOrderBy: PropTypes.string.isRequired
 };
 
 export default SearchTable;

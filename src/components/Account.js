@@ -34,6 +34,7 @@ class Account extends Component {
         theme={this.props.app.theme}
         data={this.addActionsColumn(this.props.account.assets)}
         searchInputPlaceholder="Search by asset name or symbol..."
+        defaultOrderBy="totalBalance"
       />
     );
   };
