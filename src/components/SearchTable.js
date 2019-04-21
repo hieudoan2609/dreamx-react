@@ -18,6 +18,17 @@ class SearchTable extends Component {
       .replace(/\b\w/g, l => l.toUpperCase());
   };
 
+  handleSort = property => {
+    const orderBy = property;
+    let order = "desc";
+
+    if (this.state.orderBy === property && this.state.order === "desc") {
+      order = "asc";
+    }
+
+    this.setState({ orderBy, order });
+  };
+
   render() {
     return (
       <div className={`SearchTable ${this.props.theme}`}>
@@ -38,16 +49,15 @@ class SearchTable extends Component {
             <thead>
               <tr>
                 {Object.keys(this.props.data[0]).map(col => (
-                  <th scope="col" key={col}>
+                  <th
+                    scope="col"
+                    key={col}
+                    onClick={() => this.handleSort(col)}
+                  >
                     <div className="body">
                       {this.state.orderBy === col && (
-                        <div className="icon">
-                          {this.state.order === "desc" && (
-                            <ion-icon name="arrow-dropdown" />
-                          )}
-                          {this.state.order === "asc" && (
-                            <ion-icon name="arrow-dropup" />
-                          )}
+                        <div className={`icon ${this.state.order}`}>
+                          <ion-icon name="arrow-dropdown" />
                         </div>
                       )}
 

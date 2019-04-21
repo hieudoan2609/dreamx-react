@@ -61,6 +61,12 @@ $icon-small: 14px;
             align-items: center;
             ion-icon {
               font-size: $icon-small;
+              transition: all 300ms ease;
+            }
+            &.asc {
+              ion-icon {
+                transform: rotate(180deg);
+              }
             }
           }
         }
