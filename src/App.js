@@ -20,15 +20,15 @@ const logo = require("./images/logo.svg");
 
 const navItems = [
   {
-    label: "Home",
+    label: "home",
     pathname: "/"
   },
   {
-    label: "Market",
+    label: "market",
     pathname: "/market/ETH_NJA"
   },
   {
-    label: "Account",
+    label: "account",
     pathname: "/account"
   }
 ];

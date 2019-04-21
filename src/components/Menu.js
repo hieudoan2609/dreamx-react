@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Link, NavLink, withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 // import { connect } from "react-redux";
 
 import "./Menu.scss";
@@ -28,6 +28,20 @@ class Menu extends Component {
     }
   }
 
+  handleItemClick = e => {
+    // console.log(e.target.id);
+  };
+
+  current = () => {
+    let currentPath = this.props.location.pathname.split("/")[1];
+
+    if (currentPath === "") {
+      currentPath = "home";
+    }
+
+    return currentPath;
+  };
+
   render() {
     const mobileMenuHiddenClass = this.state.mobileMenuHidden ? "hidden" : "";
 
@@ -45,15 +59,16 @@ class Menu extends Component {
 
                   <div className="items d-none d-md-flex">
                     {this.props.navItems.map((item, index) => (
-                      <div className="item" ref={this[item.label]} key={index}>
-                        <NavLink
-                          to={item.pathname}
-                          activeClassName="active"
-                          exact={true}
-                          className="link"
-                        >
-                          {item.label}
-                        </NavLink>
+                      <div
+                        className={`item ${
+                          this.current() === item.label ? "active" : ""
+                        }`}
+                        ref={this[item.label]}
+                        key={index}
+                        id={item.label}
+                        onClick={this.handleItemClick}
+                      >
+                        {item.label}
                       </div>
                     ))}
 
@@ -76,15 +91,14 @@ class Menu extends Component {
         <div className={`mobile ${mobileMenuHiddenClass}`}>
           <div className="items">
             {this.props.navItems.map((item, index) => (
-              <div className="item" key={index}>
-                <NavLink
-                  to={item.pathname}
-                  className="link"
-                  activeClassName="active"
-                  exact={true}
-                >
-                  {item.label}
-                </NavLink>
+              <div
+                className={`item ${
+                  this.current() === item.label ? "active" : ""
+                }`}
+                key={index}
+                onClick={this.handleItemClick}
+              >
+                {item.label}
               </div>
             ))}
             <ion-icon
