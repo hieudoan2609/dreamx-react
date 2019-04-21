@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import Login from "./Login";
 import TabMenu from "./TabMenu";
-import Table from "./Table";
+import SearchTable from "./SearchTable";
 import "./Account.scss";
 
 class Account extends Component {
@@ -28,24 +28,25 @@ class Account extends Component {
     this.setState({ currentTab: tab });
   };
 
-  renderAssetTable = () => {
+  renderAssetSearchTable = () => {
     return (
-      <Table
+      <SearchTable
         theme={this.props.app.theme}
         data={this.addActionsColumn(this.props.account.assets)}
+        searchInputPlaceholder="Search by asset name or symbol..."
       />
     );
   };
 
-  renderOrderTable = () => {
+  renderOrderSearchTable = () => {
     return <div>ORDERS</div>;
   };
 
-  renderTransferTable = () => {
+  renderTransferSearchTable = () => {
     return <div>TRANSFERS</div>;
   };
 
-  renderTradeTable = () => {
+  renderTradeSearchTable = () => {
     return <div>TRADES</div>;
   };
 
@@ -62,10 +63,11 @@ class Account extends Component {
             onChange={this.handleTabChange}
           />
 
-          {this.state.currentTab === "assets" && this.renderAssetTable()}
-          {this.state.currentTab === "orders" && this.renderOrderTable()}
-          {this.state.currentTab === "transfers" && this.renderTransferTable()}
-          {this.state.currentTab === "trades" && this.renderTradeTable()}
+          {this.state.currentTab === "assets" && this.renderAssetSearchTable()}
+          {this.state.currentTab === "orders" && this.renderOrderSearchTable()}
+          {this.state.currentTab === "transfers" &&
+            this.renderTransferSearchTable()}
+          {this.state.currentTab === "trades" && this.renderTradeSearchTable()}
         </div>
       </div>
     );
