@@ -51,7 +51,6 @@ $dark-primary: #EA6C2C;
             height: 1px;
             transition: all 300ms ease;
             width: 0%;
-            background-color: pink;
           }
           .item {
             user-select: none;
@@ -96,6 +95,9 @@ $dark-primary: #EA6C2C;
       color: $inactive-grey;
     }
     .items {
+      .highlighter {
+        background-color: $primary-blue;
+      }
       .item {
         color: $inactive-grey;
         &.active {
@@ -121,6 +123,9 @@ $dark-primary: #EA6C2C;
       color: $dark-text;
     }
     .items {
+      .highlighter {
+        background-color: $dark-primary;
+      }
       .item {
         color: $dark-text;
         &.active {

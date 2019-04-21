@@ -15,18 +15,36 @@ class Menu extends Component {
   }
 
   state = {
-    mobileMenuHidden: true
+    mobileMenuHidden: true,
+    highlighterWidth: 0,
+    highlighterOffsetLeft: 0
   };
 
   toggleMobileMenu = () => {
     this.setState({ mobileMenuHidden: !this.state.mobileMenuHidden });
   };
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate = prevProps => {
+    const currentItem = this.current();
+    if (this[currentItem]) {
+      // only execute if there is a ref defined
+      const currentItemWidth = this[currentItem].current.clientWidth;
+      const currentItemOffsetLeft = this[currentItem].current.offsetLeft;
+      if (
+        this.state.highlighterWidth !== currentItemWidth ||
+        this.state.highlighterOffsetLeft !== currentItemOffsetLeft
+      ) {
+        this.setState({
+          highlighterWidth: currentItemWidth,
+          highlighterOffsetLeft: currentItemOffsetLeft
+        });
+      }
+    }
+
     if (this.props.location.pathname !== prevProps.location.pathname) {
       this.setState({ mobileMenuHidden: true });
     }
-  }
+  };
 
   handleItemClick = e => {
     this.props.history.push(e.target.getAttribute("pathname"));
@@ -37,13 +55,13 @@ class Menu extends Component {
       item => item.pathname === "/"
     )[0];
 
-    let currentPath = this.props.location.pathname.split("/")[1];
+    let currentItem = this.props.location.pathname.split("/")[1];
 
-    if (currentPath === "") {
-      currentPath = rootItem.label;
+    if (currentItem === "") {
+      currentItem = rootItem.label;
     }
 
-    return currentPath;
+    return currentItem;
   };
 
   render() {
@@ -77,7 +95,13 @@ class Menu extends Component {
                       </div>
                     ))}
 
-                    <div className="highlighter" />
+                    <div
+                      className="highlighter"
+                      style={{
+                        width: this.state.highlighterWidth,
+                        left: this.state.highlighterOffsetLeft
+                      }}
+                    />
                   </div>
                 </div>
 
