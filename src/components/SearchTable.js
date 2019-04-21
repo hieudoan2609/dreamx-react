@@ -4,6 +4,32 @@ import PropTypes from "prop-types";
 
 import "./SearchTable.scss";
 
+function desc(a, b, orderBy) {
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
+}
+
+function stableSort(rawArray, cmp) {
+  const stabilizedThis = rawArray.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = cmp(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map(el => el[0]);
+}
+
+function getSorting(order, orderBy) {
+  return order === "desc"
+    ? (a, b) => desc(a, b, orderBy)
+    : (a, b) => -desc(a, b, orderBy);
+}
+
 class SearchTable extends Component {
   state = {
     order: "desc",
@@ -19,6 +45,10 @@ class SearchTable extends Component {
   };
 
   handleSort = property => {
+    if (this.props.excludeFromSorting.includes(property)) {
+      return;
+    }
+
     const orderBy = property;
     let order = "desc";
 
@@ -70,7 +100,10 @@ class SearchTable extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.props.data.map((row, i) => (
+              {stableSort(
+                this.props.data,
+                getSorting(this.state.order, this.state.orderBy)
+              ).map((row, i) => (
                 <tr key={i}>
                   {Object.keys(row).map(key => (
                     <td key={key}>{row[key]}</td>
@@ -97,7 +130,8 @@ SearchTable.propTypes = {
   theme: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired, // [ { column: value, ... }, ... ]
   searchInputPlaceholder: PropTypes.string.isRequired,
-  defaultOrderBy: PropTypes.string.isRequired
+  defaultOrderBy: PropTypes.string.isRequired,
+  excludeFromSorting: PropTypes.array
 };
 
 export default SearchTable;

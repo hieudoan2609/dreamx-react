@@ -35,6 +35,7 @@ class Account extends Component {
         data={this.addActionsColumn(this.props.account.assets)}
         searchInputPlaceholder="Search by asset name or symbol..."
         defaultOrderBy="totalBalance"
+        excludeFromSorting={["actions"]}
       />
     );
   };
