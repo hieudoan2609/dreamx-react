@@ -29,7 +29,7 @@ class Menu extends Component {
   }
 
   handleItemClick = e => {
-    // console.log(e.target.id);
+    this.props.history.push(e.target.getAttribute("pathname"));
   };
 
   current = () => {
@@ -67,6 +67,7 @@ class Menu extends Component {
                         key={index}
                         id={item.label}
                         onClick={this.handleItemClick}
+                        pathname={item.pathname}
                       >
                         {item.label}
                       </div>
@@ -97,6 +98,7 @@ class Menu extends Component {
                 }`}
                 key={index}
                 onClick={this.handleItemClick}
+                pathname={item.pathname}
               >
                 {item.label}
               </div>
