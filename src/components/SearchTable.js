@@ -34,7 +34,14 @@ class SearchTable extends Component {
               <tr>
                 {Object.keys(this.props.data[0]).map(col => (
                   <th scope="col" key={col}>
-                    {this.formatNameToUserFriendly(col)}
+                    <div className="body">
+                      <div className="icon">
+                        <ion-icon name="arrow-dropdown" />
+                      </div>
+                      <div className="text">
+                        {this.formatNameToUserFriendly(col)}
+                      </div>
+                    </div>
                   </th>
                 ))}
               </tr>
