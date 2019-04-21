@@ -31,6 +31,7 @@ class TabMenu extends Component {
             {item}
           </div>
         ))}
+
         <div
           className="highlighter"
           style={{

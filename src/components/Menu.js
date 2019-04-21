@@ -6,6 +6,14 @@ import { Link, NavLink, withRouter } from "react-router-dom";
 import "./Menu.scss";
 
 class Menu extends Component {
+  constructor(props) {
+    super(props);
+
+    for (let item of this.props.navItems) {
+      this[item.label] = React.createRef();
+    }
+  }
+
   state = {
     mobileMenuHidden: true
   };
@@ -37,16 +45,19 @@ class Menu extends Component {
 
                   <div className="items d-none d-md-flex">
                     {this.props.navItems.map((item, index) => (
-                      <NavLink
-                        key={index}
-                        to={item.pathname}
-                        className="item"
-                        activeClassName="active"
-                        exact={true}
-                      >
-                        {item.label}
-                      </NavLink>
+                      <div className="item" ref={this[item.label]} key={index}>
+                        <NavLink
+                          to={item.pathname}
+                          activeClassName="active"
+                          exact={true}
+                          className="link"
+                        >
+                          {item.label}
+                        </NavLink>
+                      </div>
                     ))}
+
+                    <div className="highlighter" />
                   </div>
                 </div>
 
@@ -65,17 +76,17 @@ class Menu extends Component {
         <div className={`mobile ${mobileMenuHiddenClass}`}>
           <div className="items">
             {this.props.navItems.map((item, index) => (
-              <NavLink
-                key={index}
-                to={item.pathname}
-                className="item"
-                activeClassName="active"
-                exact={true}
-              >
-                {item.label}
-              </NavLink>
+              <div className="item" key={index}>
+                <NavLink
+                  to={item.pathname}
+                  className="link"
+                  activeClassName="active"
+                  exact={true}
+                >
+                  {item.label}
+                </NavLink>
+              </div>
             ))}
-
             <ion-icon
               className="item"
               name="bulb"
