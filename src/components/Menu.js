@@ -27,7 +27,7 @@ class Menu extends Component {
   componentDidUpdate = prevProps => {
     const currentItem = this.current();
     if (this[currentItem]) {
-      // only execute if there is a ref defined
+      // only execute if there is a ref defined for currentItem
       const currentItemWidth = this[currentItem].current.clientWidth;
       const currentItemOffsetLeft = this[currentItem].current.offsetLeft;
       if (
@@ -37,6 +37,17 @@ class Menu extends Component {
         this.setState({
           highlighterWidth: currentItemWidth,
           highlighterOffsetLeft: currentItemOffsetLeft
+        });
+      }
+    } else {
+      // set highlighter width and offset back to 0 if there is no active item
+      if (
+        this.state.highlighterWidth !== 0 ||
+        this.state.highlighterOffsetLeft !== 0
+      ) {
+        this.setState({
+          highlighterWidth: 0,
+          highlighterOffsetLeft: 0
         });
       }
     }
