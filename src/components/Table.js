@@ -5,9 +5,15 @@ import PropTypes from "prop-types";
 import "./Table.scss";
 
 class Table extends Component {
-  render() {
-    console.log(Object.keys(this.props.data[0]));
+  formatNameToUserFriendly = name => {
+    return name
+      .split(/(?=[A-Z])/)
+      .join(" ")
+      .toLowerCase()
+      .replace(/\b\w/g, l => l.toUpperCase());
+  };
 
+  render() {
     return (
       <div className={`Table ${this.props.theme} table-responsive`}>
         <table className="table">
@@ -15,7 +21,7 @@ class Table extends Component {
             <tr>
               {Object.keys(this.props.data[0]).map(col => (
                 <th scope="col" key={col}>
-                  {col}
+                  {this.formatNameToUserFriendly(col)}
                 </th>
               ))}
             </tr>
