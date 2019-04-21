@@ -12,6 +12,14 @@ $dark-secondary-shade: #1f283d;
 
 .TabMenu {
   display: flex;
+  position: relative;
+  .highlighter {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    height: 1px;
+    transition: all 300ms ease;
+  }
   .item {
     flex: 1;
     text-align: center;
@@ -26,16 +34,20 @@ $dark-secondary-shade: #1f283d;
     .item {
       &.active {
         color: $light-primary;
-        border-bottom: 1px solid $light-primary;
       }
+    }
+    .highlighter {
+      background-color: $light-primary;
     }
   }
   &.dark {
     .item {
       &.active {
         color: $dark-primary;
-        border-bottom: 1px solid $dark-primary;
       }
+    }
+    .highlighter {
+      background-color: $dark-primary;
     }
   }
 }

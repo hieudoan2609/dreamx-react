@@ -5,7 +5,18 @@ import PropTypes from "prop-types";
 require("./TabMenu.scss");
 
 class TabMenu extends Component {
+  state = {
+    highlighterOffsetLeft: 0
+  };
+
+  handleOnClick = e => {
+    this.setState({ highlighterOffsetLeft: e.target.offsetLeft });
+    this.props.onChange(e.target.id);
+  };
+
   render() {
+    const highlighterWidth = `${100 / this.props.items.length}%`;
+
     return (
       <div className={`TabMenu ${this.props.theme}`}>
         {this.props.items.map(item => (
@@ -14,11 +25,19 @@ class TabMenu extends Component {
             className={`item ${
               item === this.props.currentItem ? "active" : ""
             }`}
-            onClick={() => this.props.onChange(item)}
+            onClick={this.handleOnClick}
+            id={item}
           >
             {item}
           </div>
         ))}
+        <div
+          className="highlighter"
+          style={{
+            width: highlighterWidth,
+            left: this.state.highlighterOffsetLeft
+          }}
+        />
       </div>
     );
   }
