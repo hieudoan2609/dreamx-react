@@ -12,13 +12,28 @@ class Account extends Component {
     currentTab: "assets"
   };
 
+  addActionsColumn = data => {
+    for (let row of data) {
+      row["actions"] = (
+        <div className="actions">
+          <div className="action">deposit</div>
+          <div className="action">withdraw</div>
+        </div>
+      );
+    }
+    return data;
+  };
+
   handleTabChange = tab => {
     this.setState({ currentTab: tab });
   };
 
   renderAssetTable = () => {
     return (
-      <Table theme={this.props.app.theme} data={this.props.account.assets} />
+      <Table
+        theme={this.props.app.theme}
+        data={this.addActionsColumn(this.props.account.assets)}
+      />
     );
   };
 

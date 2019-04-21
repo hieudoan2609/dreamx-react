@@ -2,4 +2,18 @@
   .card {
     margin-top: 30px;
   }
+  .actions {
+    display: flex;
+    .action {
+      margin-right: 10px;
+      text-transform: capitalize;
+      cursor: pointer;
+      &:hover {
+        opacity: 0.7;
+      }
+      &:last-child {
+        margin-right: 0px;
+      }
+    }
+  }
 }

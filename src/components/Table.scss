@@ -13,15 +13,10 @@ $dark-secondary-shade: #1f283d;
 .Table {
   .table {
     margin: 0px;
-    thead {
-      th {
-        border: 0px;
-      }
-    }
-    tbody {
+    thead, tbody {
       th, td {
         border: 0px;
-        padding-right: 60px;
+        padding-right: 50px;
       }
     }
   }
