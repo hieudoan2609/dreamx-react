@@ -33,10 +33,14 @@ class Menu extends Component {
   };
 
   current = () => {
+    const rootItem = this.props.navItems.filter(
+      item => item.pathname === "/"
+    )[0];
+
     let currentPath = this.props.location.pathname.split("/")[1];
 
     if (currentPath === "") {
-      currentPath = "home";
+      currentPath = rootItem.label;
     }
 
     return currentPath;
