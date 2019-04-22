@@ -6,14 +6,6 @@ import { Link, withRouter } from "react-router-dom";
 import "./Menu.scss";
 
 class Menu extends Component {
-  constructor(props) {
-    super(props);
-
-    for (let item of this.props.navItems) {
-      this[item.label] = React.createRef();
-    }
-  }
-
   state = {
     mobileMenuHidden: true,
     highlighterWidth: 0,
@@ -25,40 +17,36 @@ class Menu extends Component {
   };
 
   componentDidUpdate = prevProps => {
-    const currentItem = this.current();
-    if (this[currentItem]) {
-      // only execute if there is a ref defined for currentItem
-      const currentItemWidth = this[currentItem].current.clientWidth;
-      const currentItemOffsetLeft = this[currentItem].current.offsetLeft;
-      if (
-        this.state.highlighterWidth !== currentItemWidth ||
-        this.state.highlighterOffsetLeft !== currentItemOffsetLeft
-      ) {
-        this.setState({
-          highlighterWidth: currentItemWidth,
-          highlighterOffsetLeft: currentItemOffsetLeft
-        });
-      }
-    } else {
-      // set highlighter width and offset back to 0 if there is no active item
-      if (
-        this.state.highlighterWidth !== 0 ||
-        this.state.highlighterOffsetLeft !== 0
-      ) {
-        this.setState({
-          highlighterWidth: 0,
-          highlighterOffsetLeft: 0
-        });
-      }
-    }
+    // const currentItem = this.current();
+    // if (this[currentItem]) {
+    //   // only execute if there is a ref defined for currentItem
+    //   const currentItemWidth = this[currentItem].current.clientWidth;
+    //   const currentItemOffsetLeft = this[currentItem].current.offsetLeft;
+    //   if (
+    //     this.state.highlighterWidth !== currentItemWidth ||
+    //     this.state.highlighterOffsetLeft !== currentItemOffsetLeft
+    //   ) {
+    //     this.setState({
+    //       highlighterWidth: currentItemWidth,
+    //       highlighterOffsetLeft: currentItemOffsetLeft
+    //     });
+    //   }
+    // } else {
+    //   // set highlighter width and offset back to 0 if there is no active item
+    //   if (
+    //     this.state.highlighterWidth !== 0 ||
+    //     this.state.highlighterOffsetLeft !== 0
+    //   ) {
+    //     this.setState({
+    //       highlighterWidth: 0,
+    //       highlighterOffsetLeft: 0
+    //     });
+    //   }
+    // }
 
     if (this.props.location.pathname !== prevProps.location.pathname) {
       this.setState({ mobileMenuHidden: true });
     }
-  };
-
-  handleItemClick = e => {
-    this.props.history.push(e.target.getAttribute("pathname"));
   };
 
   current = () => {
@@ -69,7 +57,7 @@ class Menu extends Component {
     let currentItem = this.props.location.pathname.split("/")[1];
 
     if (currentItem === "") {
-      currentItem = rootItem.label;
+      currentItem = rootItem ? rootItem.label : "";
     }
 
     return currentItem;
@@ -92,18 +80,16 @@ class Menu extends Component {
 
                   <div className="items d-none d-md-flex">
                     {this.props.navItems.map((item, index) => (
-                      <div
+                      <Link
                         className={`item ${
                           this.current() === item.label ? "active" : ""
                         }`}
-                        ref={this[item.label]}
                         key={index}
                         id={item.label}
-                        onClick={this.handleItemClick}
-                        pathname={item.pathname}
+                        to={item.pathname}
                       >
                         {item.label}
-                      </div>
+                      </Link>
                     ))}
 
                     <div
@@ -131,16 +117,16 @@ class Menu extends Component {
         <div className={`mobile ${mobileMenuHiddenClass}`}>
           <div className="items">
             {this.props.navItems.map((item, index) => (
-              <div
+              <Link
                 className={`item ${
                   this.current() === item.label ? "active" : ""
                 }`}
                 key={index}
-                onClick={this.handleItemClick}
-                pathname={item.pathname}
+                id={item.label}
+                to={item.pathname}
               >
                 {item.label}
-              </div>
+              </Link>
             ))}
             <ion-icon
               className="item"
