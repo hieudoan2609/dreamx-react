@@ -59,6 +59,52 @@ class SearchTable extends Component {
     this.setState({ orderBy, order });
   };
 
+  renderAssetTable = () => {
+    return (
+      <div className="table-responsive">
+        <table className="table">
+          <thead>
+            <tr>
+              {Object.keys(this.props.data[0]).map(col => (
+                <th scope="col" key={col} onClick={() => this.handleSort(col)}>
+                  <div className="body">
+                    {this.state.orderBy === col && (
+                      <div className={`icon ${this.state.order}`}>
+                        <ion-icon name="arrow-dropdown" />
+                      </div>
+                    )}
+
+                    <div className="text">
+                      {this.formatNameToUserFriendly(col)}
+                    </div>
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {stableSort(
+              this.props.data,
+              getSorting(this.state.order, this.state.orderBy)
+            ).map((row, i) => (
+              <tr key={i}>
+                {Object.keys(row).map(key => (
+                  <td key={key}>{row[key]}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  renderNoAssetAvailable = () => {
+    return (
+      <div className="not-available">No assets are currently available.</div>
+    );
+  };
+
   render() {
     return (
       <div className={`SearchTable ${this.props.theme}`}>
@@ -74,45 +120,9 @@ class SearchTable extends Component {
             spellCheck="false"
           />
         </div>
-        <div className="table-responsive">
-          <table className="table">
-            <thead>
-              <tr>
-                {Object.keys(this.props.data[0]).map(col => (
-                  <th
-                    scope="col"
-                    key={col}
-                    onClick={() => this.handleSort(col)}
-                  >
-                    <div className="body">
-                      {this.state.orderBy === col && (
-                        <div className={`icon ${this.state.order}`}>
-                          <ion-icon name="arrow-dropdown" />
-                        </div>
-                      )}
 
-                      <div className="text">
-                        {this.formatNameToUserFriendly(col)}
-                      </div>
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {stableSort(
-                this.props.data,
-                getSorting(this.state.order, this.state.orderBy)
-              ).map((row, i) => (
-                <tr key={i}>
-                  {Object.keys(row).map(key => (
-                    <td key={key}>{row[key]}</td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {this.props.data.length === 0 && this.renderNoAssetAvailable()}
+        {this.props.data.length > 0 && this.renderAssetTable()}
       </div>
     );
   }
@@ -131,7 +141,9 @@ SearchTable.propTypes = {
   data: PropTypes.array.isRequired, // [ { column: value, ... }, ... ]
   searchInputPlaceholder: PropTypes.string.isRequired,
   defaultOrderBy: PropTypes.string.isRequired,
-  excludeFromSorting: PropTypes.array
+  excludeFromSorting: PropTypes.array,
+  searchValue: PropTypes.string.isRequired,
+  handleSearch: PropTypes.func.isRequired
 };
 
 export default SearchTable;

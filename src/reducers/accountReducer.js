@@ -11,39 +11,10 @@ const INITIAL_STATE = {
   address: "",
   metamask: "running",
   loading: false,
+  balances: [],
   transfers: [],
   trades: [],
-  orders: [],
-  assets: [
-    {
-      coin: "ETH",
-      name: "Ethereum",
-      totalBalance: 305,
-      availableBalance: 3.7,
-      inOrders: 67
-    },
-    {
-      coin: "NJA",
-      name: "NinjaCoin",
-      totalBalance: 452,
-      availableBalance: 25,
-      inOrders: 51
-    },
-    {
-      coin: "BNB",
-      name: "Binance",
-      totalBalance: 262,
-      availableBalance: 16,
-      inOrders: 24
-    },
-    {
-      coin: "OMG",
-      name: "OmiseGo",
-      totalBalance: 159,
-      availableBalance: 6,
-      inOrders: 24
-    }
-  ]
+  orders: []
 };
 
 export default (state = INITIAL_STATE, action) => {

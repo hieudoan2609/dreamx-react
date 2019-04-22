@@ -5,6 +5,7 @@ import Login from "./Login";
 import TabMenu from "./TabMenu";
 import SearchTable from "./SearchTable";
 import "./Account.scss";
+import { tokenFilter } from "../actions";
 
 class Account extends Component {
   state = {
@@ -32,10 +33,12 @@ class Account extends Component {
     return (
       <SearchTable
         theme={this.props.app.theme}
-        data={this.addActionsColumn(this.props.account.assets)}
+        data={this.addActionsColumn(this.props.tokens.filtered)}
         searchInputPlaceholder="Search by asset name or symbol..."
         defaultOrderBy="totalBalance"
         excludeFromSorting={["actions"]}
+        searchValue={this.props.tokens.searchValue}
+        handleSearch={this.props.tokenFilter}
       />
     );
   };
@@ -76,12 +79,12 @@ class Account extends Component {
   }
 }
 
-const mapStateToProps = ({ app, account }) => {
-  return { app, account };
+const mapStateToProps = ({ app, account, tokens }) => {
+  return { app, account, tokens };
 };
 
-// const mapDispatchToProps = {
-//  getChartData
-// };
+const mapDispatchToProps = {
+  tokenFilter
+};
 
 export default connect(mapStateToProps)(Account);
