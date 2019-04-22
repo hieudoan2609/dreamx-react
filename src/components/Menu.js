@@ -17,7 +17,7 @@ class Menu extends Component {
   };
 
   componentDidUpdate = prevProps => {
-    // const currentItem = this.current();
+    // const currentItem = this.getActiveNavItemLabel();
     // if (this[currentItem]) {
     //   // only execute if there is a ref defined for currentItem
     //   const currentItemWidth = this[currentItem].current.clientWidth;
@@ -49,18 +49,20 @@ class Menu extends Component {
     }
   };
 
-  current = () => {
-    const rootItem = this.props.navItems.filter(
-      item => item.pathname === "/"
-    )[0];
+  getActiveNavItemLabel = () => {
+    let currentTopLevelPath = this.props.location.pathname.split("/")[1];
 
-    let currentItem = this.props.location.pathname.split("/")[1];
-
-    if (currentItem === "") {
-      currentItem = rootItem ? rootItem.label : "";
+    let activeItem;
+    if (currentTopLevelPath === "") {
+      activeItem = this.props.navItems.filter(item => item.pathname === "/")[0];
+    } else {
+      activeItem = this.props.navItems.filter(
+        item => item.pathname.split("/")[1] === currentTopLevelPath
+      )[0];
     }
 
-    return currentItem;
+    const activeItemLabel = activeItem ? activeItem.label : undefined;
+    return activeItemLabel;
   };
 
   render() {
@@ -82,7 +84,9 @@ class Menu extends Component {
                     {this.props.navItems.map((item, index) => (
                       <Link
                         className={`item ${
-                          this.current() === item.label ? "active" : ""
+                          this.getActiveNavItemLabel() === item.label
+                            ? "active"
+                            : ""
                         }`}
                         key={index}
                         id={item.label}
@@ -119,7 +123,7 @@ class Menu extends Component {
             {this.props.navItems.map((item, index) => (
               <Link
                 className={`item ${
-                  this.current() === item.label ? "active" : ""
+                  this.getActiveNavItemLabel() === item.label ? "active" : ""
                 }`}
                 key={index}
                 id={item.label}
@@ -149,7 +153,7 @@ class Menu extends Component {
 // };
 
 Menu.propTypes = {
-  navItems: PropTypes.array.isRequired, // [ { label, pathname }, ... ]
+  navItems: PropTypes.array.isRequired, // [ { label, pathname }, ... ] navItems must be top-level links and will be highlighted on all sub-routes except for the root link
   toggleTheme: PropTypes.func.isRequired
 };
 
