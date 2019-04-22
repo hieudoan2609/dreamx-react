@@ -17,36 +17,51 @@ class Menu extends Component {
   };
 
   componentDidUpdate = prevProps => {
-    // const currentItem = this.getActiveNavItemLabel();
-    // if (this[currentItem]) {
-    //   // only execute if there is a ref defined for currentItem
-    //   const currentItemWidth = this[currentItem].current.clientWidth;
-    //   const currentItemOffsetLeft = this[currentItem].current.offsetLeft;
-    //   if (
-    //     this.state.highlighterWidth !== currentItemWidth ||
-    //     this.state.highlighterOffsetLeft !== currentItemOffsetLeft
-    //   ) {
-    //     this.setState({
-    //       highlighterWidth: currentItemWidth,
-    //       highlighterOffsetLeft: currentItemOffsetLeft
-    //     });
-    //   }
-    // } else {
-    //   // set highlighter width and offset back to 0 if there is no active item
-    //   if (
-    //     this.state.highlighterWidth !== 0 ||
-    //     this.state.highlighterOffsetLeft !== 0
-    //   ) {
-    //     this.setState({
-    //       highlighterWidth: 0,
-    //       highlighterOffsetLeft: 0
-    //     });
-    //   }
-    // }
+    this.updateHighlighter();
 
-    if (this.props.location.pathname !== prevProps.location.pathname) {
-      this.setState({ mobileMenuHidden: true });
+    const routeChanged =
+      this.props.location.pathname !== prevProps.location.pathname;
+    if (routeChanged) {
+      this.updateMobileMenu();
     }
+  };
+
+  updateHighlighter = () => {
+    const activeNavItemLabel = this.getActiveNavItemLabel();
+
+    if (!activeNavItemLabel) {
+      if (
+        this.state.highlighterWidth !== 0 ||
+        this.state.highlighterOffsetLeft !== 0
+      ) {
+        this.setState({
+          highlighterWidth: 0,
+          highlighterOffsetLeft: 0
+        });
+      }
+
+      return;
+    }
+
+    const activeNavItem = document.querySelector(
+      `.desktop #${activeNavItemLabel}`
+    );
+
+    if (
+      this.state.highlighterWidth === activeNavItem.clientWidth &&
+      this.state.highlighterOffsetLeft === activeNavItem.offsetLeft
+    ) {
+      return;
+    }
+
+    this.setState({
+      highlighterWidth: activeNavItem.clientWidth,
+      highlighterOffsetLeft: activeNavItem.offsetLeft
+    });
+  };
+
+  updateMobileMenu = () => {
+    this.setState({ mobileMenuHidden: true });
   };
 
   getActiveNavItemLabel = () => {
