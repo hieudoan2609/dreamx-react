@@ -1,10 +1,14 @@
 $shadow: 0px 5px 15px rgba(1, 1, 1, 0.1);
-$inactive-grey: rgba(0, 0, 0, 0.54);
-$primary-blue: #303f9f;
-$background-grey: #f5f5f5;
-$dark-fg: #384256;
+$light-text: rgba(0, 0, 0, 0.54);
+$light-primary: #303f9f;
+$light-secondary: #f5f5f5;
+$light-secondary-tint: white;
+$light-secondary-shade: #dcdcdc;
 $dark-text: hsla(0,0%,100%,.7);
 $dark-primary: #EA6C2C;
+$dark-secondary: #232d44;
+$dark-secondary-tint: #384256;
+$dark-secondary-shade: #1f283d;
 
 .Menu {
   position: fixed;
@@ -92,16 +96,16 @@ $dark-primary: #EA6C2C;
     ion-icon {
       font-size: 24px;
       cursor: pointer;
-      color: $inactive-grey;
+      color: $light-text;
     }
     .items {
       .highlighter {
-        background-color: $primary-blue;
+        background-color: $light-primary;
       }
       .item {
-        color: $inactive-grey;
+        color: $light-text;
         &.active {
-          color: $primary-blue; 
+          color: $light-primary; 
         }
       }
     }
@@ -110,7 +114,7 @@ $dark-primary: #EA6C2C;
     }
   }
   &.dark {
-    background-color: $dark-fg;
+    background-color: $dark-secondary-tint;
     .brand {
       span {
         color: $dark-text;
@@ -134,7 +138,7 @@ $dark-primary: #EA6C2C;
       }
     }
     .mobile {
-      background-color: $dark-fg;
+      background-color: $dark-secondary-tint;
     }
   }
   .mobile {

@@ -92,7 +92,7 @@ class Menu extends Component {
                 <div className="pull-left">
                   <Link to="/" className="brand">
                     <img width={20} src={this.props.logo} alt="" />
-                    <span>Odin Trade</span>
+                    <span>{this.props.brandName}</span>
                   </Link>
 
                   <div className="items d-none d-md-flex">
@@ -169,7 +169,10 @@ class Menu extends Component {
 
 Menu.propTypes = {
   navItems: PropTypes.array.isRequired, // [ { label, pathname }, ... ] navItems must be top-level links and will be highlighted on all sub-routes except for the root link
-  toggleTheme: PropTypes.func.isRequired
+  toggleTheme: PropTypes.func.isRequired,
+  // logo: PropTypes.string.isRequired, // a logo is required but its proptype is disabled because it can be an object when testing with jest
+  theme: PropTypes.string.isRequired,
+  brandName: PropTypes.string.isRequired
 };
 
 export default withRouter(Menu);

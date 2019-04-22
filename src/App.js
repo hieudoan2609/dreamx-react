@@ -45,6 +45,7 @@ class App extends Component {
       <BrowserRouter>
         <div className={`App ${this.props.app.theme}`}>
           <Menu
+            brandName="Odin Trade"
             logo={logo}
             navItems={navItems}
             toggleTheme={this.props.toggleTheme}
