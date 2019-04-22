@@ -36,6 +36,10 @@ class SearchTable extends Component {
     orderBy: this.props.defaultOrderBy
   };
 
+  componentWillMount = () => {
+    this.props.handleSearch(this.props.searchValue);
+  };
+
   formatNameToUserFriendly = name => {
     return name
       .split(/(?=[A-Z])/)
@@ -100,9 +104,11 @@ class SearchTable extends Component {
   };
 
   renderNoAssetAvailable = () => {
-    return (
-      <div className="not-available">No assets are currently available.</div>
-    );
+    return <div className="not-available">No assets coule be found.</div>;
+  };
+
+  handleSearchInput = e => {
+    this.props.handleSearch(e.target.value);
   };
 
   render() {
@@ -118,6 +124,8 @@ class SearchTable extends Component {
             className="form-control search"
             placeholder={this.props.searchInputPlaceholder}
             spellCheck="false"
+            value={this.props.searchValue}
+            onChange={this.handleSearchInput}
           />
         </div>
 

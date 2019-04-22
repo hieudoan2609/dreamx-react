@@ -87,4 +87,7 @@ const mapDispatchToProps = {
   tokenFilter
 };
 
-export default connect(mapStateToProps)(Account);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Account);
