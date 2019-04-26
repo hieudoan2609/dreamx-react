@@ -6,7 +6,7 @@ import TabMenu from "./TabMenu";
 import SearchTable from "./SearchTable";
 import "./Account.scss";
 import { tokenFilter } from "../actions";
-import { excludeKeysFromObjectInArray } from "../helpers";
+import { extractKeysFromObjectArray } from "../helpers";
 
 class Account extends Component {
   state = {
@@ -27,13 +27,14 @@ class Account extends Component {
   };
 
   getAssetTableData = () => {
-    const dataWithoutExcludedKeys = excludeKeysFromObjectInArray(
+    if (!this.props.account.address) {
+      return [];
+    }
+    const extractedData = extractKeysFromObjectArray(
       this.props.tokens.filtered,
-      ["address", "symbol", "decimals"]
+      ["name", "totalBalance", "availableBalance", "inOrders"]
     );
-    const dataWithActionsColumn = this.addActionsColumn(
-      dataWithoutExcludedKeys
-    );
+    const dataWithActionsColumn = this.addActionsColumn(extractedData);
     return dataWithActionsColumn;
   };
 
@@ -95,11 +96,11 @@ const mapStateToProps = ({ app, account, tokens }) => {
   return { app, account, tokens };
 };
 
-const mapDispatchToProps = {
+const mapActionsToProps = {
   tokenFilter
 };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapActionsToProps
 )(Account);

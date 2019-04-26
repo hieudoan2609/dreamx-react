@@ -8,14 +8,11 @@ export const getNetworkNameFromId = networkId => {
   }
 };
 
-export const excludeKeysFromObjectInArray = (array, keys) => {
+export const extractKeysFromObjectArray = (array, keys) => {
   let newArray = [];
   for (let object of array) {
     let newObject = {};
-    for (let key of Object.keys(object)) {
-      if (keys.includes(key)) {
-        continue;
-      }
+    for (let key of keys) {
       newObject[key] = object[key];
     }
     newArray.push(newObject);
