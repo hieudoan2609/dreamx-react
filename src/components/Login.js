@@ -35,12 +35,6 @@ class Login extends Component {
             You have now logged in. Your address is 0x
             {address_first_four_digits}...{address_last_four_digits}
           </p>
-          <Button
-            theme={this.props.app.theme}
-            onClick={this.props.accountLogout}
-          >
-            Disconnect
-          </Button>
         </div>
       );
     }

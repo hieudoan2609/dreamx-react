@@ -125,25 +125,25 @@ it("when metamask is on the wrong network", async () => {
   expect(container).toMatchSnapshot();
 });
 
-it("when log out", async () => {
-  store.dispatch({
-    type: ACCOUNT_LOGIN,
-    payload: { address: "0x4E30dBA9762ABa125f5Ab81647eDEbFF9f9DF7a7" }
-  });
+// it("when log out", async () => {
+//   store.dispatch({
+//     type: ACCOUNT_LOGIN,
+//     payload: { address: "0x4E30dBA9762ABa125f5Ab81647eDEbFF9f9DF7a7" }
+//   });
 
-  const { getByText, container } = render(
-    <Provider store={store}>
-      <Login />
-    </Provider>
-  );
+//   const { getByText, container } = render(
+//     <Provider store={store}>
+//       <Login />
+//     </Provider>
+//   );
 
-  fireEvent.click(getByText(/Disconnect/i));
+//   fireEvent.click(getByText(/Disconnect/i));
 
-  expect(
-    await waitForElement(() =>
-      getByText(/Connect to MetaMask to manage your account/i)
-    )
-  ).toBeTruthy();
+//   expect(
+//     await waitForElement(() =>
+//       getByText(/Connect to MetaMask to manage your account/i)
+//     )
+//   ).toBeTruthy();
 
-  expect(container).toMatchSnapshot();
-});
+//   expect(container).toMatchSnapshot();
+// });

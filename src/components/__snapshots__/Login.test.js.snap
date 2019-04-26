@@ -1,33 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`when log out 1`] = `
-<div>
-  <div
-    class="Login card text-center dark"
-  >
-    <div
-      class="card-body"
-    >
-      <h5
-        class="card-title"
-      >
-        You are not logged in
-      </h5>
-      <p
-        class="card-text"
-      >
-        Connect to MetaMask to manage your account.
-      </p>
-      <div
-        class="Button dark"
-      >
-        Connect
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
 exports[`when logged in 1`] = `
 <div>
   <div
@@ -49,11 +21,6 @@ exports[`when logged in 1`] = `
         ...
         f7a7
       </p>
-      <div
-        class="Button dark"
-      >
-        Disconnect
-      </div>
     </div>
   </div>
 </div>
