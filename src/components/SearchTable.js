@@ -36,10 +36,6 @@ class SearchTable extends Component {
     orderBy: this.props.defaultOrderBy
   };
 
-  componentWillMount = () => {
-    this.props.handleSearch(this.props.searchValue);
-  };
-
   formatNameToUserFriendly = name => {
     return name
       .split(/(?=[A-Z])/)

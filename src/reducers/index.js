@@ -2,13 +2,13 @@ import { combineReducers } from "redux";
 
 import accountReducer from "./accountReducer";
 import appReducer from "./appReducer";
-import tokenReducer from "./tokenReducer";
+import tokensReducer from "./tokensReducer";
 import { RESET_INITIAL_STATE } from "../actions/types";
 
 const indexReducer = combineReducers({
   account: accountReducer,
   app: appReducer,
-  tokens: tokenReducer
+  tokens: tokensReducer
 });
 
 const rootReducer = (state, action) => {

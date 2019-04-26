@@ -7,3 +7,18 @@ export const getNetworkNameFromId = networkId => {
     }
   }
 };
+
+export const excludeKeysFromObjectInArray = (array, keys) => {
+  let newArray = [];
+  for (let object of array) {
+    let newObject = {};
+    for (let key of Object.keys(object)) {
+      if (keys.includes(key)) {
+        continue;
+      }
+      newObject[key] = object[key];
+    }
+    newArray.push(newObject);
+  }
+  return newArray;
+};

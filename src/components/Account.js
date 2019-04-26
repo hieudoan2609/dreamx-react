@@ -6,6 +6,7 @@ import TabMenu from "./TabMenu";
 import SearchTable from "./SearchTable";
 import "./Account.scss";
 import { tokenFilter } from "../actions";
+import { excludeKeysFromObjectInArray } from "../helpers";
 
 class Account extends Component {
   state = {
@@ -25,6 +26,17 @@ class Account extends Component {
     return data;
   };
 
+  getAssetTableData = () => {
+    const dataWithoutExcludedKeys = excludeKeysFromObjectInArray(
+      this.props.tokens.filtered,
+      ["address", "symbol", "decimals"]
+    );
+    const dataWithActionsColumn = this.addActionsColumn(
+      dataWithoutExcludedKeys
+    );
+    return dataWithActionsColumn;
+  };
+
   handleTabChange = tab => {
     this.setState({ currentTab: tab });
   };
@@ -33,7 +45,7 @@ class Account extends Component {
     return (
       <SearchTable
         theme={this.props.app.theme}
-        data={this.addActionsColumn(this.props.tokens.filtered)}
+        data={this.getAssetTableData()}
         searchInputPlaceholder="Search by asset name or symbol..."
         defaultOrderBy="totalBalance"
         excludeFromSorting={["actions"]}

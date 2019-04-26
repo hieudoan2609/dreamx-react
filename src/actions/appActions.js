@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { APP_TOGGLE_THEME, APP_INITIALIZE } from "../actions/types";
+import { APP_TOGGLE_THEME, APP_INITIALIZE, TOKEN_LOAD } from "../actions/types";
 import { getNetworkNameFromId } from "../helpers";
 
 export const toggleTheme = () => {
@@ -29,15 +29,30 @@ export const loadTheme = () => {
 
 export const initializeAppAsync = () => {
   return async dispatch => {
-    const res = await axios.get(
+    const contract = await axios.get(
       "https://api.odin.trade/return_contract_address"
     );
+    const tokens = await axios.get("https://api.odin.trade/tokens");
+
+    let tokensWithInitialBalances = [];
+    for (let token of tokens.data.records) {
+      token.totalBalance = token.availableBalance = token.inOrders = 0;
+      token.decimals = parseInt(token.decimals);
+      tokensWithInitialBalances.push(token);
+    }
+
+    dispatch({
+      type: TOKEN_LOAD,
+      payload: {
+        tokens: tokensWithInitialBalances
+      }
+    });
     dispatch({
       type: APP_INITIALIZE,
       payload: {
-        address: res.data.address,
-        networkId: res.data.network_id,
-        networkName: getNetworkNameFromId(res.data.network_id)
+        address: contract.data.address,
+        networkId: contract.data.network_id,
+        networkName: getNetworkNameFromId(contract.data.network_id)
       }
     });
   };

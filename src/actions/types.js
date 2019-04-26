@@ -13,3 +13,4 @@ export const APP_TOGGLE_THEME = "APP_TOGGLE_THEME";
 export const APP_INITIALIZE = "APP_INITIALIZE";
 
 export const TOKEN_FILTER = "TOKEN_FILTER";
+export const TOKEN_LOAD = "TOKEN_LOAD";
