@@ -11,7 +11,9 @@ $dark-secondary-tint: #384256;
 $dark-secondary-shade: #1f283d;
 
 .App {
-  min-height: 100vh;
+  position: relative;
+  // min-height: 100vh;
+  min-height: 2000px;
   &.light {
     background-color: $light-secondary;
     color: $light-text;

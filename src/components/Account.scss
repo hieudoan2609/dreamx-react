@@ -1,3 +1,17 @@
+$shadow: 0px 5px 15px rgba(1, 1, 1, 0.1);
+$light-text: rgba(0, 0, 0, 0.54);
+$light-primary: #303f9f;
+$light-secondary: #f5f5f5;
+$light-secondary-tint: white;
+$light-secondary-shade: #dcdcdc;
+$dark-text: hsla(0,0%,100%,.7);
+$dark-primary: #EA6C2C;
+$dark-secondary: #232d44;
+$dark-secondary-tint: #384256;
+$dark-secondary-shade: #1f283d;
+$darken: rgba(1, 1, 1, 0.5);
+$overlay: rgba(130,130,130,.1);
+
 .Account {
   .card {
     margin-top: 30px;
@@ -8,11 +22,23 @@
       margin-right: 10px;
       text-transform: capitalize;
       cursor: pointer;
-      &:hover {
-        opacity: 0.7;
-      }
+      transition: color 300ms ease;
       &:last-child {
         margin-right: 0px;
+      }
+    }
+  }
+  &.light {
+    .action {
+      &:hover {
+        color: $light-primary;
+      }
+    }
+  }
+  &.dark {
+    .action {
+      &:hover {
+        color: $dark-primary;
       }
     }
   }

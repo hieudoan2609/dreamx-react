@@ -70,7 +70,7 @@ class Account extends Component {
 
   render() {
     return (
-      <div className="Account">
+      <div className={`Account ${this.props.app.theme}`}>
         <Login />
 
         <div className={`card ${this.props.app.theme}`}>

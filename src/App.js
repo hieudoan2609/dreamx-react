@@ -15,6 +15,7 @@ import {
   initializeAppAsync,
   accountLoginAsync
 } from "./actions";
+import Modal from "./components/Modal";
 
 const logo = require("./images/logo.svg");
 
@@ -44,6 +45,8 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className={`App ${this.props.app.theme}`}>
+          <Modal show={true} theme={this.props.app.theme} />
+
           <Menu
             brandName="Odin Trade"
             logo={logo}

@@ -14,3 +14,5 @@ export const APP_INITIALIZE = "APP_INITIALIZE";
 
 export const TOKEN_FILTER = "TOKEN_FILTER";
 export const TOKEN_LOAD = "TOKEN_LOAD";
+
+export const MODAL_TOGGLE = "MODAL_TOGGLE";
