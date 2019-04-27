@@ -80,10 +80,8 @@ $dark-secondary-shade: #1f283d;
         align-items: center;
       }
     }
-  }
-  ion-icon {
-    &:hover {
-      opacity: 0.7;
+    ion-icon {
+      transition: color 300ms ease;
     }
   }
   &.light {
@@ -97,6 +95,9 @@ $dark-secondary-shade: #1f283d;
       font-size: 24px;
       cursor: pointer;
       color: $light-text;
+      &:hover {
+        color: $light-primary;
+      }
     }
     .items {
       .highlighter {
@@ -125,6 +126,9 @@ $dark-secondary-shade: #1f283d;
       font-size: 24px;
       cursor: pointer;
       color: $dark-text;
+      &:hover {
+        color: $dark-primary;
+      }
     }
     .items {
       .highlighter {

@@ -16,23 +16,25 @@ class Modal extends Component {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Deposit Ethereum (ETH)</h5>
+                <div className="close">
+                  <ion-icon name="close-circle" />
+                </div>
               </div>
 
               <div className="modal-body">
                 <div className="input-group">
                   <input
-                    className="form-control search"
+                    className="form-control"
                     placeholder="Amount"
                     spellCheck="false"
                   />
+                  <div className="input-group-append">
+                    <span className="input-group-text">DEPOSIT</span>
+                  </div>
                 </div>
-                <small class="form-text text-muted">
+                <small className="form-text text-muted">
                   Deposit entire balance
                 </small>
-              </div>
-
-              <div className="modal-footer">
-                <Button theme={this.props.theme}>DEPOSIT</Button>
               </div>
             </div>
           </div>

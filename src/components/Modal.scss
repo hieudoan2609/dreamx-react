@@ -9,8 +9,10 @@ $dark-primary: #EA6C2C;
 $dark-secondary: #232d44;
 $dark-secondary-tint: #384256;
 $dark-secondary-shade: #1f283d;
-$darken: rgba(1, 1, 1, 0.7);
+$darken: rgba(1, 1, 1, 0.5);
 $overlay: rgba(130,130,130,.1);
+$light-button-shadow: 0 14px 26px -12px rgba(85, 172, 238, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(85, 172, 238, 0.2);
+$dark-button-shadow: 0 14px 26px -12px rgba(255, 69, 0, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(255, 69, 0, 0.2);
 
 .Modal {
   display: none;
@@ -42,31 +44,69 @@ $overlay: rgba(130,130,130,.1);
       .modal-header, .modal-body, .modal-footer {
         border : 0px;
       }
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .close {
+          opacity: 1;
+          cursor: pointer;
+          transition: color 300ms ease;
+        }
+      }
       input {
         border: 0px;
         background-color: $overlay;
       }
+      .input-group-append span {
+        border: 0px;
+        cursor: pointer;
+      }
       small {
         text-decoration: underline;
+        display: inline-block;
         cursor: pointer;
+        padding-bottom: 10px;
       }
     }
   }
   &.light {
+    .close {
+      color: $light-text;
+      &:hover {
+        color: $light-primary;
+      }
+    }
     .modal-content {
       background-color: $light-secondary-tint;
       color: $light-text;
       input {
         color: $light-text;
       }
+      .input-group-append span {
+        background-color: $light-primary;
+        color: $light-secondary;
+        box-shadow: $light-button-shadow;
+      }
     }
   }
   &.dark {
+    .close {
+      color: $dark-text;
+      &:hover {
+        color: $dark-primary;
+      }
+    }
     .modal-content {
       background-color: $dark-secondary-tint;
       color: $dark-text;
       input {
         color: $dark-text;
+      }
+      .input-group-append span {
+        background-color: $dark-primary;
+        color: $dark-text;
+        box-shadow: $dark-button-shadow;
       }
     }
   }

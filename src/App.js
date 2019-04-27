@@ -45,7 +45,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className={`App ${this.props.app.theme}`}>
-          <Modal show={true} theme={this.props.app.theme} />
+          <Modal show={false} theme={this.props.app.theme} />
 
           <Menu
             brandName="Odin Trade"
