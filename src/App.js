@@ -13,7 +13,8 @@ import {
   toggleTheme,
   loadTheme,
   initializeAppAsync,
-  accountLoginAsync
+  accountLoginAsync,
+  modalHide
 } from "./actions";
 import Modal from "./components/Modal";
 
@@ -45,7 +46,11 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className={`App ${this.props.app.theme}`}>
-          <Modal show={true} theme={this.props.app.theme} />
+          <Modal
+            show={this.props.modal.show}
+            theme={this.props.app.theme}
+            onHide={this.props.modalHide}
+          />
 
           <Menu
             brandName="Odin Trade"
@@ -79,15 +84,16 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ app }) => {
-  return { app };
+const mapStateToProps = ({ app, modal }) => {
+  return { app, modal };
 };
 
 const mapActionsToProps = {
   toggleTheme,
   loadTheme,
   initializeAppAsync,
-  accountLoginAsync
+  accountLoginAsync,
+  modalHide
 };
 
 export default connect(

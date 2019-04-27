@@ -3,9 +3,20 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import "./Modal.scss";
-import Button from "./Button";
 
 class Modal extends Component {
+  componentDidUpdate = () => {
+    this.disableScrolling();
+  };
+
+  disableScrolling = () => {
+    if (this.props.show) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "visible";
+    }
+  };
+
   render() {
     return (
       <div
@@ -16,7 +27,7 @@ class Modal extends Component {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Deposit Ethereum (ETH)</h5>
-                <div className="close">
+                <div className="close" onClick={this.props.onHide}>
                   <ion-icon name="close-circle" />
                 </div>
               </div>
@@ -38,9 +49,9 @@ class Modal extends Component {
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="backdrop" />
+          <div className="backdrop" onClick={this.props.onHide} />
+        </div>
       </div>
     );
   }
@@ -56,8 +67,8 @@ class Modal extends Component {
 
 Modal.propTypes = {
   theme: PropTypes.string.isRequired,
-  show: PropTypes.bool
-  // onHide: PropTypes.func.isRequired
+  show: PropTypes.bool,
+  onHide: PropTypes.func.isRequired
 };
 
 export default Modal;

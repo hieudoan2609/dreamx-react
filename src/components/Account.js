@@ -5,7 +5,7 @@ import Login from "./Login";
 import TabMenu from "./TabMenu";
 import SearchTable from "./SearchTable";
 import "./Account.scss";
-import { tokenFilter } from "../actions";
+import { tokenFilter, modalShow } from "../actions";
 import { extractKeysFromObjectArray } from "../helpers";
 
 class Account extends Component {
@@ -18,8 +18,12 @@ class Account extends Component {
     for (let row of data) {
       row["actions"] = (
         <div className="actions">
-          <div className="action">deposit</div>
-          <div className="action">withdraw</div>
+          <div className="action" onClick={this.props.modalShow}>
+            deposit
+          </div>
+          <div className="action" onClick={this.props.modalShow}>
+            withdraw
+          </div>
         </div>
       );
     }
@@ -97,7 +101,8 @@ const mapStateToProps = ({ app, account, tokens }) => {
 };
 
 const mapActionsToProps = {
-  tokenFilter
+  tokenFilter,
+  modalShow
 };
 
 export default connect(

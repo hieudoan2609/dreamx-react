@@ -35,6 +35,7 @@ $overlay: rgba(130,130,130,.1);
   justify-content: center;
   .backdrop {
     position: absolute;
+    z-index: 0;
     width: 100%;
     height: 100%;
     top: 0px;
@@ -44,6 +45,9 @@ $overlay: rgba(130,130,130,.1);
   .modal {
     position: relative;
     display: block;
+    .modal-dialog {
+      z-index: 1;
+    }
     .modal-content {
       box-shadow: $shadow;
       border: 0px;
@@ -81,9 +85,9 @@ $overlay: rgba(130,130,130,.1);
   }
   &.light {
     .close {
-      color: $light-text;
+      color: $light-primary;
       &:hover {
-        color: $light-primary;
+        color: $light-primary-shade;
       }
     }
     .modal-content {
@@ -105,9 +109,9 @@ $overlay: rgba(130,130,130,.1);
   }
   &.dark {
     .close {
-      color: $dark-text;
+      color: $dark-primary;
       &:hover {
-        color: $dark-primary;
+        color: $dark-primary-shade;
       }
     }
     .modal-content {
