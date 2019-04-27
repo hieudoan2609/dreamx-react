@@ -6,6 +6,11 @@ import { CSSTransition } from "react-transition-group";
 import "./Modal.scss";
 
 class Modal extends Component {
+  constructor(props) {
+    super(props);
+    this.onEsc = this.onEsc.bind(this);
+  }
+
   componentDidUpdate = () => {
     this.disableScrolling();
   };
@@ -17,6 +22,20 @@ class Modal extends Component {
       document.body.style.overflow = "visible";
     }
   };
+
+  onEsc(event) {
+    if (event.keyCode === 27) {
+      this.props.onHide();
+    }
+  }
+
+  componentDidMount() {
+    document.addEventListener("keydown", this.onEsc, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.onEsc, false);
+  }
 
   render() {
     return (
