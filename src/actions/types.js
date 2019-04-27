@@ -15,5 +15,6 @@ export const APP_INITIALIZE = "APP_INITIALIZE";
 export const TOKEN_FILTER = "TOKEN_FILTER";
 export const TOKEN_LOAD = "TOKEN_LOAD";
 
-export const MODAL_SHOW = "MODAL_SHOW";
-export const MODAL_HIDE = "MODAL_HIDE";
+export const TRANSFER_SHOW = "TRANSFER_SHOW";
+export const TRANSFER_HIDE = "TRANSFER_HIDE";
+export const TRANSFER_AMOUNT_INPUT = "TRANSFER_AMOUNT_INPUT";

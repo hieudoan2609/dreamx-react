@@ -19,8 +19,9 @@ $dark-button-shadow-hover: 0 2px 2px 0 rgba(255, 69, 0, 0.14), 0 3px 1px -2px rg
 $darken: rgba(1, 1, 1, 0.5);
 $shadow: 0px 5px 15px rgba(1, 1, 1, 0.1);
 $overlay: rgba(130,130,130,.1);
+$danger: rgba(220, 53, 69, 0.5);
 
-.Modal {
+.Transfer {
   display: flex;
   z-index: 10001;
   position: fixed;
@@ -76,9 +77,15 @@ $overlay: rgba(130,130,130,.1);
           transition: color 300ms ease;
         }
       }
+      .invalid-feedback {
+        display: block;
+      }
       input {
         border: 0px;
         background-color: $overlay;
+        &.invalid {
+          background-color: $danger;
+        }
       }
       .input-group-append span {
         border: 0px;

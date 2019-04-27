@@ -3,10 +3,10 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { CSSTransition } from "react-transition-group";
 
-import "./Modal.scss";
+import "./Transfer.scss";
 import { capitalize } from "../helpers";
 
-class Modal extends Component {
+class Transfer extends Component {
   componentDidUpdate = () => {
     this.disableScrolling();
   };
@@ -50,14 +50,18 @@ class Modal extends Component {
           <div className="modal-body">
             <div className="input-group">
               <input
+                onChange={this.props.onAmountChange}
+                type="number"
                 className="form-control"
                 placeholder="Amount"
                 spellCheck="false"
+                value={this.props.amount}
               />
               <div className="input-group-append">
                 <span className="input-group-text">DEPOSIT</span>
               </div>
             </div>
+            <div className="invalid-feedback">{this.props.error}</div>
             <small className="form-text text-muted">
               Deposit entire balance
             </small>
@@ -86,9 +90,12 @@ class Modal extends Component {
           <div className="modal-body">
             <div className="input-group">
               <input
+                onChange={this.props.onAmountChange}
+                type="number"
                 className="form-control"
                 placeholder="Amount"
                 spellCheck="false"
+                value={this.props.amount}
               />
               <div className="input-group-append">
                 <span className="input-group-text">WITHDRAW</span>
@@ -110,7 +117,7 @@ class Modal extends Component {
       <CSSTransition
         in={this.props.show}
         timeout={{ enter: 0, exit: 300 }}
-        className={`Modal ${this.props.theme}`}
+        className={`Transfer ${this.props.theme}`}
         unmountOnExit
       >
         <div>
@@ -130,13 +137,16 @@ class Modal extends Component {
 //  getChartData
 // };
 
-Modal.propTypes = {
+Transfer.propTypes = {
   theme: PropTypes.string.isRequired,
   show: PropTypes.bool.isRequired,
   onHide: PropTypes.func.isRequired,
-  type: PropTypes.string,
-  name: PropTypes.string,
-  symbol: PropTypes.string
+  type: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  symbol: PropTypes.string.isRequired,
+  amount: PropTypes.string.isRequired,
+  onAmountChange: PropTypes.func.isRequired,
+  error: PropTypes.string.isRequired
 };
 
-export default Modal;
+export default Transfer;

@@ -13,10 +13,8 @@ import {
   toggleTheme,
   loadTheme,
   initializeAppAsync,
-  accountLoginAsync,
-  modalHide
+  accountLoginAsync
 } from "./actions";
-import Modal from "./components/Modal";
 
 const logo = require("./images/logo.svg");
 
@@ -46,15 +44,6 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className={`App ${this.props.app.theme}`}>
-          <Modal
-            show={this.props.modal.show}
-            theme={this.props.app.theme}
-            onHide={this.props.modalHide}
-            type={this.props.modal.type}
-            name={this.props.modal.name}
-            symbol={this.props.modal.symbol}
-          />
-
           <Menu
             brandName="Odin Trade"
             logo={logo}
@@ -87,16 +76,15 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ app, modal }) => {
-  return { app, modal };
+const mapStateToProps = ({ app }) => {
+  return { app };
 };
 
 const mapActionsToProps = {
   toggleTheme,
   loadTheme,
   initializeAppAsync,
-  accountLoginAsync,
-  modalHide
+  accountLoginAsync
 };
 
 export default connect(

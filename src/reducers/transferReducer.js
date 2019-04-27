@@ -1,7 +1,11 @@
-import { MODAL_SHOW, MODAL_HIDE } from "../actions/types";
+import {
+  TRANSFER_SHOW,
+  TRANSFER_HIDE,
+  TRANSFER_AMOUNT_INPUT
+} from "../actions/types";
 
 const INITIAL_STATE = {
-  value: "",
+  amount: "",
   error: "",
   type: "",
   name: "",
@@ -12,9 +16,11 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case MODAL_HIDE:
+    case TRANSFER_AMOUNT_INPUT:
+      return { ...state, amount: action.payload.amount };
+    case TRANSFER_HIDE:
       return { ...state, show: false };
-    case MODAL_SHOW:
+    case TRANSFER_SHOW:
       return {
         ...INITIAL_STATE,
         show: true,

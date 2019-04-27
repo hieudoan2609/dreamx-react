@@ -5,8 +5,14 @@ import Login from "./Login";
 import TabMenu from "./TabMenu";
 import SearchTable from "./SearchTable";
 import "./Account.scss";
-import { tokenFilter, modalShow } from "../actions";
+import {
+  tokenFilter,
+  transferShow,
+  onAmountChange,
+  transferHide
+} from "../actions";
 import { extractKeysFromObjectArray } from "../helpers";
+import Transfer from "./Transfer";
 
 class Account extends Component {
   state = {
@@ -31,13 +37,13 @@ class Account extends Component {
         <div className="actions">
           <div
             className="action"
-            onClick={() => this.props.modalShow(depositModalPayload)}
+            onClick={() => this.props.transferShow(depositModalPayload)}
           >
             deposit
           </div>
           <div
             className="action"
-            onClick={() => this.props.modalShow(withdrawModalPayload)}
+            onClick={() => this.props.transferShow(withdrawModalPayload)}
           >
             withdraw
           </div>
@@ -92,6 +98,18 @@ class Account extends Component {
   render() {
     return (
       <div className={`Account ${this.props.app.theme}`}>
+        <Transfer
+          theme={this.props.app.theme}
+          show={this.props.transfer.show}
+          onHide={this.props.transferHide}
+          type={this.props.transfer.type}
+          name={this.props.transfer.name}
+          symbol={this.props.transfer.symbol}
+          amount={this.props.transfer.amount}
+          onAmountChange={this.props.onAmountChange}
+          error={this.props.transfer.error}
+        />
+
         <Login />
 
         <div className={`card ${this.props.app.theme}`}>
@@ -113,13 +131,15 @@ class Account extends Component {
   }
 }
 
-const mapStateToProps = ({ app, account, tokens }) => {
-  return { app, account, tokens };
+const mapStateToProps = ({ app, account, tokens, transfer }) => {
+  return { app, account, tokens, transfer };
 };
 
 const mapActionsToProps = {
   tokenFilter,
-  modalShow
+  transferShow,
+  onAmountChange,
+  transferHide
 };
 
 export default connect(
