@@ -33,85 +33,6 @@ class Transfer extends Component {
     document.removeEventListener("keydown", this.onEsc, false);
   };
 
-  renderDepositModal = () => (
-    <div className="modal">
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">
-              Deposit {capitalize(this.props.name)} (
-              {this.props.symbol.toUpperCase()})
-            </h5>
-            <div className="close" onClick={this.props.onHide}>
-              <ion-icon name="close-circle" />
-            </div>
-          </div>
-
-          <div className="modal-body">
-            <div className="input-group">
-              <input
-                onChange={this.props.onAmountChange}
-                type="number"
-                className="form-control"
-                placeholder="Amount"
-                spellCheck="false"
-                value={this.props.amount}
-              />
-              <div className="input-group-append">
-                <span className="input-group-text">DEPOSIT</span>
-              </div>
-            </div>
-            <div className="invalid-feedback">{this.props.error}</div>
-            <small className="form-text text-muted">
-              Deposit entire balance
-            </small>
-          </div>
-        </div>
-      </div>
-
-      <div className="backdrop" onClick={this.props.onHide} />
-    </div>
-  );
-
-  renderWithdrawModal = () => (
-    <div className="modal">
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">
-              Withdraw {capitalize(this.props.name)} (
-              {this.props.symbol.toUpperCase()})
-            </h5>
-            <div className="close" onClick={this.props.onHide}>
-              <ion-icon name="close-circle" />
-            </div>
-          </div>
-
-          <div className="modal-body">
-            <div className="input-group">
-              <input
-                onChange={this.props.onAmountChange}
-                type="number"
-                className="form-control"
-                placeholder="Amount"
-                spellCheck="false"
-                value={this.props.amount}
-              />
-              <div className="input-group-append">
-                <span className="input-group-text">WITHDRAW</span>
-              </div>
-            </div>
-            <small className="form-text text-muted">
-              Withdraw entire balance
-            </small>
-          </div>
-        </div>
-      </div>
-
-      <div className="backdrop" onClick={this.props.onHide} />
-    </div>
-  );
-
   render() {
     return (
       <CSSTransition
@@ -121,8 +42,50 @@ class Transfer extends Component {
         unmountOnExit
       >
         <div>
-          {this.props.type === "deposit" && this.renderDepositModal()}
-          {this.props.type === "withdraw" && this.renderWithdrawModal()}
+          <div className="modal">
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">
+                    {capitalize(this.props.type)} {capitalize(this.props.name)}{" "}
+                    ({this.props.symbol.toUpperCase()})
+                  </h5>
+                  <div className="close" onClick={this.props.onHide}>
+                    <ion-icon name="close-circle" />
+                  </div>
+                </div>
+
+                <div className="modal-body">
+                  <div className="input-group">
+                    <input
+                      onChange={this.props.onAmountChange}
+                      type="number"
+                      className={`form-control ${
+                        this.props.error ? "invalid" : ""
+                      }`}
+                      placeholder="Amount"
+                      spellCheck="false"
+                      value={this.props.amount}
+                    />
+                    <div
+                      className="input-group-append"
+                      onClick={this.props.onSubmit}
+                    >
+                      <span className="input-group-text">
+                        {this.props.type.toUpperCase()}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="invalid-feedback">{this.props.error}</div>
+                  <small className="form-text text-muted">
+                    {capitalize(this.props.type)} entire balance
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div className="backdrop" onClick={this.props.onHide} />
+          </div>
         </div>
       </CSSTransition>
     );
@@ -146,7 +109,8 @@ Transfer.propTypes = {
   symbol: PropTypes.string.isRequired,
   amount: PropTypes.string.isRequired,
   onAmountChange: PropTypes.func.isRequired,
-  error: PropTypes.string.isRequired
+  error: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func.isRequired
 };
 
 export default Transfer;

@@ -8,8 +8,9 @@ import "./Account.scss";
 import {
   tokenFilter,
   transferShow,
-  onAmountChange,
-  transferHide
+  transferHandleAmountChange,
+  transferHide,
+  transferHandleSubmitAsync
 } from "../actions";
 import { extractKeysFromObjectArray } from "../helpers";
 import Transfer from "./Transfer";
@@ -106,8 +107,9 @@ class Account extends Component {
           name={this.props.transfer.name}
           symbol={this.props.transfer.symbol}
           amount={this.props.transfer.amount}
-          onAmountChange={this.props.onAmountChange}
+          onAmountChange={this.props.transferHandleAmountChange}
           error={this.props.transfer.error}
+          onSubmit={this.props.transferHandleSubmitAsync}
         />
 
         <Login />
@@ -138,8 +140,9 @@ const mapStateToProps = ({ app, account, tokens, transfer }) => {
 const mapActionsToProps = {
   tokenFilter,
   transferShow,
-  onAmountChange,
-  transferHide
+  transferHandleAmountChange,
+  transferHide,
+  transferHandleSubmitAsync
 };
 
 export default connect(

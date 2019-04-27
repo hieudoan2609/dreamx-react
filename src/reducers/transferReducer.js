@@ -1,7 +1,8 @@
 import {
   TRANSFER_SHOW,
   TRANSFER_HIDE,
-  TRANSFER_AMOUNT_INPUT
+  TRANSFER_AMOUNT_INPUT,
+  TRANSFER_ERROR
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -16,6 +17,8 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case TRANSFER_ERROR:
+      return { ...state, error: action.payload.error };
     case TRANSFER_AMOUNT_INPUT:
       return { ...state, amount: action.payload.amount };
     case TRANSFER_HIDE:
