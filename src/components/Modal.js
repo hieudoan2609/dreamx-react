@@ -4,13 +4,9 @@ import PropTypes from "prop-types";
 import { CSSTransition } from "react-transition-group";
 
 import "./Modal.scss";
+import { capitalize } from "../helpers";
 
 class Modal extends Component {
-  constructor(props) {
-    super(props);
-    this.onEsc = this.onEsc.bind(this);
-  }
-
   componentDidUpdate = () => {
     this.disableScrolling();
   };
@@ -23,19 +19,91 @@ class Modal extends Component {
     }
   };
 
-  onEsc(event) {
+  onEsc = event => {
     if (event.keyCode === 27) {
       this.props.onHide();
     }
-  }
+  };
 
-  componentDidMount() {
+  componentDidMount = () => {
     document.addEventListener("keydown", this.onEsc, false);
-  }
+  };
 
-  componentWillUnmount() {
+  componentWillUnmount = () => {
     document.removeEventListener("keydown", this.onEsc, false);
-  }
+  };
+
+  renderDepositModal = () => (
+    <div className="modal">
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">
+              Deposit {capitalize(this.props.name)} (
+              {this.props.symbol.toUpperCase()})
+            </h5>
+            <div className="close" onClick={this.props.onHide}>
+              <ion-icon name="close-circle" />
+            </div>
+          </div>
+
+          <div className="modal-body">
+            <div className="input-group">
+              <input
+                className="form-control"
+                placeholder="Amount"
+                spellCheck="false"
+              />
+              <div className="input-group-append">
+                <span className="input-group-text">DEPOSIT</span>
+              </div>
+            </div>
+            <small className="form-text text-muted">
+              Deposit entire balance
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div className="backdrop" onClick={this.props.onHide} />
+    </div>
+  );
+
+  renderWithdrawModal = () => (
+    <div className="modal">
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">
+              Withdraw {capitalize(this.props.name)} (
+              {this.props.symbol.toUpperCase()})
+            </h5>
+            <div className="close" onClick={this.props.onHide}>
+              <ion-icon name="close-circle" />
+            </div>
+          </div>
+
+          <div className="modal-body">
+            <div className="input-group">
+              <input
+                className="form-control"
+                placeholder="Amount"
+                spellCheck="false"
+              />
+              <div className="input-group-append">
+                <span className="input-group-text">WITHDRAW</span>
+              </div>
+            </div>
+            <small className="form-text text-muted">
+              Withdraw entire balance
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div className="backdrop" onClick={this.props.onHide} />
+    </div>
+  );
 
   render() {
     return (
@@ -46,36 +114,8 @@ class Modal extends Component {
         unmountOnExit
       >
         <div>
-          <div className="modal">
-            <div className="modal-dialog modal-dialog-centered">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">Deposit Ethereum (ETH)</h5>
-                  <div className="close" onClick={this.props.onHide}>
-                    <ion-icon name="close-circle" />
-                  </div>
-                </div>
-
-                <div className="modal-body">
-                  <div className="input-group">
-                    <input
-                      className="form-control"
-                      placeholder="Amount"
-                      spellCheck="false"
-                    />
-                    <div className="input-group-append">
-                      <span className="input-group-text">DEPOSIT</span>
-                    </div>
-                  </div>
-                  <small className="form-text text-muted">
-                    Deposit entire balance
-                  </small>
-                </div>
-              </div>
-            </div>
-
-            <div className="backdrop" onClick={this.props.onHide} />
-          </div>
+          {this.props.type === "deposit" && this.renderDepositModal()}
+          {this.props.type === "withdraw" && this.renderWithdrawModal()}
         </div>
       </CSSTransition>
     );
@@ -92,8 +132,11 @@ class Modal extends Component {
 
 Modal.propTypes = {
   theme: PropTypes.string.isRequired,
-  show: PropTypes.bool,
-  onHide: PropTypes.func.isRequired
+  show: PropTypes.bool.isRequired,
+  onHide: PropTypes.func.isRequired,
+  type: PropTypes.string,
+  name: PropTypes.string,
+  symbol: PropTypes.string
 };
 
 export default Modal;

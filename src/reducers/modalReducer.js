@@ -1,6 +1,12 @@
 import { MODAL_SHOW, MODAL_HIDE } from "../actions/types";
 
 const INITIAL_STATE = {
+  value: "",
+  error: "",
+  type: "",
+  name: "",
+  symbol: "",
+  pending: false,
   show: false
 };
 
@@ -9,7 +15,13 @@ export default (state = INITIAL_STATE, action) => {
     case MODAL_HIDE:
       return { ...state, show: false };
     case MODAL_SHOW:
-      return { ...state, show: true };
+      return {
+        ...INITIAL_STATE,
+        show: true,
+        type: action.payload.type,
+        name: action.payload.name,
+        symbol: action.payload.symbol
+      };
     default:
       return state;
   }

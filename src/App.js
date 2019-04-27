@@ -50,6 +50,9 @@ class App extends Component {
             show={this.props.modal.show}
             theme={this.props.app.theme}
             onHide={this.props.modalHide}
+            type={this.props.modal.type}
+            name={this.props.modal.name}
+            symbol={this.props.modal.symbol}
           />
 
           <Menu

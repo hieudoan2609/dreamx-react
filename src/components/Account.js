@@ -16,12 +16,29 @@ class Account extends Component {
 
   addActionsColumn = data => {
     for (let row of data) {
+      const depositModalPayload = {
+        type: "deposit",
+        name: row.name,
+        symbol: row.symbol
+      };
+      const withdrawModalPayload = {
+        type: "withdraw",
+        name: row.name,
+        symbol: row.symbol
+      };
+
       row["actions"] = (
         <div className="actions">
-          <div className="action" onClick={this.props.modalShow}>
+          <div
+            className="action"
+            onClick={() => this.props.modalShow(depositModalPayload)}
+          >
             deposit
           </div>
-          <div className="action" onClick={this.props.modalShow}>
+          <div
+            className="action"
+            onClick={() => this.props.modalShow(withdrawModalPayload)}
+          >
             withdraw
           </div>
         </div>
@@ -36,7 +53,7 @@ class Account extends Component {
     }
     const extractedData = extractKeysFromObjectArray(
       this.props.tokens.filtered,
-      ["name", "totalBalance", "availableBalance", "inOrders"]
+      ["name", "symbol", "totalBalance", "availableBalance", "inOrders"]
     );
     const dataWithActionsColumn = this.addActionsColumn(extractedData);
     return dataWithActionsColumn;

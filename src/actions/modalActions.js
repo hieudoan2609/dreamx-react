@@ -1,8 +1,9 @@
 import { MODAL_SHOW, MODAL_HIDE } from "../actions/types";
 
-export const modalShow = () => {
+export const modalShow = payload => {
   return {
-    type: MODAL_SHOW
+    type: MODAL_SHOW,
+    payload
   };
 };
 
