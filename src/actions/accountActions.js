@@ -1,3 +1,6 @@
+import Web3 from "web3";
+import axios from "axios";
+
 import {
   ACCOUNT_LOGIN,
   ACCOUNT_LOGOUT,
@@ -6,6 +9,9 @@ import {
   ACCOUNT_LOADING,
   ACCOUNT_LOADED
 } from "../actions/types";
+import singletons, { setSingleton } from "../singletons";
+import Exchange from "../ABI/Exchange.json";
+import ERC20 from "../ABI/ERC20.json";
 
 export const accountLoginAsync = () => {
   return async (dispatch, getState) => {
@@ -13,7 +19,7 @@ export const accountLoginAsync = () => {
       type: ACCOUNT_LOADING
     });
 
-    const { app } = getState();
+    const { app, tokens } = getState();
 
     if (!window.ethereum || (window.ethereum && !window.ethereum.isMetaMask)) {
       dispatch({
@@ -23,6 +29,11 @@ export const accountLoginAsync = () => {
     }
 
     if (window.ethereum.networkVersion !== app.networkId) {
+      console.log(
+        `wrong network, MetaMask network id: ${
+          window.ethereum.networkVersion
+        }, app network id: ${app.networkId}`
+      );
       dispatch({
         type: ACCOUNT_METAMASK_WRONGNETWORK
       });
@@ -31,10 +42,20 @@ export const accountLoginAsync = () => {
 
     try {
       const accounts = await window.ethereum.enable();
+      const address = accounts[0];
       addMetamaskListeners(dispatch);
+      initializeSingletons(app, tokens);
+
+      // TODO: LOAD USER INITIAL BALANCES
+      // const balances = await axios.get(
+      //   `https://api.odin.trade/balances/${address}`
+      // );
+      // const tokenWithInitialBalances = token.all;
+      // let tokenWithUserBalances = [];
+
       dispatch({
         type: ACCOUNT_LOGIN,
-        payload: { address: accounts[0] }
+        payload: { address }
       });
     } catch (err) {
       console.log(err);
@@ -52,6 +73,18 @@ export const accountLogout = () => {
       type: ACCOUNT_LOGOUT
     });
   };
+};
+
+const initializeSingletons = (app, tokens) => {
+  const web3 = new Web3(Web3.givenProvider);
+  const exchangeInstance = new web3.eth.Contract(Exchange, app.contractAddress);
+  const tokenInstances = {};
+  for (let token of tokens.all) {
+    tokenInstances[token.symbol] = new web3.eth.Contract(ERC20, token.address);
+  }
+  setSingleton("web3", web3);
+  setSingleton("exchange", exchangeInstance);
+  setSingleton("tokens", tokenInstances);
 };
 
 const addMetamaskListeners = dispatch => {

@@ -50,7 +50,7 @@ export const initializeAppAsync = () => {
     dispatch({
       type: APP_INITIALIZE,
       payload: {
-        address: contract.data.address,
+        contractAddress: contract.data.address,
         networkId: contract.data.network_id,
         networkName: getNetworkNameFromId(contract.data.network_id)
       }

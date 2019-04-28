@@ -22,7 +22,7 @@ export default (state = INITIAL_STATE, action) => {
     case APP_INITIALIZE:
       return {
         ...state,
-        contractAddress: action.payload.address,
+        contractAddress: action.payload.contractAddress,
         networkId: action.payload.networkId,
         networkName: action.payload.networkName,
         loading: false
