@@ -1,3 +1,5 @@
+import singletons from "./singletons";
+
 export const getNetworkNameFromId = networkId => {
   networkId = parseInt(networkId);
   const networks = { Mainnet: 1, Kovan: 42, Ropsten: 3, Rinkeby: 4 };
@@ -24,6 +26,20 @@ export const capitalize = string => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-// export const getWalletBalance = (user, token) => {
+export const getOnchainBalanceAsync = async (accountAddress, tokenSymbol) => {
+  return new Promise(async (resolve, reject) => {
+    const { web3, tokens } = singletons;
 
-// }
+    let balance;
+    if (tokenSymbol === "ETH") {
+      balance = web3.utils.fromWei(await web3.eth.getBalance(accountAddress));
+    } else {
+      const token = tokens[tokenSymbol];
+      balance = web3.utils.fromWei(
+        (await token.methods.balanceOf(accountAddress).call()).toString()
+      );
+    }
+
+    resolve(balance);
+  });
+};

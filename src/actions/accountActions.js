@@ -1,5 +1,5 @@
 import Web3 from "web3";
-import axios from "axios";
+// import axios from "axios";
 
 import {
   ACCOUNT_LOGIN,
@@ -7,9 +7,10 @@ import {
   ACCOUNT_METAMASK_UNAVAILABLE,
   ACCOUNT_METAMASK_WRONGNETWORK,
   ACCOUNT_LOADING,
-  ACCOUNT_LOADED
+  ACCOUNT_LOADED,
+  TRANSFER_HIDE
 } from "../actions/types";
-import singletons, { setSingleton } from "../singletons";
+import { setSingleton } from "../singletons";
 import Exchange from "../ABI/Exchange.json";
 import ERC20 from "../ABI/ERC20.json";
 
@@ -69,9 +70,7 @@ export const accountLoginAsync = () => {
 
 export const accountLogout = () => {
   return async dispatch => {
-    dispatch({
-      type: ACCOUNT_LOGOUT
-    });
+    dispatchLogoutActions(dispatch);
   };
 };
 
@@ -92,14 +91,19 @@ const addMetamaskListeners = dispatch => {
     window.ethereum.autoRefreshOnNetworkChange = false;
     window.ethereum.removeAllListeners();
     window.ethereum.on("networkChanged", function(network) {
-      dispatch({
-        type: ACCOUNT_LOGOUT
-      });
+      dispatchLogoutActions(dispatch);
     });
     window.ethereum.on("accountsChanged", function(accounts) {
-      dispatch({
-        type: ACCOUNT_LOGOUT
-      });
+      dispatchLogoutActions(dispatch);
     });
   }
+};
+
+const dispatchLogoutActions = dispatch => {
+  dispatch({
+    type: TRANSFER_HIDE
+  });
+  dispatch({
+    type: ACCOUNT_LOGOUT
+  });
 };

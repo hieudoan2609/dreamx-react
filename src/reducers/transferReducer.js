@@ -2,7 +2,9 @@ import {
   TRANSFER_SHOW,
   TRANSFER_HIDE,
   TRANSFER_AMOUNT_INPUT,
-  TRANSFER_ERROR
+  TRANSFER_ERROR,
+  TRANSFER_PENDING_ON,
+  TRANSFER_PENDING_OFF
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -17,6 +19,10 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case TRANSFER_PENDING_OFF:
+      return { ...state, pending: false };
+    case TRANSFER_PENDING_ON:
+      return { ...state, pending: true };
     case TRANSFER_ERROR:
       return { ...state, error: action.payload.error };
     case TRANSFER_AMOUNT_INPUT:

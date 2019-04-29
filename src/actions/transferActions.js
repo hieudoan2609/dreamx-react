@@ -2,8 +2,12 @@ import {
   TRANSFER_SHOW,
   TRANSFER_HIDE,
   TRANSFER_AMOUNT_INPUT,
-  TRANSFER_ERROR
+  TRANSFER_ERROR,
+  TRANSFER_PENDING_ON,
+  TRANSFER_PENDING_OFF
 } from "../actions/types";
+import { getOnchainBalanceAsync } from "../helpers";
+import singletons from "../singletons";
 
 export const transferShow = payload => {
   return {
@@ -40,7 +44,13 @@ export const transferHandleSubmitAsync = () => {
 };
 
 const depositAsync = async (dispatch, getState) => {
-  const { transfer } = getState();
+  const { tokens, web3 } = singletons;
+  const { transfer, account, app } = getState();
+  const accountAddress = account.address;
+  const tokenSymbol = transfer.symbol;
+  // const tokenAddress = transfer.address;
+  const amountWei = web3.utils.toWei(transfer.amount.toString());
+  const exchangeAddress = app.contractAddress;
 
   if (transfer.amount === "" || parseFloat(transfer.amount) === 0) {
     dispatch({
@@ -53,13 +63,43 @@ const depositAsync = async (dispatch, getState) => {
     return;
   }
 
-  // check for balance sufficiency
+  const onchainBalance = await getOnchainBalanceAsync(
+    accountAddress,
+    tokenSymbol
+  );
+  if (parseFloat(onchainBalance) < parseFloat(transfer.amount)) {
+    dispatch({
+      type: TRANSFER_ERROR,
+      payload: { error: "Insufficient balance." }
+    });
+    return;
+  }
 
-  // request for approval
+  // let approved = false;
+  // if (tokenSymbol !== "ETH") {
+  //   try {
+  //     dispatch({
+  //       type: TRANSFER_PENDING_ON
+  //     });
+  //     await tokens[tokenSymbol].methods
+  //       .approve(exchangeAddress, amountWei)
+  //       .send({ from: accountAddress });
+  //     approved = true;
+  //   } catch (error) {
+  //     dispatch({
+  //       type: TRANSFER_PENDING_OFF
+  //     });
+  //   }
+  // } else {
+  //   approved = true;
+  // }
 
   // call the deposit method on the exchange contract
 
-  console.log("DEPOSIT");
+  tokens[tokenSymbol].methods
+    .approve(exchangeAddress, amountWei)
+    .send({ from: accountAddress })
+    .on("receipt", console.log);
 };
 
 const withdrawAsync = (dispatch, getState) => {
