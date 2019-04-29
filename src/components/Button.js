@@ -3,15 +3,24 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import "./Button.scss";
+import Loading from "./Loading";
 
 class Button extends Component {
   render() {
     return (
       <div
-        onClick={this.props.onClick}
-        className={`Button ${this.props.theme}`}
+        className={`Button ${this.props.theme} ${
+          this.props.pending ? "pending" : ""
+        }`}
       >
-        {this.props.children}
+        <Loading
+          type="button"
+          active={this.props.pending ? true : false}
+          theme={this.props.theme}
+        />
+        <div className="body" onClick={this.props.onClick}>
+          {this.props.children}
+        </div>
       </div>
     );
   }
@@ -27,7 +36,8 @@ class Button extends Component {
 
 Button.propTypes = {
   theme: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  pending: PropTypes.bool
 };
 
 export default Button;

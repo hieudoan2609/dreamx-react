@@ -64,8 +64,8 @@ class Login extends Component {
             try again.
           </p>
           <Button
-            onClick={this.props.accountLoginAsync}
             theme={this.props.app.theme}
+            onClick={this.props.accountLoginAsync}
           >
             Try again
           </Button>

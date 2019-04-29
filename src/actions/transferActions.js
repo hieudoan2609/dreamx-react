@@ -48,8 +48,6 @@ const depositAsync = async (dispatch, getState) => {
   const { transfer, account, app } = getState();
   const accountAddress = account.address;
   const tokenSymbol = transfer.symbol;
-  // const tokenAddress = transfer.address;
-  const amountWei = web3.utils.toWei(transfer.amount.toString());
   const exchangeAddress = app.contractAddress;
 
   if (transfer.amount === "" || parseFloat(transfer.amount) === 0) {
@@ -62,6 +60,9 @@ const depositAsync = async (dispatch, getState) => {
 
     return;
   }
+
+  const amountWei = web3.utils.toWei(transfer.amount.toString());
+  const value = tokenSymbol === "ETH" ? amountWei : 0;
 
   const onchainBalance = await getOnchainBalanceAsync(
     accountAddress,
@@ -83,7 +84,35 @@ const depositAsync = async (dispatch, getState) => {
     exchangeAddress
   });
 
-  // call the deposit method on the exchange contract
+  if (!approved) {
+    return;
+  }
+
+  // try {
+  //   dispatch({
+  //     type: TRANSFER,
+  //     payload: { pending: true, error: "" }
+  //   });
+  //   await exchangeInstance.methods
+  //     .deposit(assetAddress, amount)
+  //     .send({ from: user, value });
+  // } catch (error) {
+  //   dispatch({
+  //     type: TRANSFER,
+  //     payload: { pending: false }
+  //   });
+  //   err = error;
+  // }
+  // if (!err) {
+  //   dispatch({
+  //     type: TRANSFER,
+  //     payload: { pending: false }
+  //   });
+
+  //   var $ = window.$;
+  //   $("#transfer").modal("close");
+  //   $("#transferComplete").modal("open");
+  // }
 
   console.log(approved);
 };

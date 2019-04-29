@@ -110,6 +110,7 @@ class Account extends Component {
           onAmountChange={this.props.transferHandleAmountChange}
           error={this.props.transfer.error}
           onSubmit={this.props.transferHandleSubmitAsync}
+          pending={this.props.transfer.pending}
         />
 
         <Login />
