@@ -75,31 +75,49 @@ const depositAsync = async (dispatch, getState) => {
     return;
   }
 
-  // let approved = false;
-  // if (tokenSymbol !== "ETH") {
-  //   try {
-  //     dispatch({
-  //       type: TRANSFER_PENDING_ON
-  //     });
-  //     await tokens[tokenSymbol].methods
-  //       .approve(exchangeAddress, amountWei)
-  //       .send({ from: accountAddress });
-  //     approved = true;
-  //   } catch (error) {
-  //     dispatch({
-  //       type: TRANSFER_PENDING_OFF
-  //     });
-  //   }
-  // } else {
-  //   approved = true;
-  // }
+  const approved = await requestDepositApprovalAsync({
+    dispatch,
+    accountAddress,
+    amountWei,
+    tokenSymbol,
+    exchangeAddress
+  });
 
   // call the deposit method on the exchange contract
 
-  tokens[tokenSymbol].methods
-    .approve(exchangeAddress, amountWei)
-    .send({ from: accountAddress })
-    .on("receipt", console.log);
+  console.log(approved);
+};
+
+const requestDepositApprovalAsync = ({
+  dispatch,
+  accountAddress,
+  amountWei,
+  tokenSymbol,
+  exchangeAddress
+}) => {
+  return new Promise((resolve, reject) => {
+    const { tokens } = singletons;
+
+    if (tokenSymbol === "ETH") {
+      resolve(true);
+    } else {
+      dispatch({
+        type: TRANSFER_PENDING_ON
+      });
+      tokens[tokenSymbol].methods
+        .approve(exchangeAddress, amountWei)
+        .send({ from: accountAddress })
+        .on("transactionHash", () => {
+          resolve(true);
+        })
+        .on("error", () => {
+          dispatch({
+            type: TRANSFER_PENDING_OFF
+          });
+          resolve(false);
+        });
+    }
+  });
 };
 
 const withdrawAsync = (dispatch, getState) => {

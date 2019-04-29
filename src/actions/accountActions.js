@@ -29,12 +29,12 @@ export const accountLoginAsync = () => {
       return;
     }
 
+    // if (!window.ethereum.networkVersion) {
+    //   return;
+    // }
+
     if (window.ethereum.networkVersion !== app.networkId) {
-      console.log(
-        `wrong network, MetaMask network id: ${
-          window.ethereum.networkVersion
-        }, app network id: ${app.networkId}`
-      );
+      console.log(window.ethereum);
       dispatch({
         type: ACCOUNT_METAMASK_WRONGNETWORK
       });
