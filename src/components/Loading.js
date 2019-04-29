@@ -12,7 +12,9 @@ class Loading extends Component {
           ${this.props.theme} 
           ${this.props.active ? "active" : ""}`}
       >
-        <ion-icon name="hourglass" />
+        <div className="wrapper">
+          <ion-icon name="hourglass" />
+        </div>
       </div>
     );
   }

@@ -17,8 +17,16 @@ export const transferShow = payload => {
 };
 
 export const transferHide = () => {
-  return {
-    type: TRANSFER_HIDE
+  return async (dispatch, getState) => {
+    const { transfer } = getState();
+
+    if (transfer.pending) {
+      return;
+    }
+
+    dispatch({
+      type: TRANSFER_HIDE
+    });
   };
 };
 

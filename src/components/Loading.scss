@@ -25,6 +25,12 @@ $danger: rgba(220, 53, 69, 0.7);
   top: 0px;
   left: 0px;
   right: 0px;
+  .wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: spin 500ms ease-in-out infinite;
+  }
   &.fixed {
     position: fixed;
     height: 100vh;
@@ -84,7 +90,6 @@ $danger: rgba(220, 53, 69, 0.7);
   justify-content: center;
   align-items: center;
   ion-icon[name="hourglass"] {
-    animation: spin 500ms ease-in-out infinite;
     line-height: 0;
   }
   &.active {
@@ -93,10 +98,10 @@ $danger: rgba(220, 53, 69, 0.7);
 }
 
 @keyframes spin {
-    from {
-        transform:rotate(0deg);
-    }
-    to {
-        transform:rotate(180deg);
-    }
+  from {
+    transform:rotate(0deg);
+  }
+  to {
+    transform:rotate(180deg);
+  }
 }
