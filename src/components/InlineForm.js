@@ -3,11 +3,16 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import Loading from "./Loading";
+import "./InlineForm.scss";
 
 class InlineForm extends Component {
   render() {
     return (
-      <div className="input-group">
+      <div
+        className={`InlineForm input-group ${this.props.theme} ${
+          this.props.pending ? "pending" : ""
+        }`}
+      >
         <input
           onChange={this.props.onAmountChange}
           type="number"
@@ -49,7 +54,8 @@ InlineForm.propTypes = {
   pending: PropTypes.bool.isRequired,
   theme: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
+  inputPlaceHolder: PropTypes.string.isRequired
 };
 
 export default InlineForm;

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 // import { connect } from "react-redux";
 // import PropTypes from "prop-types";
 
+import "./Boilerplate.scss";
+
 class Boilerplate extends Component {
   render() {
     return <p>Boilerplate</p>;

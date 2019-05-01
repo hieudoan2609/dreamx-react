@@ -71,6 +71,7 @@ class Transfer extends Component {
                       theme={this.props.theme}
                       onSubmit={this.props.onSubmit}
                       type={this.props.type}
+                      inputPlaceHolder={"Amount"}
                     />
                     <div className="invalid-feedback">{this.props.error}</div>
                     <small className="form-text text-muted">
