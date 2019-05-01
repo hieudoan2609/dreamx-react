@@ -24,7 +24,7 @@ export default (state = INITIAL_STATE, action) => {
     case TRANSFER_PENDING_ON:
       return { ...state, pending: true };
     case TRANSFER_ERROR:
-      return { ...state, error: action.payload.error };
+      return { ...state, error: action.payload.error, pending: false };
     case TRANSFER_AMOUNT_INPUT:
       return { ...state, amount: action.payload.amount };
     case TRANSFER_HIDE:

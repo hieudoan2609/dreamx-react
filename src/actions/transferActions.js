@@ -41,6 +41,10 @@ export const transferHandleAmountChange = e => {
 
 export const transferHandleSubmitAsync = () => {
   return async (dispatch, getState) => {
+    dispatch({
+      type: TRANSFER_PENDING_ON
+    });
+
     const { transfer } = getState();
 
     if (transfer.type === "deposit") {
@@ -123,6 +127,10 @@ const depositAsync = async (dispatch, getState) => {
   // }
 
   console.log(approved);
+
+  dispatch({
+    type: TRANSFER_PENDING_OFF
+  });
 };
 
 const requestDepositApprovalAsync = ({
@@ -138,9 +146,6 @@ const requestDepositApprovalAsync = ({
     if (tokenSymbol === "ETH") {
       resolve(true);
     } else {
-      dispatch({
-        type: TRANSFER_PENDING_ON
-      });
       tokens[tokenSymbol].methods
         .approve(exchangeAddress, amountWei)
         .send({ from: accountAddress })
