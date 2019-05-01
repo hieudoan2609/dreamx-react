@@ -5,7 +5,7 @@ import { CSSTransition } from "react-transition-group";
 
 import "./Transfer.scss";
 import { capitalize } from "../helpers";
-import Loading from "./Loading";
+import InlineForm from "./InlineForm";
 
 class Transfer extends Component {
   componentDidUpdate = () => {
@@ -63,31 +63,15 @@ class Transfer extends Component {
                   </div>
 
                   <div className="modal-body">
-                    <div className="input-group">
-                      <input
-                        onChange={this.props.onAmountChange}
-                        type="number"
-                        className={`form-control ${
-                          this.props.error ? "invalid" : ""
-                        }`}
-                        placeholder="Amount"
-                        spellCheck="false"
-                        value={this.props.amount}
-                        disabled={this.props.pending ? true : false}
-                      />
-                      <div className="input-group-append">
-                        <span className="input-group-text">
-                          <Loading
-                            type="button"
-                            active={this.props.pending ? true : false}
-                            theme={this.props.theme}
-                          />
-                          <div className="body" onClick={this.props.onSubmit}>
-                            {this.props.type.toUpperCase()}
-                          </div>
-                        </span>
-                      </div>
-                    </div>
+                    <InlineForm
+                      onAmountChange={this.props.onAmountChange}
+                      error={this.props.error}
+                      amount={this.props.amount}
+                      pending={this.props.pending}
+                      theme={this.props.theme}
+                      onSubmit={this.props.onSubmit}
+                      type={this.props.type}
+                    />
                     <div className="invalid-feedback">{this.props.error}</div>
                     <small className="form-text text-muted">
                       {capitalize(this.props.type)} entire balance
