@@ -73,7 +73,6 @@ class Transfer extends Component {
                       type={this.props.type}
                       inputPlaceHolder={"Amount"}
                     />
-                    <div className="invalid-feedback">{this.props.error}</div>
                     <small className="form-text text-muted">
                       {capitalize(this.props.type)} entire balance
                     </small>

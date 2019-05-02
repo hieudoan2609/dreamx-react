@@ -9,31 +9,34 @@ class InlineForm extends Component {
   render() {
     return (
       <div
-        className={`InlineForm input-group ${this.props.theme} ${
+        className={`InlineForm ${this.props.theme} ${
           this.props.pending ? "pending" : ""
         }`}
       >
-        <input
-          onChange={this.props.onAmountChange}
-          type="number"
-          className={`form-control ${this.props.error ? "invalid" : ""}`}
-          placeholder="Amount"
-          spellCheck="false"
-          value={this.props.amount}
-          disabled={this.props.pending ? true : false}
-        />
-        <div className="input-group-append">
-          <span className="input-group-text">
-            <Loading
-              type="button"
-              active={this.props.pending ? true : false}
-              theme={this.props.theme}
-            />
-            <div className="body" onClick={this.props.onSubmit}>
-              {this.props.type.toUpperCase()}
-            </div>
-          </span>
+        <div className="input-group">
+          <input
+            onChange={this.props.onAmountChange}
+            type="number"
+            className={`form-control ${this.props.error ? "invalid" : ""}`}
+            placeholder="Amount"
+            spellCheck="false"
+            value={this.props.amount}
+            disabled={this.props.pending ? true : false}
+          />
+          <div className="input-group-append">
+            <span className="input-group-text">
+              <Loading
+                type="button"
+                active={this.props.pending ? true : false}
+                theme={this.props.theme}
+              />
+              <div className="body" onClick={this.props.onSubmit}>
+                {this.props.type.toUpperCase()}
+              </div>
+            </span>
+          </div>
         </div>
+        <div className="invalid-feedback">{this.props.error}</div>
       </div>
     );
   }
