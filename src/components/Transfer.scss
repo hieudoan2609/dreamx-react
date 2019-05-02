@@ -83,6 +83,8 @@ $danger: rgba(220, 53, 69, 0.7);
       }
       .invalid-feedback {
         display: block;
+        height: 16px;
+        font-size: 12px;
       }
       small {
         text-decoration: underline;
