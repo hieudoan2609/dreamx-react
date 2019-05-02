@@ -13,7 +13,7 @@ import {
   transferHandleSubmitAsync
 } from "../actions";
 import { extractKeysFromObjectArray } from "../helpers";
-import Transfer from "./Transfer";
+import Modal from "./Modal";
 
 class Account extends Component {
   state = {
@@ -99,7 +99,7 @@ class Account extends Component {
   render() {
     return (
       <div className={`Account ${this.props.app.theme}`}>
-        <Transfer
+        <Modal
           theme={this.props.app.theme}
           show={this.props.transfer.show}
           onHide={this.props.transferHide}
