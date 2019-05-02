@@ -56,7 +56,7 @@ export const transferHandleSubmitAsync = () => {
 };
 
 const depositAsync = async (dispatch, getState) => {
-  const { tokens, web3 } = singletons;
+  const { web3 } = singletons;
   const { transfer, account, app } = getState();
   const accountAddress = account.address;
   const tokenSymbol = transfer.symbol;
@@ -73,9 +73,6 @@ const depositAsync = async (dispatch, getState) => {
     return;
   }
 
-  const amountWei = web3.utils.toWei(transfer.amount.toString());
-  const value = tokenSymbol === "ETH" ? amountWei : 0;
-
   const onchainBalance = await getOnchainBalanceAsync(
     accountAddress,
     tokenSymbol
@@ -88,53 +85,61 @@ const depositAsync = async (dispatch, getState) => {
     return;
   }
 
+  const amountWei = web3.utils.toWei(transfer.amount.toString());
   const approved = await requestDepositApprovalAsync({
-    dispatch,
     accountAddress,
     amountWei,
     tokenSymbol,
     exchangeAddress
   });
-
   if (!approved) {
+    dispatch({
+      type: TRANSFER_PENDING_OFF
+    });
     return;
   }
 
-  // try {
-  //   dispatch({
-  //     type: TRANSFER,
-  //     payload: { pending: true, error: "" }
-  //   });
-  //   await exchangeInstance.methods
-  //     .deposit(assetAddress, amount)
-  //     .send({ from: user, value });
-  // } catch (error) {
-  //   dispatch({
-  //     type: TRANSFER,
-  //     payload: { pending: false }
-  //   });
-  //   err = error;
-  // }
-  // if (!err) {
-  //   dispatch({
-  //     type: TRANSFER,
-  //     payload: { pending: false }
-  //   });
+  const sent = await sendDepositTransactionAsync({
+    accountAddress,
+    amountWei,
+    tokenSymbol
+  });
+  if (!sent) {
+    dispatch({
+      type: TRANSFER_PENDING_OFF
+    });
+    return;
+  }
 
-  //   var $ = window.$;
-  //   $("#transfer").modal("close");
-  //   $("#transferComplete").modal("open");
-  // }
+  // dispatch({
+  //   type:
+  // })
 
-  console.log(approved);
+  console.log("DONE");
+};
 
-  dispatch({
-    type: TRANSFER_PENDING_OFF
+const sendDepositTransactionAsync = ({
+  accountAddress,
+  amountWei,
+  tokenSymbol
+}) => {
+  return new Promise((resolve, reject) => {
+    const { exchange, tokens } = singletons;
+    const value = tokenSymbol === "ETH" ? amountWei : 0;
+    const tokenAddress = tokens[tokenSymbol].options.address;
+    exchange.methods
+      .deposit(tokenAddress, amountWei)
+      .send({ from: accountAddress, value })
+      .on("transactionHash", () => {
+        resolve(true);
+      })
+      .on("error", () => {
+        resolve(false);
+      });
   });
 };
 
 const requestDepositApprovalAsync = ({
-  dispatch,
   accountAddress,
   amountWei,
   tokenSymbol,
@@ -153,9 +158,6 @@ const requestDepositApprovalAsync = ({
           resolve(true);
         })
         .on("error", () => {
-          dispatch({
-            type: TRANSFER_PENDING_OFF
-          });
           resolve(false);
         });
     }
