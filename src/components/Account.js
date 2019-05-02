@@ -13,7 +13,8 @@ import {
   transferHandleSubmitAsync
 } from "../actions";
 import { extractKeysFromObjectArray } from "../helpers";
-import Modal from "./Modal";
+import ModalWrapper from "./ModalWrapper";
+import TransferModal from "./TransferModal";
 
 class Account extends Component {
   state = {
@@ -99,19 +100,25 @@ class Account extends Component {
   render() {
     return (
       <div className={`Account ${this.props.app.theme}`}>
-        <Modal
+        <ModalWrapper
           theme={this.props.app.theme}
           show={this.props.transfer.show}
           onHide={this.props.transferHide}
-          type={this.props.transfer.type}
-          name={this.props.transfer.name}
-          symbol={this.props.transfer.symbol}
-          amount={this.props.transfer.amount}
-          onAmountChange={this.props.transferHandleAmountChange}
-          error={this.props.transfer.error}
-          onSubmit={this.props.transferHandleSubmitAsync}
           pending={this.props.transfer.pending}
-        />
+        >
+          <TransferModal
+            theme={this.props.app.theme}
+            onHide={this.props.transferHide}
+            type={this.props.transfer.type}
+            name={this.props.transfer.name}
+            symbol={this.props.transfer.symbol}
+            amount={this.props.transfer.amount}
+            onAmountChange={this.props.transferHandleAmountChange}
+            error={this.props.transfer.error}
+            onSubmit={this.props.transferHandleSubmitAsync}
+            pending={this.props.transfer.pending}
+          />
+        </ModalWrapper>
 
         <Login />
 

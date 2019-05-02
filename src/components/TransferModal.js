@@ -2,14 +2,14 @@ import React, { Component } from "react";
 // import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import "./Transfer.scss";
+import "./TransferModal.scss";
 import { capitalize } from "../helpers";
 import InlineForm from "./InlineForm";
 
-class Transfer extends Component {
+class TransferModal extends Component {
   render() {
     return (
-      <div className={`Transfer ${this.props.theme}`}>
+      <div className={`TransferModal ${this.props.theme}`}>
         <div className="modal-header">
           <h5 className="modal-title">
             {capitalize(this.props.type)} {capitalize(this.props.name)} (
@@ -48,7 +48,7 @@ class Transfer extends Component {
 //  getChartData
 // };
 
-Transfer.propTypes = {
+TransferModal.propTypes = {
   theme: PropTypes.string.isRequired,
   onHide: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
@@ -61,4 +61,4 @@ Transfer.propTypes = {
   pending: PropTypes.bool.isRequired
 };
 
-export default Transfer;
+export default TransferModal;
