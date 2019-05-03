@@ -12,8 +12,8 @@ class Loading extends Component {
           ${this.props.theme} 
           ${this.props.active ? "active" : ""}`}
       >
-        <div className="wrapper">
-          <ion-icon name="hourglass" />
+        <div className="spinner-border" role="status">
+          <span className="sr-only">Loading...</span>
         </div>
       </div>
     );
