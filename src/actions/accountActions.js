@@ -33,8 +33,10 @@ export const accountLoginAsync = () => {
     //   return;
     // }
 
-    if (window.ethereum.networkVersion !== app.networkId) {
-      console.log(window.ethereum);
+    if (
+      window.ethereum.networkVersion &&
+      window.ethereum.networkVersion !== app.networkId
+    ) {
       dispatch({
         type: ACCOUNT_METAMASK_WRONGNETWORK
       });
