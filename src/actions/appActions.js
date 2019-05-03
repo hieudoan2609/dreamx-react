@@ -47,13 +47,13 @@ export const initializeAppAsync = () => {
         tokens: tokensWithInitialBalances
       }
     });
-    // dispatch({
-    //   type: APP_INITIALIZE,
-    //   payload: {
-    //     contractAddress: contract.data.address,
-    //     networkId: contract.data.network_id,
-    //     networkName: getNetworkNameFromId(contract.data.network_id)
-    //   }
-    // });
+    dispatch({
+      type: APP_INITIALIZE,
+      payload: {
+        contractAddress: contract.data.address,
+        networkId: contract.data.network_id,
+        networkName: getNetworkNameFromId(contract.data.network_id)
+      }
+    });
   };
 };
