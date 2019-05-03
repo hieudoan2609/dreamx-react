@@ -12,9 +12,7 @@ class Loading extends Component {
           ${this.props.theme} 
           ${this.props.active ? "active" : ""}`}
       >
-        <div className="spinner-border" role="status">
-          <span className="sr-only">Loading...</span>
-        </div>
+        <div className="spinner-border" />
       </div>
     );
   }
