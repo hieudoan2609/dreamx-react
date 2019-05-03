@@ -15,6 +15,7 @@ import {
 import { extractKeysFromObjectArray } from "../helpers";
 import ModalWrapper from "./ModalWrapper";
 import TransferModal from "./TransferModal";
+import TransferCompleteModal from "./TransferCompleteModal";
 
 class Account extends Component {
   state = {
@@ -97,6 +98,32 @@ class Account extends Component {
     return <div>TRADES</div>;
   };
 
+  renderFrontModal = () => {
+    return (
+      <TransferModal
+        theme={this.props.app.theme}
+        onHide={this.props.transferHide}
+        type={this.props.transfer.type}
+        name={this.props.transfer.name}
+        symbol={this.props.transfer.symbol}
+        amount={this.props.transfer.amount}
+        onAmountChange={this.props.transferHandleAmountChange}
+        error={this.props.transfer.error}
+        onSubmit={this.props.transferHandleSubmitAsync}
+        pending={this.props.transfer.pending}
+      />
+    );
+  };
+
+  renderBackModal = () => {
+    return (
+      <TransferCompleteModal
+        theme={this.props.app.theme}
+        onHide={this.props.transferHide}
+      />
+    );
+  };
+
   render() {
     return (
       <div className={`Account ${this.props.app.theme}`}>
@@ -105,20 +132,10 @@ class Account extends Component {
           show={this.props.transfer.show}
           onHide={this.props.transferHide}
           pending={this.props.transfer.pending}
-        >
-          <TransferModal
-            theme={this.props.app.theme}
-            onHide={this.props.transferHide}
-            type={this.props.transfer.type}
-            name={this.props.transfer.name}
-            symbol={this.props.transfer.symbol}
-            amount={this.props.transfer.amount}
-            onAmountChange={this.props.transferHandleAmountChange}
-            error={this.props.transfer.error}
-            onSubmit={this.props.transferHandleSubmitAsync}
-            pending={this.props.transfer.pending}
-          />
-        </ModalWrapper>
+          completed={this.props.transfer.completed}
+          renderFrontModal={this.renderFrontModal}
+          renderBackModal={this.renderBackModal}
+        />
 
         <Login />
 

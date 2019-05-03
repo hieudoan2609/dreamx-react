@@ -69,6 +69,16 @@ $danger: rgba(220, 53, 69, 0.7);
       box-shadow: $shadow;
       border: 0px;
       transition: transform 300ms ease, opacity 300ms ease;
+      overflow: hidden;
+      .wrapper {
+        display: flex;
+        width: 200%;
+        transform: translateX(0%);
+        transition: transform 300ms ease;
+        > div {
+          width: 100%;
+        }
+      }
     }
   }
   &.light {
@@ -81,6 +91,15 @@ $danger: rgba(220, 53, 69, 0.7);
     .modal-content {
       background-color: $dark-secondary-tint;
       color: $dark-text;
+    }
+  }
+  &.completed {
+    .modal {
+      .modal-content {
+        .wrapper {
+          transform: translateX(-50%);
+        }
+      }
     }
   }
 }

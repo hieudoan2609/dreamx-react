@@ -42,13 +42,19 @@ class ModalWrapper extends Component {
       >
         <div>
           <div
-            className={`ModalWrapper ${this.props.theme} ${
-              this.props.pending ? "pending" : ""
-            }`}
+            className={`ModalWrapper ${this.props.theme} 
+              ${this.props.pending ? "pending" : ""}
+              ${this.props.completed ? "completed" : ""}
+            `}
           >
             <div className="modal">
               <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content">{this.props.children}</div>
+                <div className="modal-content">
+                  <div className="wrapper">
+                    <div className="front">{this.props.renderFrontModal()}</div>
+                    <div className="back">{this.props.renderBackModal()}</div>
+                  </div>
+                </div>
               </div>
 
               <div className="backdrop" onClick={this.props.onHide} />
@@ -72,7 +78,10 @@ ModalWrapper.propTypes = {
   theme: PropTypes.string.isRequired,
   show: PropTypes.bool.isRequired,
   onHide: PropTypes.func.isRequired,
-  pending: PropTypes.bool.isRequired
+  pending: PropTypes.bool.isRequired,
+  completed: PropTypes.bool.isRequired,
+  renderFrontModal: PropTypes.func.isRequired,
+  renderBackModal: PropTypes.func.isRequired
 };
 
 export default ModalWrapper;

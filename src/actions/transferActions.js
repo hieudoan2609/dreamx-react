@@ -4,7 +4,8 @@ import {
   TRANSFER_AMOUNT_INPUT,
   TRANSFER_ERROR,
   TRANSFER_PENDING_ON,
-  TRANSFER_PENDING_OFF
+  TRANSFER_PENDING_OFF,
+  TRANSFER_COMPLETE
 } from "../actions/types";
 import { getOnchainBalanceAsync } from "../helpers";
 import singletons from "../singletons";
@@ -111,9 +112,9 @@ const depositAsync = async (dispatch, getState) => {
     return;
   }
 
-  // dispatch({
-  //   type:
-  // })
+  dispatch({
+    type: TRANSFER_COMPLETE
+  });
 
   console.log("DONE");
 };
