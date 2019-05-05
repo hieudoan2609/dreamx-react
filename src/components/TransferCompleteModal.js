@@ -13,8 +13,7 @@ class TransferCompleteModal extends Component {
           <ion-icon name="checkmark-circle" />
           <h5 className="modal-title">Complete</h5>
           <p>
-            Deposit submitted, it will show up in the <b>Transfers</b> tab in a
-            minute.
+            Deposit will show up in the <b>Transfers</b> tab in a minute.
           </p>
           <Button theme={this.props.theme} onClick={this.props.onHide}>
             Close

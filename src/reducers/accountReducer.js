@@ -4,7 +4,8 @@ import {
   ACCOUNT_METAMASK_UNAVAILABLE,
   ACCOUNT_METAMASK_WRONGNETWORK,
   ACCOUNT_LOADING,
-  ACCOUNT_LOADED
+  ACCOUNT_LOADED,
+  ACCOUNT_METAMASK_NOTREADY
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -19,6 +20,8 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case ACCOUNT_METAMASK_NOTREADY:
+      return { ...state, metamask: "notready", loading: false };
     case ACCOUNT_LOADING:
       return { ...state, loading: true };
     case ACCOUNT_LOADED:

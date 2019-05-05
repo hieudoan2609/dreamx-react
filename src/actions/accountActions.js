@@ -8,7 +8,8 @@ import {
   ACCOUNT_METAMASK_WRONGNETWORK,
   ACCOUNT_LOADING,
   ACCOUNT_LOADED,
-  TRANSFER_HIDE
+  TRANSFER_HIDE,
+  ACCOUNT_METAMASK_NOTREADY
 } from "../actions/types";
 import { setSingleton } from "../singletons";
 import Exchange from "../ABI/Exchange.json";
@@ -29,14 +30,14 @@ export const accountLoginAsync = () => {
       return;
     }
 
-    // if (!window.ethereum.networkVersion) {
-    //   return;
-    // }
+    if (!window.ethereum.networkVersion) {
+      dispatch({
+        type: ACCOUNT_METAMASK_NOTREADY
+      });
+      return;
+    }
 
-    if (
-      window.ethereum.networkVersion &&
-      window.ethereum.networkVersion !== app.networkId
-    ) {
+    if (window.ethereum.networkVersion !== app.networkId) {
       dispatch({
         type: ACCOUNT_METAMASK_WRONGNETWORK
       });

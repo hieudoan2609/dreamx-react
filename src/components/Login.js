@@ -7,6 +7,10 @@ import "./Login.scss";
 import Button from "./Button";
 
 class Login extends Component {
+  refreshPage = () => {
+    window.location.reload();
+  };
+
   renderBody = () => {
     if (this.props.account.loading) {
       return (
@@ -68,6 +72,18 @@ class Login extends Component {
             onClick={this.props.accountLoginAsync}
           >
             Try again
+          </Button>
+        </div>
+      );
+    }
+
+    if (this.props.account.metamask === "notready") {
+      return (
+        <div className="card-body">
+          <h5 className="card-title">MetaMask is not ready</h5>
+          <p className="card-text">Please refresh this page in a moment.</p>
+          <Button onClick={this.refreshPage} theme={this.props.app.theme}>
+            Refresh
           </Button>
         </div>
       );

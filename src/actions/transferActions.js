@@ -115,8 +115,6 @@ const depositAsync = async (dispatch, getState) => {
   dispatch({
     type: TRANSFER_COMPLETE
   });
-
-  console.log("DONE");
 };
 
 const sendDepositTransactionAsync = ({
