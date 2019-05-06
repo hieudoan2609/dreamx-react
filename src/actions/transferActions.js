@@ -7,7 +7,7 @@ import {
   TRANSFER_PENDING_OFF,
   TRANSFER_COMPLETE
 } from "../actions/types";
-import { getOnchainBalanceAsync } from "../helpers";
+import { getOnchainBalanceAsync, round } from "../helpers";
 import singletons from "../singletons";
 
 export const transferShow = payload => {
@@ -161,6 +161,26 @@ const requestDepositApprovalAsync = ({
         });
     }
   });
+};
+
+export const transferDepositEntireBalance = () => {
+  return async (dispatch, getState) => {
+    const { account, transfer } = getState();
+    const accountAddress = account.address;
+    const tokenSymbol = transfer.symbol;
+
+    const onchainBalance = await getOnchainBalanceAsync(
+      accountAddress,
+      tokenSymbol
+    );
+
+    dispatch({
+      type: TRANSFER_AMOUNT_INPUT,
+      payload: {
+        amount: round(onchainBalance)
+      }
+    });
+  };
 };
 
 const withdrawAsync = (dispatch, getState) => {

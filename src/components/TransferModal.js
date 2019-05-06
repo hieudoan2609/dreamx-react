@@ -31,7 +31,10 @@ class TransferModal extends Component {
             type={this.props.type}
             inputPlaceHolder={"Amount"}
           />
-          <small className="form-text text-muted">
+          <small
+            className="form-text text-muted"
+            onClick={this.props.depositEntireBalance}
+          >
             {capitalize(this.props.type)} entire balance
           </small>
         </div>
@@ -58,7 +61,8 @@ TransferModal.propTypes = {
   onAmountChange: PropTypes.func.isRequired,
   error: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  pending: PropTypes.bool.isRequired
+  pending: PropTypes.bool.isRequired,
+  depositEntireBalance: PropTypes.func.isRequired
 };
 
 export default TransferModal;
