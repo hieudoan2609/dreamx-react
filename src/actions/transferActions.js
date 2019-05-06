@@ -173,11 +173,12 @@ export const transferDepositEntireBalance = () => {
       accountAddress,
       tokenSymbol
     );
+    const roundedOnchainBalance = round(onchainBalance).toString();
 
     dispatch({
       type: TRANSFER_AMOUNT_INPUT,
       payload: {
-        amount: round(onchainBalance)
+        amount: roundedOnchainBalance
       }
     });
   };
