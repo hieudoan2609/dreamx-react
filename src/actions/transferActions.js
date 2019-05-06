@@ -126,15 +126,17 @@ const sendDepositTransactionAsync = ({
     const { exchange, tokens } = singletons;
     const value = tokenSymbol === "ETH" ? amountWei : 0;
     const tokenAddress = tokens[tokenSymbol].options.address;
-    exchange.methods
-      .deposit(tokenAddress, amountWei)
-      .send({ from: accountAddress, value })
-      .on("transactionHash", () => {
-        resolve(true);
-      })
-      .on("error", () => {
-        resolve(false);
-      });
+    setTimeout(() => {
+      exchange.methods
+        .deposit(tokenAddress, amountWei)
+        .send({ from: accountAddress, value })
+        .on("transactionHash", () => {
+          resolve(true);
+        })
+        .on("error", () => {
+          resolve(false);
+        });
+    }, 1000);
   });
 };
 
