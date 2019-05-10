@@ -71,10 +71,13 @@ const loadUserBalancesAsync = async (dispatch, address, tokens) => {
     `https://api.odin.trade/balances/${address}`
   );
   let tokensWithUserBalances = tokens.all;
-  for (let balance of balances.data.records) {
-    for (let index in tokensWithUserBalances) {
-      const token = tokensWithUserBalances[index];
-      if (tokensWithUserBalances[index].address === balance.token_address) {
+  for (let index in tokensWithUserBalances) {
+    const token = tokensWithUserBalances[index];
+    token.availableBalance = 0;
+    token.inOrders = 0;
+    token.totalBalance = 0;
+    for (let balance of balances.data.records) {
+      if (token.address === balance.token_address) {
         token.availableBalance = parseInt(balance.balance);
         token.inOrders = parseInt(balance.hold_balance);
         token.totalBalance = token.availableBalance + token.inOrders;
