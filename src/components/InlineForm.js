@@ -20,7 +20,7 @@ class InlineForm extends Component {
             className={`form-control ${this.props.error ? "invalid" : ""}`}
             placeholder="Amount"
             spellCheck="false"
-            value={this.props.amount}
+            value={this.props.value}
             disabled={this.props.pending ? true : false}
           />
           <div className="input-group-append">
@@ -53,7 +53,7 @@ class InlineForm extends Component {
 InlineForm.propTypes = {
   onAmountChange: PropTypes.func.isRequired,
   error: PropTypes.string.isRequired,
-  amount: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
   pending: PropTypes.bool.isRequired,
   theme: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
