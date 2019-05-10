@@ -17,7 +17,6 @@ import { extractKeysFromObjectArray } from "../helpers";
 import ModalWrapper from "./ModalWrapper";
 import TransferModal from "./TransferModal";
 import TransferCompleteModal from "./TransferCompleteModal";
-import singletons from "../singletons";
 
 class Account extends Component {
   state = {
@@ -59,7 +58,6 @@ class Account extends Component {
   };
 
   getAssetTableData = () => {
-    const { web3 } = singletons;
     if (!this.props.account.address) {
       return [];
     }
@@ -67,13 +65,6 @@ class Account extends Component {
       this.props.tokens.filtered,
       ["name", "symbol", "totalBalance", "availableBalance", "inOrders"]
     );
-    for (let row of extractedData) {
-      row.availableBalance = web3.utils.fromWei(
-        row.availableBalance.toString()
-      );
-      row.inOrders = web3.utils.fromWei(row.inOrders.toString());
-      row.totalBalance = web3.utils.fromWei(row.totalBalance.toString());
-    }
     const dataWithActionsColumn = this.addActionsColumn(extractedData);
     return dataWithActionsColumn;
   };
