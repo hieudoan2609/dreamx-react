@@ -1,5 +1,5 @@
 import Web3 from "web3";
-// import axios from "axios";
+import axios from "axios";
 
 import {
   ACCOUNT_LOGIN,
@@ -9,9 +9,10 @@ import {
   ACCOUNT_LOADING,
   ACCOUNT_LOADED,
   TRANSFER_HIDE,
-  ACCOUNT_METAMASK_NOTREADY
+  ACCOUNT_METAMASK_NOTREADY,
+  TOKEN_LOAD
 } from "../actions/types";
-import { setSingleton } from "../singletons";
+import singletons, { setSingleton } from "../singletons";
 import Exchange from "../ABI/Exchange.json";
 import ERC20 from "../ABI/ERC20.json";
 
@@ -49,13 +50,7 @@ export const accountLoginAsync = () => {
       const address = accounts[0];
       addMetamaskListeners(dispatch);
       initializeSingletons(app, tokens);
-
-      // TODO: LOAD USER INITIAL BALANCES
-      // const balances = await axios.get(
-      //   `https://api.odin.trade/balances/${address}`
-      // );
-      // const tokenWithInitialBalances = token.all;
-      // let tokenWithUserBalances = [];
+      await loadUserBalancesAsync(dispatch, address, tokens);
 
       dispatch({
         type: ACCOUNT_LOGIN,
@@ -69,6 +64,29 @@ export const accountLoginAsync = () => {
       return;
     }
   };
+};
+
+const loadUserBalancesAsync = async (dispatch, address, tokens) => {
+  const balances = await axios.get(
+    `https://api.odin.trade/balances/${address}`
+  );
+  let tokensWithUserBalances = tokens.all;
+  for (let balance of balances.data.records) {
+    for (let index in tokensWithUserBalances) {
+      const token = tokensWithUserBalances[index];
+      if (tokensWithUserBalances[index].address === balance.token_address) {
+        token.availableBalance = parseInt(balance.balance);
+        token.inOrders = parseInt(balance.hold_balance);
+        token.totalBalance = token.availableBalance + token.inOrders;
+      }
+    }
+  }
+  dispatch({
+    type: TOKEN_LOAD,
+    payload: {
+      tokens: tokensWithUserBalances
+    }
+  });
 };
 
 export const accountLogout = () => {
