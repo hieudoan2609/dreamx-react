@@ -24,7 +24,7 @@ class TransferModal extends Component {
           <InlineForm
             onAmountChange={this.props.onAmountChange}
             error={this.props.error}
-            amount={this.props.amount}
+            value={this.props.amount}
             pending={this.props.pending}
             theme={this.props.theme}
             onSubmit={this.props.onSubmit}
