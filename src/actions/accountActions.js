@@ -12,7 +12,7 @@ import {
   ACCOUNT_METAMASK_NOTREADY,
   TOKEN_LOAD
 } from "../actions/types";
-import singletons, { setSingleton } from "../singletons";
+import { setSingleton } from "../singletons";
 import Exchange from "../ABI/Exchange.json";
 import ERC20 from "../ABI/ERC20.json";
 

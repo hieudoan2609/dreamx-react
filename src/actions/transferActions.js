@@ -187,5 +187,32 @@ export const transferDepositEntireBalance = () => {
 };
 
 const withdrawAsync = (dispatch, getState) => {
-  console.log("WITHDRAW");
+  // input check
+  // balance check
+  // signature
+  // POST request
+
+  const { transfer, tokens } = getState();
+  const tokenSymbol = transfer.symbol;
+
+  if (transfer.amount === "" || parseFloat(transfer.amount) === 0) {
+    dispatch({
+      type: TRANSFER_ERROR,
+      payload: {
+        error: "Amount can't be empty."
+      }
+    });
+
+    return;
+  }
+
+  // const token = tokens.all.filter(token => token.symbol === tokenSymbol)[0];
+  // const availableBalance = token.availableBalance;
+  // if (parseFloat(availableBalance) < parseFloat(transfer.amount)) {
+  //   dispatch({
+  //     type: TRANSFER_ERROR,
+  //     payload: { error: "Insufficient balance." }
+  //   });
+  //   return;
+  // }
 };

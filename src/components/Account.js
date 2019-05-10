@@ -17,7 +17,7 @@ import { extractKeysFromObjectArray } from "../helpers";
 import ModalWrapper from "./ModalWrapper";
 import TransferModal from "./TransferModal";
 import TransferCompleteModal from "./TransferCompleteModal";
-import singletons, { setSingleton } from "../singletons";
+import singletons from "../singletons";
 
 class Account extends Component {
   state = {
