@@ -34,21 +34,7 @@ export const initializeAppAsync = () => {
     const contract = await axios.get(
       `${HTTP_BASE_URL}/return_contract_address`
     );
-    const tokens = await axios.get(`${HTTP_BASE_URL}/tokens`);
-
-    let tokensWithInitialBalances = [];
-    for (let token of tokens.data.records) {
-      token.totalBalance = token.availableBalance = token.inOrders = 0;
-      token.decimals = parseInt(token.decimals);
-      tokensWithInitialBalances.push(token);
-    }
-
-    dispatch({
-      type: TOKEN_LOAD,
-      payload: {
-        tokens: tokensWithInitialBalances
-      }
-    });
+    await loadTokensAsync(dispatch);
     dispatch({
       type: APP_INITIALIZE,
       payload: {
@@ -58,4 +44,29 @@ export const initializeAppAsync = () => {
       }
     });
   };
+};
+
+const loadTokensAsync = async dispatch => {
+  const { HTTP_BASE_URL } = config;
+  const tokens = await axios.get(`${HTTP_BASE_URL}/tokens`);
+
+  let tokensWithInitialBalances = [];
+  for (let token of tokens.data.records) {
+    token.totalBalance = token.availableBalance = token.inOrders = 0;
+    token.decimals = parseInt(token.decimals);
+    [token.withdrawMimnimum, token.withdrawFee] = [
+      token.withdraw_minimum,
+      token.withdraw_fee
+    ];
+    delete token.withdraw_minimum;
+    delete token.withdraw_fee;
+    tokensWithInitialBalances.push(token);
+  }
+
+  dispatch({
+    type: TOKEN_LOAD,
+    payload: {
+      tokens: tokensWithInitialBalances
+    }
+  });
 };
