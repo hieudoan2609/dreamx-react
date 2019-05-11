@@ -11,7 +11,7 @@ import {
   transferHandleAmountChange,
   transferHide,
   transferHandleSubmitAsync,
-  transferDepositEntireBalance
+  transferEnterEntireBalance
 } from "../actions";
 import { extractKeysFromObjectArray } from "../helpers";
 import ModalWrapper from "./ModalWrapper";
@@ -112,7 +112,7 @@ class Account extends Component {
         error={this.props.transfer.error}
         onSubmit={this.props.transferHandleSubmitAsync}
         pending={this.props.transfer.pending}
-        depositEntireBalance={this.props.transferDepositEntireBalance}
+        enterEntireBalance={this.props.transferEnterEntireBalance}
       />
     );
   };
@@ -170,7 +170,7 @@ const mapActionsToProps = {
   transferHandleAmountChange,
   transferHide,
   transferHandleSubmitAsync,
-  transferDepositEntireBalance
+  transferEnterEntireBalance
 };
 
 export default connect(

@@ -165,25 +165,39 @@ const requestDepositApprovalAsync = ({
   });
 };
 
-export const transferDepositEntireBalance = () => {
+export const transferEnterEntireBalance = () => {
   return async (dispatch, getState) => {
-    const { account, transfer } = getState();
-    const accountAddress = account.address;
-    const tokenSymbol = transfer.symbol;
+    const { transfer } = getState();
 
-    const onchainBalance = await getOnchainBalanceAsync(
-      accountAddress,
-      tokenSymbol
-    );
-    const roundedOnchainBalance = round(onchainBalance).toString();
-
-    dispatch({
-      type: TRANSFER_AMOUNT_INPUT,
-      payload: {
-        amount: roundedOnchainBalance
-      }
-    });
+    if (transfer.type === "deposit") {
+      depositEntireBalanceAsync(dispatch, getState);
+    } else {
+      withdrawEntireBalanceAsync(dispatch, getState);
+    }
   };
+};
+
+const withdrawEntireBalanceAsync = (dispatch, getState) => {
+  console.log("WITHDRAW ENTIRE BALANCE");
+};
+
+const depositEntireBalanceAsync = async (dispatch, getState) => {
+  const { account, transfer } = getState();
+  const accountAddress = account.address;
+  const tokenSymbol = transfer.symbol;
+
+  const onchainBalance = await getOnchainBalanceAsync(
+    accountAddress,
+    tokenSymbol
+  );
+  const roundedOnchainBalance = round(onchainBalance).toString();
+
+  dispatch({
+    type: TRANSFER_AMOUNT_INPUT,
+    payload: {
+      amount: roundedOnchainBalance
+    }
+  });
 };
 
 const withdrawAsync = (dispatch, getState) => {
