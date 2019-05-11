@@ -181,7 +181,16 @@ export const transferEnterEntireBalance = () => {
 };
 
 const withdrawEntireBalanceAsync = (dispatch, getState) => {
-  console.log("WITHDRAW ENTIRE BALANCE");
+  const { tokens, transfer } = getState();
+  const tokenSymbol = transfer.symbol;
+  const token = tokens.all.filter(t => t.symbol === tokenSymbol)[0];
+
+  dispatch({
+    type: TRANSFER_AMOUNT_INPUT,
+    payload: {
+      amount: token.availableBalance
+    }
+  });
 };
 
 const depositEntireBalanceAsync = async (dispatch, getState) => {
