@@ -54,7 +54,7 @@ const loadTokensAsync = async dispatch => {
   for (let token of tokens.data.records) {
     token.totalBalance = token.availableBalance = token.inOrders = 0;
     token.decimals = parseInt(token.decimals);
-    [token.withdrawMimnimum, token.withdrawFee] = [
+    [token.withdrawMinimum, token.withdrawFee] = [
       token.withdraw_minimum,
       token.withdraw_fee
     ];

@@ -221,6 +221,7 @@ const depositEntireBalanceAsync = async (dispatch, getState) => {
 };
 
 const withdrawAsync = async (dispatch, getState) => {
+  const { web3 } = singletons;
   const { HTTP_BASE_URL } = config;
   const { transfer, tokens, account, app } = getState();
   const tokenSymbol = transfer.symbol;
@@ -242,10 +243,22 @@ const withdrawAsync = async (dispatch, getState) => {
   const availableBalance = token.availableBalance;
   const amountWei = transfer.amountWei;
   const contractAddress = app.contractAddress;
+  const minimumAmount = token.withdrawMinimum;
   if (parseInt(availableBalance) < parseInt(amountWei)) {
     dispatch({
       type: TRANSFER_ERROR,
       payload: { error: "Insufficient balance." }
+    });
+    return;
+  }
+  if (parseInt(minimumAmount) > parseInt(amountWei)) {
+    dispatch({
+      type: TRANSFER_ERROR,
+      payload: {
+        error: `Amount is too small, minimal amount is ${web3.utils.fromWei(
+          minimumAmount
+        )}.`
+      }
     });
     return;
   }
@@ -256,6 +269,13 @@ const withdrawAsync = async (dispatch, getState) => {
     tokenAddress,
     contractAddress
   });
+
+  if (!payload) {
+    dispatch({
+      type: TRANSFER_PENDING_OFF
+    });
+    return;
+  }
 
   const withdraw = await axios.post(`${HTTP_BASE_URL}/withdraws`, payload);
 
@@ -279,14 +299,18 @@ const generateWithdrawPayloadAsync = async ({
     accountAddress,
     nonce
   );
-  const signature = await web3.eth.personal.sign(hash, accountAddress);
-  const payload = {
-    account_address: accountAddress,
-    amount: amountWei,
-    token_address: tokenAddress,
-    nonce,
-    withdraw_hash: hash,
-    signature
-  };
-  return payload;
+  try {
+    const signature = await web3.eth.personal.sign(hash, accountAddress);
+    const payload = {
+      account_address: accountAddress,
+      amount: amountWei,
+      token_address: tokenAddress,
+      nonce,
+      withdraw_hash: hash,
+      signature
+    };
+    return payload;
+  } catch {
+    return;
+  }
 };
