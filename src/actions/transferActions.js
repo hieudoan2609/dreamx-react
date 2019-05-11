@@ -32,10 +32,13 @@ export const transferHide = () => {
 };
 
 export const transferHandleAmountChange = e => {
+  const { web3 } = singletons;
+  const amountWei = e.target.value ? web3.utils.toWei(e.target.value) : "";
+
   return {
     type: TRANSFER_AMOUNT_INPUT,
     payload: {
-      amount: e.target.value
+      amount: amountWei
     }
   };
 };

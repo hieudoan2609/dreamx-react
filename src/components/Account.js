@@ -69,11 +69,9 @@ class Account extends Component {
       ["name", "symbol", "totalBalance", "availableBalance", "inOrders"]
     );
     for (let row of extractedData) {
-      row.availableBalance = web3.utils.fromWei(
-        row.availableBalance.toString()
-      );
-      row.inOrders = web3.utils.fromWei(row.inOrders.toString());
-      row.totalBalance = web3.utils.fromWei(row.totalBalance.toString());
+      row.availableBalance = web3.utils.fromWei(row.availableBalance);
+      row.inOrders = web3.utils.fromWei(row.inOrders);
+      row.totalBalance = web3.utils.fromWei(row.totalBalance);
     }
     const dataWithActionsColumn = this.addActionsColumn(extractedData);
     return dataWithActionsColumn;
@@ -110,6 +108,16 @@ class Account extends Component {
   };
 
   renderFrontModal = () => {
+    const { web3 } = singletons;
+
+    if (!web3) {
+      return;
+    }
+
+    const amountEther = this.props.transfer.amount
+      ? web3.utils.fromWei(this.props.transfer.amount)
+      : "";
+
     return (
       <TransferModal
         theme={this.props.app.theme}
@@ -117,7 +125,7 @@ class Account extends Component {
         type={this.props.transfer.type}
         name={this.props.transfer.name}
         symbol={this.props.transfer.symbol}
-        amount={this.props.transfer.amount}
+        amount={amountEther}
         onAmountChange={this.props.transferHandleAmountChange}
         error={this.props.transfer.error}
         onSubmit={this.props.transferHandleSubmitAsync}

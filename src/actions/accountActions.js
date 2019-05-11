@@ -73,14 +73,16 @@ const loadUserBalancesAsync = async (dispatch, address, tokens) => {
   let tokensWithUserBalances = tokens.all;
   for (let index in tokensWithUserBalances) {
     const token = tokensWithUserBalances[index];
-    token.availableBalance = 0;
-    token.inOrders = 0;
-    token.totalBalance = 0;
+    token.availableBalance = "0";
+    token.inOrders = "0";
+    token.totalBalance = "0";
     for (let balance of balances.data.records) {
       if (token.address === balance.token_address) {
-        token.availableBalance = parseInt(balance.balance);
-        token.inOrders = parseInt(balance.hold_balance);
-        token.totalBalance = token.availableBalance + token.inOrders;
+        token.availableBalance = balance.balance;
+        token.inOrders = balance.hold_balance;
+        token.totalBalance = (
+          parseInt(token.availableBalance) + parseInt(token.inOrders)
+        ).toString();
       }
     }
   }
