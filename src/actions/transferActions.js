@@ -183,29 +183,37 @@ export const transferEnterEntireBalance = () => {
 };
 
 const withdrawEntireBalanceAsync = (dispatch, getState) => {
+  const { web3 } = singletons;
   const { tokens, transfer } = getState();
   const tokenSymbol = transfer.symbol;
   const token = tokens.all.filter(t => t.symbol === tokenSymbol)[0];
 
+  const amountWei = token.availableBalance;
+  const amount = web3.utils.fromWei(amountWei);
+
   dispatch({
     type: TRANSFER_AMOUNT_INPUT,
     payload: {
-      amount: token.availableBalance
+      amount,
+      amountWei
     }
   });
 };
 
 const depositEntireBalanceAsync = async (dispatch, getState) => {
+  const { web3 } = singletons;
   const { account, transfer } = getState();
   const accountAddress = account.address;
   const tokenSymbol = transfer.symbol;
 
   const amountWei = await getOnchainBalanceAsync(accountAddress, tokenSymbol);
+  const amount = web3.utils.fromWei(amountWei);
 
   dispatch({
     type: TRANSFER_AMOUNT_INPUT,
     payload: {
-      amount: amountWei
+      amount,
+      amountWei
     }
   });
 };
