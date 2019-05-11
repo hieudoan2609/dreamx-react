@@ -7,7 +7,7 @@ import {
   TRANSFER_PENDING_OFF,
   TRANSFER_COMPLETE
 } from "../actions/types";
-import { getOnchainBalanceAsync, round } from "../helpers";
+import { getOnchainBalanceAsync } from "../helpers";
 import singletons from "../singletons";
 
 export const transferShow = payload => {
@@ -126,7 +126,7 @@ const sendDepositTransactionAsync = ({
   tokenSymbol
 }) => {
   return new Promise(async (resolve, reject) => {
-    const { exchange, tokens, web3 } = singletons;
+    const { exchange, tokens } = singletons;
     const value = tokenSymbol === "ETH" ? amountWei : 0;
     const tokenAddress = tokens[tokenSymbol].options.address;
     setTimeout(() => {
@@ -194,11 +194,9 @@ const withdrawEntireBalanceAsync = (dispatch, getState) => {
 };
 
 const depositEntireBalanceAsync = async (dispatch, getState) => {
-  const { account, transfer, tokens } = getState();
+  const { account, transfer } = getState();
   const accountAddress = account.address;
-  const token = tokens.all.filter(t => t.symbol === transfer.symbol)[0];
-  const tokenSymbol = token.symbol;
-  const tokenAddress = token.address;
+  const tokenSymbol = transfer.symbol;
 
   const amountWei = await getOnchainBalanceAsync(accountAddress, tokenSymbol);
 
