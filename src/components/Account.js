@@ -108,16 +108,6 @@ class Account extends Component {
   };
 
   renderFrontModal = () => {
-    const { web3 } = singletons;
-
-    if (!web3) {
-      return;
-    }
-
-    const amountEther = this.props.transfer.amount
-      ? round(web3.utils.fromWei(this.props.transfer.amount)).toString()
-      : "";
-
     return (
       <TransferModal
         theme={this.props.app.theme}
@@ -125,7 +115,7 @@ class Account extends Component {
         type={this.props.transfer.type}
         name={this.props.transfer.name}
         symbol={this.props.transfer.symbol}
-        amount={amountEther}
+        amount={this.props.transfer.amount}
         onAmountChange={this.props.transferHandleAmountChange}
         error={this.props.transfer.error}
         onSubmit={this.props.transferHandleSubmitAsync}

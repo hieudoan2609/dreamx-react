@@ -10,6 +10,7 @@ import {
 
 const INITIAL_STATE = {
   amount: "",
+  amountWei: "",
   error: "",
   type: "",
   name: "",
@@ -30,7 +31,11 @@ export default (state = INITIAL_STATE, action) => {
     case TRANSFER_ERROR:
       return { ...state, error: action.payload.error, pending: false };
     case TRANSFER_AMOUNT_INPUT:
-      return { ...state, amount: action.payload.amount };
+      return {
+        ...state,
+        amount: action.payload.amount,
+        amountWei: action.payload.amountWei
+      };
     case TRANSFER_HIDE:
       return { ...state, show: false };
     case TRANSFER_SHOW:
