@@ -13,7 +13,7 @@ import {
   transferHandleSubmitAsync,
   transferEnterEntireBalance
 } from "../actions";
-import { extractKeysFromObjectArray } from "../helpers";
+import { extractKeysFromObjectArray, round } from "../helpers";
 import ModalWrapper from "./ModalWrapper";
 import TransferModal from "./TransferModal";
 import TransferCompleteModal from "./TransferCompleteModal";
@@ -108,6 +108,30 @@ class Account extends Component {
   };
 
   renderFrontModal = () => {
+    const { web3 } = singletons;
+    const tokenSymbol = this.props.transfer.symbol;
+    const token = this.props.tokens.all.filter(
+      t => t.symbol === tokenSymbol
+    )[0];
+
+    if (!web3 || !token) {
+      return;
+    }
+
+    const oneEther = web3.utils.toBN(1000000000000000000);
+    const oneHundred = web3.utils.toBN(100);
+    const feePerEther = web3.utils.toBN(token.withdrawFee);
+    const withdrawAmount = web3.utils.toBN(this.props.transfer.amountWei);
+    const feeAmount = withdrawAmount.mul(feePerEther).div(oneEther);
+    const feePercentage = feePerEther.mul(oneHundred).div(oneEther);
+    const receivingAmount = withdrawAmount.sub(feeAmount);
+
+    const feeAmountFormatted = round(web3.utils.fromWei(feeAmount)).toString();
+    const feePercentageFormatted = feePercentage.toString();
+    const receivingAmountFormatted = round(
+      web3.utils.fromWei(receivingAmount)
+    ).toString();
+
     return (
       <TransferModal
         theme={this.props.app.theme}
@@ -121,6 +145,9 @@ class Account extends Component {
         onSubmit={this.props.transferHandleSubmitAsync}
         pending={this.props.transfer.pending}
         enterEntireBalance={this.props.transferEnterEntireBalance}
+        fee={feeAmountFormatted}
+        feeInPercentage={feePercentageFormatted}
+        receiving={receivingAmountFormatted}
       />
     );
   };

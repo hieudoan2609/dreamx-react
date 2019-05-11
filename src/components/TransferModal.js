@@ -7,6 +7,19 @@ import { capitalize } from "../helpers";
 import InlineForm from "./InlineForm";
 
 class TransferModal extends Component {
+  renderFee = () => {
+    return (
+      <div className="fee d-xs-block d-sm-flex">
+        <small>
+          Fee ({this.props.feeInPercentage}%): <b>{this.props.fee}</b>
+        </small>
+        <small>
+          You will receive: <b>{this.props.receiving}</b>
+        </small>
+      </div>
+    );
+  };
+
   render() {
     return (
       <div className={`TransferModal ${this.props.theme}`}>
@@ -37,6 +50,9 @@ class TransferModal extends Component {
           >
             {capitalize(this.props.type)} entire balance
           </small>
+          {this.props.type === "withdraw" &&
+            this.props.fee !== "0" &&
+            this.renderFee()}
         </div>
       </div>
     );
@@ -62,7 +78,10 @@ TransferModal.propTypes = {
   error: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
   pending: PropTypes.bool.isRequired,
-  enterEntireBalance: PropTypes.func.isRequired
+  enterEntireBalance: PropTypes.func.isRequired,
+  fee: PropTypes.string.isRequired,
+  feeInPercentage: PropTypes.string.isRequired,
+  receiving: PropTypes.string.isRequired
 };
 
 export default TransferModal;

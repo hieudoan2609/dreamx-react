@@ -41,6 +41,15 @@ $danger: rgba(220, 53, 69, 0.7);
     cursor: pointer;
     padding-bottom: 10px;
   }
+  .fee {
+    margin-top: 10px;
+    justify-content: space-between;
+    small {
+      display: block;
+      text-decoration: none;
+      cursor: initial;
+    }
+  }
   &.light {
     .close {
       color: $light-primary;
