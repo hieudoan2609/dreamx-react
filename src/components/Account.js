@@ -13,7 +13,7 @@ import {
   transferHandleSubmitAsync,
   transferEnterEntireBalance
 } from "../actions";
-import { extractKeysFromObjectArray } from "../helpers";
+import { extractKeysFromObjectArray, round } from "../helpers";
 import ModalWrapper from "./ModalWrapper";
 import TransferModal from "./TransferModal";
 import TransferCompleteModal from "./TransferCompleteModal";
@@ -115,7 +115,7 @@ class Account extends Component {
     }
 
     const amountEther = this.props.transfer.amount
-      ? web3.utils.fromWei(this.props.transfer.amount)
+      ? round(web3.utils.fromWei(this.props.transfer.amount)).toString()
       : "";
 
     return (

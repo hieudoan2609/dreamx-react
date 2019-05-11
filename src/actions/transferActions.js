@@ -125,8 +125,8 @@ const sendDepositTransactionAsync = ({
   amountWei,
   tokenSymbol
 }) => {
-  return new Promise((resolve, reject) => {
-    const { exchange, tokens } = singletons;
+  return new Promise(async (resolve, reject) => {
+    const { exchange, tokens, web3 } = singletons;
     const value = tokenSymbol === "ETH" ? amountWei : 0;
     const tokenAddress = tokens[tokenSymbol].options.address;
     setTimeout(() => {
@@ -194,20 +194,18 @@ const withdrawEntireBalanceAsync = (dispatch, getState) => {
 };
 
 const depositEntireBalanceAsync = async (dispatch, getState) => {
-  const { account, transfer } = getState();
+  const { account, transfer, tokens } = getState();
   const accountAddress = account.address;
-  const tokenSymbol = transfer.symbol;
+  const token = tokens.all.filter(t => t.symbol === transfer.symbol)[0];
+  const tokenSymbol = token.symbol;
+  const tokenAddress = token.address;
 
-  const onchainBalance = await getOnchainBalanceAsync(
-    accountAddress,
-    tokenSymbol
-  );
-  const roundedOnchainBalance = round(onchainBalance).toString();
+  const amountWei = await getOnchainBalanceAsync(accountAddress, tokenSymbol);
 
   dispatch({
     type: TRANSFER_AMOUNT_INPUT,
     payload: {
-      amount: roundedOnchainBalance
+      amount: amountWei
     }
   });
 };

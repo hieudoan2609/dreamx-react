@@ -32,12 +32,10 @@ export const getOnchainBalanceAsync = async (accountAddress, tokenSymbol) => {
 
     let balance;
     if (tokenSymbol === "ETH") {
-      balance = web3.utils.fromWei(await web3.eth.getBalance(accountAddress));
+      balance = await web3.eth.getBalance(accountAddress);
     } else {
       const token = tokens[tokenSymbol];
-      balance = web3.utils.fromWei(
-        (await token.methods.balanceOf(accountAddress).call()).toString()
-      );
+      balance = await token.methods.balanceOf(accountAddress).call();
     }
 
     resolve(balance);
