@@ -130,6 +130,7 @@ class Account extends Component {
       <TransferCompleteModal
         theme={this.props.app.theme}
         onHide={this.props.transferHide}
+        type={this.props.transfer.type}
       />
     );
   };

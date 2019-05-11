@@ -70,7 +70,7 @@ const depositAsync = async (dispatch, getState) => {
   const tokenSymbol = transfer.symbol;
   const exchangeAddress = app.contractAddress;
 
-  if (transfer.amount === "" || parseFloat(transfer.amount) === 0) {
+  if (transfer.amount === "" || parseInt(transfer.amountWei) === 0) {
     dispatch({
       type: TRANSFER_ERROR,
       payload: {
@@ -81,17 +81,17 @@ const depositAsync = async (dispatch, getState) => {
     return;
   }
 
-  // const onchainBalance = await getOnchainBalanceAsync(
-  //   accountAddress,
-  //   tokenSymbol
-  // );
-  // if (parseFloat(onchainBalance) < parseFloat(transfer.amount)) {
-  //   dispatch({
-  //     type: TRANSFER_ERROR,
-  //     payload: { error: "Insufficient balance." }
-  //   });
-  //   return;
-  // }
+  const onchainBalance = await getOnchainBalanceAsync(
+    accountAddress,
+    tokenSymbol
+  );
+  if (parseInt(onchainBalance) < parseInt(transfer.amountWei)) {
+    dispatch({
+      type: TRANSFER_ERROR,
+      payload: { error: "Insufficient balance." }
+    });
+    return;
+  }
 
   const amountWei = web3.utils.toWei(transfer.amount.toString());
   const approved = await requestDepositApprovalAsync({
@@ -259,7 +259,9 @@ const withdrawAsync = async (dispatch, getState) => {
 
   const withdraw = await axios.post(`${HTTP_BASE_URL}/withdraws`, payload);
 
-  console.log(withdraw);
+  dispatch({
+    type: TRANSFER_COMPLETE
+  });
 };
 
 const generateWithdrawPayloadAsync = async ({

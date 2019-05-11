@@ -7,13 +7,15 @@ import Button from "./Button";
 
 class TransferCompleteModal extends Component {
   render() {
+    const action = this.props.type === "deposit" ? "Deposit" : "Withdrawal";
+
     return (
       <div className={`TransferCompleteModal ${this.props.theme}`}>
         <div className="modal-body">
           <ion-icon name="checkmark-circle" />
           <h5 className="modal-title">Complete</h5>
           <p>
-            Deposit will show up in the <b>Transfers</b> tab in a minute.
+            {action} will show up shortly under the <b>Transfers</b> tab.
           </p>
           <Button theme={this.props.theme} onClick={this.props.onHide}>
             Close
@@ -34,7 +36,8 @@ class TransferCompleteModal extends Component {
 
 TransferCompleteModal.propTypes = {
   theme: PropTypes.string.isRequired,
-  onHide: PropTypes.func.isRequired
+  onHide: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired
 };
 
 export default TransferCompleteModal;
