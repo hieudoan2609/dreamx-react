@@ -12,7 +12,7 @@ import {
   ACCOUNT_METAMASK_NOTREADY,
   TOKEN_LOAD
 } from "../actions/types";
-import singletons, { setSingleton } from "../singletons";
+import { setSingleton } from "../singletons";
 import Exchange from "../ABI/Exchange.json";
 import ERC20 from "../ABI/ERC20.json";
 
@@ -67,7 +67,6 @@ export const accountLoginAsync = () => {
 };
 
 const loadUserBalancesAsync = async (dispatch, address, tokens) => {
-  const { web3 } = singletons;
   const balances = await axios.get(
     `https://api.odin.trade/balances/${address}`
   );
@@ -79,11 +78,9 @@ const loadUserBalancesAsync = async (dispatch, address, tokens) => {
     token.totalBalance = 0;
     for (let balance of balances.data.records) {
       if (token.address === balance.token_address) {
-        token.availableBalance = web3.utils.fromWei(balance.balance);
-        token.inOrders = web3.utils.fromWei(balance.hold_balance);
-        const totalBalanceWei =
-          parseInt(balance.balance) + parseInt(balance.hold_balance);
-        token.totalBalance = web3.utils.fromWei(totalBalanceWei.toString());
+        token.availableBalance = parseInt(balance.balance);
+        token.inOrders = parseInt(balance.hold_balance);
+        token.totalBalance = token.availableBalance + token.inOrders;
       }
     }
   }
