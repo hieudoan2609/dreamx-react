@@ -15,6 +15,7 @@ import {
 import { setSingleton } from "../singletons";
 import Exchange from "../ABI/Exchange.json";
 import ERC20 from "../ABI/ERC20.json";
+import config from "../config";
 
 export const accountLoginAsync = () => {
   return async (dispatch, getState) => {
@@ -67,9 +68,8 @@ export const accountLoginAsync = () => {
 };
 
 const loadUserBalancesAsync = async (dispatch, address, tokens) => {
-  const balances = await axios.get(
-    `https://api.odin.trade/balances/${address}`
-  );
+  const { HTTP_BASE_URL } = config;
+  const balances = await axios.get(`${HTTP_BASE_URL}/balances/${address}`);
   let tokensWithUserBalances = tokens.all;
   for (let index in tokensWithUserBalances) {
     const token = tokensWithUserBalances[index];

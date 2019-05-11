@@ -9,6 +9,8 @@ import {
 } from "../actions/types";
 import { getOnchainBalanceAsync } from "../helpers";
 import singletons from "../singletons";
+import axios from "axios";
+import config from "../config";
 
 export const transferShow = payload => {
   return {
@@ -79,17 +81,17 @@ const depositAsync = async (dispatch, getState) => {
     return;
   }
 
-  const onchainBalance = await getOnchainBalanceAsync(
-    accountAddress,
-    tokenSymbol
-  );
-  if (parseFloat(onchainBalance) < parseFloat(transfer.amount)) {
-    dispatch({
-      type: TRANSFER_ERROR,
-      payload: { error: "Insufficient balance." }
-    });
-    return;
-  }
+  // const onchainBalance = await getOnchainBalanceAsync(
+  //   accountAddress,
+  //   tokenSymbol
+  // );
+  // if (parseFloat(onchainBalance) < parseFloat(transfer.amount)) {
+  //   dispatch({
+  //     type: TRANSFER_ERROR,
+  //     payload: { error: "Insufficient balance." }
+  //   });
+  //   return;
+  // }
 
   const amountWei = web3.utils.toWei(transfer.amount.toString());
   const approved = await requestDepositApprovalAsync({
@@ -218,14 +220,11 @@ const depositEntireBalanceAsync = async (dispatch, getState) => {
   });
 };
 
-const withdrawAsync = (dispatch, getState) => {
-  // input check
-  // balance check
-  // signature
-  // POST request
-
-  const { transfer, tokens } = getState();
+const withdrawAsync = async (dispatch, getState) => {
+  const { HTTP_BASE_URL } = config;
+  const { transfer, tokens, account, app } = getState();
   const tokenSymbol = transfer.symbol;
+  const accountAddress = account.address;
 
   if (transfer.amount === "" || parseFloat(transfer.amount) === 0) {
     dispatch({
@@ -238,13 +237,54 @@ const withdrawAsync = (dispatch, getState) => {
     return;
   }
 
-  // const token = tokens.all.filter(token => token.symbol === tokenSymbol)[0];
-  // const availableBalance = token.availableBalance;
-  // if (parseFloat(availableBalance) < parseFloat(transfer.amount)) {
-  //   dispatch({
-  //     type: TRANSFER_ERROR,
-  //     payload: { error: "Insufficient balance." }
-  //   });
-  //   return;
-  // }
+  const token = tokens.all.filter(token => token.symbol === tokenSymbol)[0];
+  const tokenAddress = token.address;
+  const availableBalance = token.availableBalance;
+  const amountWei = transfer.amountWei;
+  const contractAddress = app.contractAddress;
+  if (parseInt(availableBalance) < parseInt(amountWei)) {
+    dispatch({
+      type: TRANSFER_ERROR,
+      payload: { error: "Insufficient balance." }
+    });
+    return;
+  }
+
+  const payload = await generateWithdrawPayloadAsync({
+    accountAddress,
+    amountWei,
+    tokenAddress,
+    contractAddress
+  });
+
+  const withdraw = await axios.post(`${HTTP_BASE_URL}/withdraws`, payload);
+
+  console.log(withdraw);
+};
+
+const generateWithdrawPayloadAsync = async ({
+  accountAddress,
+  amountWei,
+  tokenAddress,
+  contractAddress
+}) => {
+  const { web3 } = singletons;
+  const nonce = Date.now();
+  const hash = web3.utils.soliditySha3(
+    contractAddress,
+    tokenAddress,
+    amountWei,
+    accountAddress,
+    nonce
+  );
+  const signature = await web3.eth.personal.sign(hash, accountAddress);
+  const payload = {
+    account_address: accountAddress,
+    amount: amountWei,
+    token_address: tokenAddress,
+    nonce,
+    withdraw_hash: hash,
+    signature
+  };
+  return payload;
 };

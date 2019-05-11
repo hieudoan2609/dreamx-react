@@ -2,6 +2,7 @@ import axios from "axios";
 
 import { APP_TOGGLE_THEME, APP_INITIALIZE, TOKEN_LOAD } from "../actions/types";
 import { getNetworkNameFromId } from "../helpers";
+import config from "../config";
 
 export const toggleTheme = () => {
   return async (dispatch, getState) => {
@@ -29,10 +30,11 @@ export const loadTheme = () => {
 
 export const initializeAppAsync = () => {
   return async dispatch => {
+    const { HTTP_BASE_URL } = config;
     const contract = await axios.get(
-      "https://api.odin.trade/return_contract_address"
+      `${HTTP_BASE_URL}/return_contract_address`
     );
-    const tokens = await axios.get("https://api.odin.trade/tokens");
+    const tokens = await axios.get(`${HTTP_BASE_URL}/tokens`);
 
     let tokensWithInitialBalances = [];
     for (let token of tokens.data.records) {

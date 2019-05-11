@@ -13,7 +13,7 @@ import {
   transferHandleSubmitAsync,
   transferEnterEntireBalance
 } from "../actions";
-import { extractKeysFromObjectArray, round } from "../helpers";
+import { extractKeysFromObjectArray } from "../helpers";
 import ModalWrapper from "./ModalWrapper";
 import TransferModal from "./TransferModal";
 import TransferCompleteModal from "./TransferCompleteModal";
