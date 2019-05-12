@@ -10,7 +10,7 @@ import {
   TRANSFER_PENDING_OFF,
   TRANSFER_COMPLETE
 } from "../actions/types";
-import { getOnchainBalanceAsync, truncateInput } from "../helpers";
+import { getOnchainBalanceAsync, truncateNumberInput } from "../helpers";
 import singletons from "../singletons";
 import config from "../config";
 
@@ -37,7 +37,7 @@ export const transferHide = () => {
 
 export const transferHandleAmountChange = e => {
   const { web3 } = singletons;
-  let amount = e.target.value ? truncateInput(e.target.value) : "";
+  let amount = e.target.value ? truncateNumberInput(e.target.value) : "";
   const amountWei = amount ? web3.utils.toWei(amount) : "0";
   return {
     type: TRANSFER_AMOUNT_INPUT,

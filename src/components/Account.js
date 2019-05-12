@@ -13,7 +13,7 @@ import {
   transferHandleSubmitAsync,
   transferEnterEntireBalance
 } from "../actions";
-import { extractKeysFromObjectArray, truncate } from "../helpers";
+import { extractKeysFromObjectArray, truncateNumberOutput } from "../helpers";
 import ModalWrapper from "./ModalWrapper";
 import TransferModal from "./TransferModal";
 import TransferCompleteModal from "./TransferCompleteModal";
@@ -126,9 +126,11 @@ class Account extends Component {
     const feePercentage = feePerEther.mul(oneHundred).div(oneEther);
     const receivingAmount = withdrawAmount.sub(feeAmount);
 
-    const feeAmountFormatted = truncate(web3.utils.fromWei(feeAmount));
-    const feePercentageFormatted = truncate(feePercentage);
-    const receivingAmountFormatted = truncate(
+    const feeAmountFormatted = truncateNumberOutput(
+      web3.utils.fromWei(feeAmount)
+    );
+    const feePercentageFormatted = truncateNumberOutput(feePercentage);
+    const receivingAmountFormatted = truncateNumberOutput(
       web3.utils.fromWei(receivingAmount)
     );
 
