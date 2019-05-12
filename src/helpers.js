@@ -53,3 +53,13 @@ export const roundFixed = (num, decimalPoints) => {
 
   return parseFloat(parseFloat(num).toFixed(decimalPoints)).toString();
 };
+
+export const truncate = (num, decimalPoints) => {
+  if (!decimalPoints) {
+    decimalPoints = 8;
+  }
+  let [whole, fraction] = num.toString().split(".");
+  fraction = fraction ? fraction.substring(0, decimalPoints) : "";
+  const result = fraction ? `${whole}.${fraction}` : whole;
+  return parseFloat(result).toString();
+};
