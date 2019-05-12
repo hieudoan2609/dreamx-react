@@ -126,11 +126,11 @@ class Account extends Component {
     const feePercentage = feePerEther.mul(oneHundred).div(oneEther);
     const receivingAmount = withdrawAmount.sub(feeAmount);
 
-    const feeAmountFormatted = round(web3.utils.fromWei(feeAmount)).toString();
+    const feeAmountFormatted = web3.utils.fromWei(feeAmount).toString();
     const feePercentageFormatted = feePercentage.toString();
-    const receivingAmountFormatted = round(
-      web3.utils.fromWei(receivingAmount)
-    ).toString();
+    const receivingAmountFormatted = web3.utils
+      .fromWei(receivingAmount)
+      .toString();
 
     return (
       <TransferModal

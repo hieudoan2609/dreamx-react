@@ -68,7 +68,7 @@ it("when logged in", async () => {
 
   fireEvent.click(getByText(/^Connect$/i));
 
-  expect(await waitForElement(() => getByText(/Welcome!/i))).toBeTruthy();
+  expect(await waitForElement(() => getByText(/Woohoo!/i))).toBeTruthy();
 
   expect(container).toMatchSnapshot();
 });

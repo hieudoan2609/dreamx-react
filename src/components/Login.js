@@ -34,7 +34,7 @@ class Login extends Component {
 
       return (
         <div className="card-body">
-          <h5 className="card-title">Welcome!</h5>
+          <h5 className="card-title">Woohoo!</h5>
           <p className="card-text">
             You have now logged in. Your address is 0x
             {address_first_four_digits}...{address_last_four_digits}

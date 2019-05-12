@@ -11,7 +11,7 @@ exports[`when logged in 1`] = `
       <h5
         class="card-title"
       >
-        Welcome!
+        Woohoo!
       </h5>
       <p
         class="card-text"
@@ -50,9 +50,23 @@ exports[`when metamask is not installed 1`] = `
         target="_blank"
       >
         <div
-          class="Button dark"
+          class="Button dark "
         >
-          Install MetaMask
+          <div
+            class="Loading 
+          button 
+          dark 
+          "
+          >
+            <div
+              class="spinner-border"
+            />
+          </div>
+          <div
+            class="body"
+          >
+            Install MetaMask
+          </div>
         </div>
       </a>
     </div>
@@ -81,9 +95,23 @@ exports[`when metamask is on the wrong network 1`] = `
          and try again.
       </p>
       <div
-        class="Button dark"
+        class="Button dark "
       >
-        Try again
+        <div
+          class="Loading 
+          button 
+          dark 
+          "
+        >
+          <div
+            class="spinner-border"
+          />
+        </div>
+        <div
+          class="body"
+        >
+          Try again
+        </div>
       </div>
     </div>
   </div>
@@ -109,9 +137,23 @@ exports[`when not logged in 1`] = `
         Connect to MetaMask to manage your account.
       </p>
       <div
-        class="Button dark"
+        class="Button dark "
       >
-        Connect
+        <div
+          class="Loading 
+          button 
+          dark 
+          "
+        >
+          <div
+            class="spinner-border"
+          />
+        </div>
+        <div
+          class="body"
+        >
+          Connect
+        </div>
       </div>
     </div>
   </div>
