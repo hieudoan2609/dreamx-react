@@ -50,9 +50,7 @@ class TransferModal extends Component {
           >
             {capitalize(this.props.type)} entire balance
           </small>
-          {this.props.type === "withdraw" &&
-            this.props.fee !== "0" &&
-            this.renderFee()}
+          {this.props.type === "withdraw" && this.renderFee()}
         </div>
       </div>
     );

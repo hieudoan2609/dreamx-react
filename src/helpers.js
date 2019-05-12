@@ -1,3 +1,5 @@
+import BN from "bn.js";
+
 import singletons from "./singletons";
 
 export const getNetworkNameFromId = networkId => {
@@ -55,11 +57,16 @@ export const roundFixed = (num, decimalPoints) => {
 };
 
 export const truncate = (num, decimalPoints) => {
+  const trailingZeroes = /0*$|\.0*$/;
   if (!decimalPoints) {
     decimalPoints = 8;
   }
+
   let [whole, fraction] = num.toString().split(".");
   fraction = fraction ? fraction.substring(0, decimalPoints) : "";
-  const result = fraction ? `${whole}.${fraction}` : whole;
-  return parseFloat(result).toString();
+
+  let result = fraction
+    ? `${whole}.${fraction}`.replace(trailingZeroes, "")
+    : whole;
+  return result;
 };
