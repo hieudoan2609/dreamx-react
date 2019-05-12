@@ -51,5 +51,5 @@ export const roundFixed = (num, decimalPoints) => {
     decimalPoints = 8;
   }
 
-  return parseFloat(num).toFixed(decimalPoints);
+  return parseFloat(parseFloat(num).toFixed(decimalPoints)).toString();
 };
