@@ -1,3 +1,6 @@
+import Web3 from "web3";
+import axios from "axios";
+
 import {
   TRANSFER_SHOW,
   TRANSFER_HIDE,
@@ -7,9 +10,8 @@ import {
   TRANSFER_PENDING_OFF,
   TRANSFER_COMPLETE
 } from "../actions/types";
-import { getOnchainBalanceAsync } from "../helpers";
+import { getOnchainBalanceAsync, truncateInput } from "../helpers";
 import singletons from "../singletons";
-import axios from "axios";
 import config from "../config";
 
 export const transferShow = payload => {
@@ -35,9 +37,8 @@ export const transferHide = () => {
 
 export const transferHandleAmountChange = e => {
   const { web3 } = singletons;
-  const amount = e.target.value;
-  const amountWei = e.target.value ? web3.utils.toWei(e.target.value) : "0";
-
+  let amount = e.target.value ? truncateInput(e.target.value) : "";
+  const amountWei = amount ? web3.utils.toWei(amount) : "0";
   return {
     type: TRANSFER_AMOUNT_INPUT,
     payload: {

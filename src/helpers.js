@@ -56,17 +56,24 @@ export const roundFixed = (num, decimalPoints) => {
   return parseFloat(parseFloat(num).toFixed(decimalPoints)).toString();
 };
 
-export const truncate = (num, decimalPoints) => {
+export const truncate = (num, decimalPoints = 8) => {
   const trailingZeroes = /0*$|\.0*$/;
-  if (!decimalPoints) {
-    decimalPoints = 8;
-  }
-
   let [whole, fraction] = num.toString().split(".");
   fraction = fraction ? fraction.substring(0, decimalPoints) : "";
-
-  let result = fraction
+  const result = fraction
     ? `${whole}.${fraction}`.replace(trailingZeroes, "")
     : whole;
+  return result;
+};
+
+export const truncateInput = (
+  num,
+  significantFigures = 8,
+  decimalPoints = 8
+) => {
+  let [whole, fraction] = num.toString().split(".");
+  whole = whole.substring(0, significantFigures);
+  fraction = fraction ? fraction.substring(0, decimalPoints) : "";
+  const result = fraction ? `${whole}.${fraction}` : whole;
   return result;
 };
