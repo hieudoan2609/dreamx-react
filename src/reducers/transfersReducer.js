@@ -1,4 +1,4 @@
-import { TOKENS_FILTER, TOKENS_LOAD } from "../actions/types";
+import { TRANSFERS_LOAD, TRANSFERS_FILTER } from "../actions/types";
 
 const INITIAL_STATE = {
   all: [],
@@ -8,13 +8,13 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case TOKENS_LOAD:
+    case TRANSFERS_LOAD:
       return {
         ...state,
-        all: action.payload.tokens,
-        filtered: action.payload.tokens
+        all: action.payload.transfers,
+        filtered: action.payload.transfers
       };
-    case TOKENS_FILTER:
+    case TRANSFERS_FILTER:
       return {
         ...state,
         filtered: action.payload.filtered,

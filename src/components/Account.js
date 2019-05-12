@@ -21,7 +21,7 @@ import singletons from "../singletons";
 
 class Account extends Component {
   state = {
-    tabs: ["assets", "orders", "transfers", "trades"],
+    tabs: ["assets", "transfers", "orders", "trades"],
     currentTab: "assets"
   };
 
@@ -95,12 +95,12 @@ class Account extends Component {
     );
   };
 
-  renderOrderSearchTable = () => {
-    return <div>ORDERS</div>;
-  };
-
   renderTransferSearchTable = () => {
     return <div>TRANSFERS</div>;
+  };
+
+  renderOrderSearchTable = () => {
+    return <div>ORDERS</div>;
   };
 
   renderTradeSearchTable = () => {

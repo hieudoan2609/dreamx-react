@@ -1,6 +1,10 @@
 import axios from "axios";
 
-import { APP_TOGGLE_THEME, APP_INITIALIZE, TOKEN_LOAD } from "../actions/types";
+import {
+  APP_TOGGLE_THEME,
+  APP_INITIALIZE,
+  TOKENS_LOAD
+} from "../actions/types";
 import { getNetworkNameFromId } from "../helpers";
 import config from "../config";
 
@@ -64,7 +68,7 @@ const loadTokensAsync = async dispatch => {
   }
 
   dispatch({
-    type: TOKEN_LOAD,
+    type: TOKENS_LOAD,
     payload: {
       tokens: tokensWithInitialBalances
     }

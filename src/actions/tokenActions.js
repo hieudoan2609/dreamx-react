@@ -1,4 +1,4 @@
-import { TOKEN_FILTER } from "../actions/types";
+import { TOKENS_FILTER } from "../actions/types";
 
 export const tokenFilter = searchValue => {
   return async (dispatch, getState) => {
@@ -14,7 +14,7 @@ export const tokenFilter = searchValue => {
     }
 
     dispatch({
-      type: TOKEN_FILTER,
+      type: TOKENS_FILTER,
       payload: { filtered, searchValue }
     });
   };

@@ -10,7 +10,7 @@ import {
   ACCOUNT_LOADED,
   TRANSFER_HIDE,
   ACCOUNT_METAMASK_NOTREADY,
-  TOKEN_LOAD
+  TOKENS_LOAD
 } from "../actions/types";
 import { setSingleton } from "../singletons";
 import Exchange from "../ABI/Exchange.json";
@@ -87,7 +87,7 @@ const loadUserBalancesAsync = async (dispatch, address, tokens) => {
     }
   }
   dispatch({
-    type: TOKEN_LOAD,
+    type: TOKENS_LOAD,
     payload: {
       tokens: tokensWithUserBalances
     }
