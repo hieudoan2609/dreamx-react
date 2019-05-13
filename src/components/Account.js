@@ -128,6 +128,8 @@ class Account extends Component {
         defaultOrderBy="date"
         searchValue={this.props.transfers.searchValue}
         handleSearch={this.props.transfersFilter}
+        excludeFromSorting={["transactionHash", "status"]}
+        dateFormat={"MMMM Do YYYY, h:mm:ss A"}
       />
     );
   };

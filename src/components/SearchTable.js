@@ -45,7 +45,10 @@ class SearchTable extends Component {
   };
 
   handleSort = property => {
-    if (this.props.excludeFromSorting.includes(property)) {
+    if (
+      this.props.excludeFromSorting &&
+      this.props.excludeFromSorting.includes(property)
+    ) {
       return;
     }
 
@@ -147,7 +150,8 @@ SearchTable.propTypes = {
   defaultOrderBy: PropTypes.string.isRequired,
   excludeFromSorting: PropTypes.array,
   searchValue: PropTypes.string.isRequired,
-  handleSearch: PropTypes.func.isRequired
+  handleSearch: PropTypes.func.isRequired,
+  dateFormat: PropTypes.string
 };
 
 export default SearchTable;
