@@ -1,5 +1,4 @@
 import Web3 from "web3";
-import axios from "axios";
 
 import {
   ACCOUNT_LOGIN,
@@ -8,15 +7,13 @@ import {
   ACCOUNT_METAMASK_WRONGNETWORK,
   ACCOUNT_LOADING,
   ACCOUNT_LOADED,
-  ACCOUNT_METAMASK_NOTREADY,
-  TOKENS_LOAD
+  ACCOUNT_METAMASK_NOTREADY
 } from "../actions/types";
-import { tokensLoadAccountBalancesAsync } from ".";
+import { tokensLoadAccountAsync, transfersLoadAccountAsync } from ".";
 import { transferHide } from "./";
 import { setSingleton } from "../singletons";
 import Exchange from "../ABI/Exchange.json";
 import ERC20 from "../ABI/ERC20.json";
-import config from "../config";
 
 export const accountLoginAsync = () => {
   return async (dispatch, getState) => {
@@ -52,8 +49,8 @@ export const accountLoginAsync = () => {
       const address = accounts[0];
       addMetamaskListeners(dispatch);
       initializeSingletons(app, tokens);
-      // await loadUserBalancesAsync(dispatch, address, tokens);
-      await dispatch(tokensLoadAccountBalancesAsync(address));
+      await dispatch(tokensLoadAccountAsync(address));
+      await dispatch(transfersLoadAccountAsync(address));
 
       dispatch({
         type: ACCOUNT_LOGIN,

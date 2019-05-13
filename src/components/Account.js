@@ -198,8 +198,8 @@ class Account extends Component {
   }
 }
 
-const mapStateToProps = ({ app, account, tokens, transfer }) => {
-  return { app, account, tokens, transfer };
+const mapStateToProps = ({ app, account, tokens, transfer, transfers }) => {
+  return { app, account, tokens, transfer, transfers };
 };
 
 const mapActionsToProps = {

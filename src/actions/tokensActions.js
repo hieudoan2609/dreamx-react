@@ -50,11 +50,11 @@ export const tokensLoadAsync = () => {
   };
 };
 
-export const tokensLoadAccountBalancesAsync = accountAddress => {
+export const tokensLoadAccountAsync = accountAddress => {
   return async (dispatch, getState) => {
     const { tokens } = getState();
     const { HTTP_BASE_URL } = config;
-    const balances = await axios.get(
+    const balancesResponse = await axios.get(
       `${HTTP_BASE_URL}/balances/${accountAddress}`
     );
     let tokensWithUserBalances = tokens.all;
@@ -63,7 +63,7 @@ export const tokensLoadAccountBalancesAsync = accountAddress => {
       token.availableBalance = "0";
       token.inOrders = "0";
       token.totalBalance = "0";
-      for (let balance of balances.data.records) {
+      for (let balance of balancesResponse.data.records) {
         if (token.address === balance.token_address) {
           token.availableBalance = balance.balance;
           token.inOrders = balance.hold_balance;
