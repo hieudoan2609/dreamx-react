@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import Web3 from "web3";
+import moment from "moment";
 
 import Login from "./Login";
 import TabMenu from "./TabMenu";
@@ -102,7 +104,19 @@ class Account extends Component {
   };
 
   extractTransfersData = () => {
-    return this.props.transfers.filtered;
+    const { tokens } = this.props;
+    const extractedData = this.props.transfers.filtered.map(transfer => {
+      const token = tokens.all.filter(
+        t => t.address === transfer.tokenAddress
+      )[0];
+      const status = transfer.blockNumber ? "Completed" : "Pending";
+      const coin = token.symbol;
+      const amount = truncateNumberOutput(Web3.utils.fromWei(transfer.amount));
+      const date = moment(transfer.createdAt).format("MMMM Do YYYY, h:mm:ss A");
+      const transactionHash = `${transfer.transactionHash.substring(0, 10)}...`;
+      return { coin, amount, date, transactionHash, status };
+    });
+    return extractedData;
   };
 
   renderTransferSearchTable = () => {
@@ -111,7 +125,7 @@ class Account extends Component {
         theme={this.props.app.theme}
         data={this.extractTransfersData()}
         searchInputPlaceholder="Search by asset name or symbol..."
-        defaultOrderBy="created_at"
+        defaultOrderBy="date"
         searchValue={this.props.transfers.searchValue}
         handleSearch={this.props.transfersFilter}
       />
