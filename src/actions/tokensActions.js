@@ -49,3 +49,35 @@ export const tokensLoadAsync = () => {
     });
   };
 };
+
+export const tokensLoadAccountBalancesAsync = accountAddress => {
+  return async (dispatch, getState) => {
+    const { tokens } = getState();
+    const { HTTP_BASE_URL } = config;
+    const balances = await axios.get(
+      `${HTTP_BASE_URL}/balances/${accountAddress}`
+    );
+    let tokensWithUserBalances = tokens.all;
+    for (let index in tokensWithUserBalances) {
+      const token = tokensWithUserBalances[index];
+      token.availableBalance = "0";
+      token.inOrders = "0";
+      token.totalBalance = "0";
+      for (let balance of balances.data.records) {
+        if (token.address === balance.token_address) {
+          token.availableBalance = balance.balance;
+          token.inOrders = balance.hold_balance;
+          token.totalBalance = (
+            parseInt(token.availableBalance) + parseInt(token.inOrders)
+          ).toString();
+        }
+      }
+    }
+    dispatch({
+      type: TOKENS_LOAD,
+      payload: {
+        tokens: tokensWithUserBalances
+      }
+    });
+  };
+};

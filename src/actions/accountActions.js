@@ -11,6 +11,7 @@ import {
   ACCOUNT_METAMASK_NOTREADY,
   TOKENS_LOAD
 } from "../actions/types";
+import { tokensLoadAccountBalancesAsync } from ".";
 import { transferHide } from "./";
 import { setSingleton } from "../singletons";
 import Exchange from "../ABI/Exchange.json";
@@ -51,7 +52,8 @@ export const accountLoginAsync = () => {
       const address = accounts[0];
       addMetamaskListeners(dispatch);
       initializeSingletons(app, tokens);
-      await loadUserBalancesAsync(dispatch, address, tokens);
+      // await loadUserBalancesAsync(dispatch, address, tokens);
+      await dispatch(tokensLoadAccountBalancesAsync(address));
 
       dispatch({
         type: ACCOUNT_LOGIN,
@@ -65,33 +67,6 @@ export const accountLoginAsync = () => {
       return;
     }
   };
-};
-
-const loadUserBalancesAsync = async (dispatch, address, tokens) => {
-  const { HTTP_BASE_URL } = config;
-  const balances = await axios.get(`${HTTP_BASE_URL}/balances/${address}`);
-  let tokensWithUserBalances = tokens.all;
-  for (let index in tokensWithUserBalances) {
-    const token = tokensWithUserBalances[index];
-    token.availableBalance = "0";
-    token.inOrders = "0";
-    token.totalBalance = "0";
-    for (let balance of balances.data.records) {
-      if (token.address === balance.token_address) {
-        token.availableBalance = balance.balance;
-        token.inOrders = balance.hold_balance;
-        token.totalBalance = (
-          parseInt(token.availableBalance) + parseInt(token.inOrders)
-        ).toString();
-      }
-    }
-  }
-  dispatch({
-    type: TOKENS_LOAD,
-    payload: {
-      tokens: tokensWithUserBalances
-    }
-  });
 };
 
 export const accountLogout = () => {
