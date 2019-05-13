@@ -6,7 +6,7 @@ import TabMenu from "./TabMenu";
 import SearchTable from "./SearchTable";
 import "./Account.scss";
 import {
-  tokenFilter,
+  tokensFilter,
   transferShow,
   transferHandleAmountChange,
   transferHide,
@@ -90,7 +90,7 @@ class Account extends Component {
         defaultOrderBy="totalBalance"
         excludeFromSorting={["actions"]}
         searchValue={this.props.tokens.searchValue}
-        handleSearch={this.props.tokenFilter}
+        handleSearch={this.props.tokensFilter}
       />
     );
   };
@@ -203,7 +203,7 @@ const mapStateToProps = ({ app, account, tokens, transfer }) => {
 };
 
 const mapActionsToProps = {
-  tokenFilter,
+  tokensFilter,
   transferShow,
   transferHandleAmountChange,
   transferHide,

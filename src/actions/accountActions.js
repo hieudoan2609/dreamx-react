@@ -8,10 +8,10 @@ import {
   ACCOUNT_METAMASK_WRONGNETWORK,
   ACCOUNT_LOADING,
   ACCOUNT_LOADED,
-  TRANSFER_HIDE,
   ACCOUNT_METAMASK_NOTREADY,
   TOKENS_LOAD
 } from "../actions/types";
+import { transferHide } from "./";
 import { setSingleton } from "../singletons";
 import Exchange from "../ABI/Exchange.json";
 import ERC20 from "../ABI/ERC20.json";
@@ -126,9 +126,7 @@ const addMetamaskListeners = dispatch => {
 };
 
 const dispatchLogoutActions = dispatch => {
-  dispatch({
-    type: TRANSFER_HIDE
-  });
+  dispatch(transferHide());
   dispatch({
     type: ACCOUNT_LOGOUT
   });

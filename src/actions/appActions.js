@@ -1,10 +1,7 @@
 import axios from "axios";
 
-import {
-  APP_TOGGLE_THEME,
-  APP_INITIALIZE,
-  TOKENS_LOAD
-} from "../actions/types";
+import { APP_TOGGLE_THEME, APP_INITIALIZE } from "../actions/types";
+import { tokensLoadAsync } from ".";
 import { getNetworkNameFromId } from "../helpers";
 import config from "../config";
 
@@ -38,7 +35,7 @@ export const initializeAppAsync = () => {
     const contract = await axios.get(
       `${HTTP_BASE_URL}/return_contract_address`
     );
-    await loadTokensAsync(dispatch);
+    await dispatch(tokensLoadAsync());
     dispatch({
       type: APP_INITIALIZE,
       payload: {
@@ -48,29 +45,4 @@ export const initializeAppAsync = () => {
       }
     });
   };
-};
-
-const loadTokensAsync = async dispatch => {
-  const { HTTP_BASE_URL } = config;
-  const tokens = await axios.get(`${HTTP_BASE_URL}/tokens`);
-
-  let tokensWithInitialBalances = [];
-  for (let token of tokens.data.records) {
-    token.totalBalance = token.availableBalance = token.inOrders = 0;
-    token.decimals = parseInt(token.decimals);
-    [token.withdrawMinimum, token.withdrawFee] = [
-      token.withdraw_minimum,
-      token.withdraw_fee
-    ];
-    delete token.withdraw_minimum;
-    delete token.withdraw_fee;
-    tokensWithInitialBalances.push(token);
-  }
-
-  dispatch({
-    type: TOKENS_LOAD,
-    payload: {
-      tokens: tokensWithInitialBalances
-    }
-  });
 };

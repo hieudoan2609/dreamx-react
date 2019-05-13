@@ -1,5 +1,3 @@
-import BN from "bn.js";
-
 import singletons from "./singletons";
 
 export const getNetworkNameFromId = networkId => {
