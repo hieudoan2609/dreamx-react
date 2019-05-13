@@ -1,3 +1,4 @@
+import _ from "lodash";
 import singletons from "./singletons";
 
 export const getNetworkNameFromId = networkId => {
@@ -10,16 +11,12 @@ export const getNetworkNameFromId = networkId => {
   }
 };
 
-export const extractKeysFromObjectArray = (array, keys) => {
-  let newArray = [];
-  for (let object of array) {
-    let newObject = {};
-    for (let key of keys) {
-      newObject[key] = object[key];
-    }
-    newArray.push(newObject);
+export const extractKeysFromObject = (object, keys) => {
+  let newObject = {};
+  for (let key of keys) {
+    newObject[key] = object[key];
   }
-  return newArray;
+  return newObject;
 };
 
 export const capitalize = string => {
@@ -76,4 +73,17 @@ export const truncateNumberInput = (
   fraction = fraction ? fraction.substring(0, decimalPoints) : "";
   const result = fraction ? `${whole}.${fraction}` : whole;
   return result;
+};
+
+export const convertKeysToCamelCase = obj => {
+  const keys = Object.keys(obj);
+  for (let key of keys) {
+    const camelCaseKey = _.camelCase(key);
+    if (camelCaseKey === key) {
+      continue;
+    }
+    obj[camelCaseKey] = obj[key];
+    delete obj[key];
+  }
+  return obj;
 };

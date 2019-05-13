@@ -6,8 +6,8 @@ import config from "../config";
 export const tokensFilter = searchValue => {
   return (dispatch, getState) => {
     const regex = new RegExp(searchValue, "gmi");
-    const state = getState();
-    const allTokens = state.tokens.all;
+    const { tokens } = getState();
+    const allTokens = tokens.all;
 
     let filtered = [];
     for (let token of allTokens) {

@@ -11,9 +11,10 @@ import {
   transferHandleAmountChange,
   transferHide,
   transferHandleSubmitAsync,
-  transferEnterEntireBalance
+  transferEnterEntireBalance,
+  transfersFilter
 } from "../actions";
-import { extractKeysFromObjectArray, truncateNumberOutput } from "../helpers";
+import { extractKeysFromObject, truncateNumberOutput } from "../helpers";
 import ModalWrapper from "./ModalWrapper";
 import TransferModal from "./TransferModal";
 import TransferCompleteModal from "./TransferCompleteModal";
@@ -58,15 +59,20 @@ class Account extends Component {
     return data;
   };
 
-  getAssetTableData = () => {
+  extractTokensData = () => {
     const { web3 } = singletons;
 
     if (!this.props.account.address) {
       return [];
     }
-    const extractedData = extractKeysFromObjectArray(
-      this.props.tokens.filtered,
-      ["name", "symbol", "totalBalance", "availableBalance", "inOrders"]
+    const extractedData = this.props.tokens.filtered.map(t =>
+      extractKeysFromObject(t, [
+        "name",
+        "symbol",
+        "totalBalance",
+        "availableBalance",
+        "inOrders"
+      ])
     );
     for (let row of extractedData) {
       row.availableBalance = web3.utils.fromWei(row.availableBalance);
@@ -85,7 +91,7 @@ class Account extends Component {
     return (
       <SearchTable
         theme={this.props.app.theme}
-        data={this.getAssetTableData()}
+        data={this.extractTokensData()}
         searchInputPlaceholder="Search by asset name or symbol..."
         defaultOrderBy="totalBalance"
         excludeFromSorting={["actions"]}
@@ -95,8 +101,21 @@ class Account extends Component {
     );
   };
 
+  extractTransfersData = () => {
+    return this.props.transfers.filtered;
+  };
+
   renderTransferSearchTable = () => {
-    return <div>TRANSFERS</div>;
+    return (
+      <SearchTable
+        theme={this.props.app.theme}
+        data={this.extractTransfersData()}
+        searchInputPlaceholder="Search by asset name or symbol..."
+        defaultOrderBy="created_at"
+        searchValue={this.props.transfers.searchValue}
+        handleSearch={this.props.transfersFilter}
+      />
+    );
   };
 
   renderOrderSearchTable = () => {
@@ -208,7 +227,8 @@ const mapActionsToProps = {
   transferHandleAmountChange,
   transferHide,
   transferHandleSubmitAsync,
-  transferEnterEntireBalance
+  transferEnterEntireBalance,
+  transfersFilter
 };
 
 export default connect(
