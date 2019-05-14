@@ -38,6 +38,7 @@ $overlay: rgba(130,130,130,.1);
     width: 90px;
     text-align: center;
     border-radius: .25rem;
+    color: $dark-text;
     &.deposit {
       background-color: $buy;
     }

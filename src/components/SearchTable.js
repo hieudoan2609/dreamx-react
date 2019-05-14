@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import "./SearchTable.scss";
+import InputPaginator from "./InputPaginator";
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -65,47 +66,60 @@ class SearchTable extends Component {
 
   renderTable = () => {
     return (
-      <div className="table-responsive">
-        <table className="table">
-          <thead>
-            <tr>
-              {Object.keys(this.props.data[0]).map(col => (
-                <th scope="col" key={col} onClick={() => this.handleSort(col)}>
-                  <div className="body">
-                    {this.state.orderBy === col && (
-                      <div className={`icon ${this.state.order}`}>
-                        <ion-icon name="arrow-dropdown" />
+      <div className="table-wrapper">
+        <div className="table-responsive">
+          <table className="table">
+            <thead>
+              <tr>
+                {Object.keys(this.props.data[0]).map(col => (
+                  <th
+                    scope="col"
+                    key={col}
+                    onClick={() => this.handleSort(col)}
+                  >
+                    <div className="body">
+                      {this.state.orderBy === col && (
+                        <div className={`icon ${this.state.order}`}>
+                          <ion-icon name="arrow-dropdown" />
+                        </div>
+                      )}
+
+                      <div className="text">
+                        {this.formatNameToUserFriendly(col)}
                       </div>
-                    )}
-
-                    <div className="text">
-                      {this.formatNameToUserFriendly(col)}
                     </div>
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {stableSort(
-              this.props.data,
-              getSorting(this.state.order, this.state.orderBy)
-            ).map((row, i) => (
-              <tr key={i}>
-                {Object.keys(row).map(key => {
-                  if (this.props.dateColumn && key === this.props.dateColumn) {
-                    const format =
-                      this.props.dateFormat || "MMMM Do YYYY, h:mm:ss a";
-                    const formattedDate = moment(row[key]).format(format);
-                    return <td key={key}>{formattedDate}</td>;
-                  }
-
-                  return <td key={key}>{row[key]}</td>;
-                })}
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {stableSort(
+                this.props.data,
+                getSorting(this.state.order, this.state.orderBy)
+              ).map((row, i) => (
+                <tr key={i}>
+                  {Object.keys(row).map(key => {
+                    if (
+                      this.props.dateColumn &&
+                      key === this.props.dateColumn
+                    ) {
+                      const format =
+                        this.props.dateFormat || "MMMM Do YYYY, h:mm:ss a";
+                      const formattedDate = moment(row[key]).format(format);
+                      return <td key={key}>{formattedDate}</td>;
+                    }
+
+                    return <td key={key}>{row[key]}</td>;
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {this.props.paginated === true && (
+          <InputPaginator theme={this.props.theme} />
+        )}
       </div>
     );
   };
@@ -166,7 +180,8 @@ SearchTable.propTypes = {
   // non-required props
   excludeFromSorting: PropTypes.array,
   dateColumn: PropTypes.string, // the data of this column should be raw timestamps and should pass moment(timestamp).isValid(), for example: 2019-05-13T14:03:28.738Z or 1557825217091
-  dateFormat: PropTypes.string // the format to which dateColumn's timestamps should be converted, for example: "MMMM Do YYYY, h:mm:ss A"
+  dateFormat: PropTypes.string, // the format to which dateColumn's timestamps should be converted, for example: "MMMM Do YYYY, h:mm:ss A"
+  paginated: PropTypes.bool
 };
 
 export default SearchTable;

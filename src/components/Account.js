@@ -150,6 +150,7 @@ class Account extends Component {
         excludeFromSorting={["transactionHash", "status"]}
         dateColumn="date"
         dataName="transfers"
+        paginated={true}
       />
     );
   };
