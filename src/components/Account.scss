@@ -34,11 +34,16 @@ $overlay: rgba(130,130,130,.1);
       }
     }
   }
-  .deposit {
-    color: $buy;
-  }
-  .withdraw {
-    color: $sell;
+  .transfer-type {
+    width: 90px;
+    text-align: center;
+    border-radius: .25rem;
+    &.deposit {
+      background-color: $buy;
+    }
+    &.withdraw {
+      background-color: $sell;
+    }
   }
   &.light {
     .action {

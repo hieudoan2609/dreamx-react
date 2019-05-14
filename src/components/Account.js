@@ -129,7 +129,9 @@ class Account extends Component {
         >{`${transfer.transactionHash.substring(0, 10)}...`}</a>
       );
       const type = (
-        <span className={transfer.type}>{capitalize(transfer.type)}</span>
+        <div className={`transfer-type ${transfer.type}`}>
+          {capitalize(transfer.type)}
+        </div>
       );
       return { type, coin, amount, transactionHash, status, date };
     });
