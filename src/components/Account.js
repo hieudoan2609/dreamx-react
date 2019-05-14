@@ -114,7 +114,7 @@ class Account extends Component {
       const amount = truncateNumberOutput(Web3.utils.fromWei(transfer.amount));
       const date = moment(transfer.createdAt).format("MMMM Do YYYY, h:mm:ss A");
       const transactionHash = `${transfer.transactionHash.substring(0, 10)}...`;
-      return { coin, amount, date, transactionHash, status };
+      return { coin, amount, transactionHash, status, date };
     });
     return extractedData;
   };

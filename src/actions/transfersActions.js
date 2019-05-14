@@ -10,8 +10,13 @@ export const transfersLoadAccountAsync = accountAddress => {
     const transfersResponse = await axios.get(
       `${HTTP_BASE_URL}/transfers/${accountAddress}`
     );
-    const deposits = transfersResponse.data.deposits.records;
-    const withdraws = transfersResponse.data.withdraws.records;
+    const deposits = transfersResponse.data.deposits.records.map(t => {
+      t.type = "deposit";
+      return t;
+    });
+    const withdraws = transfersResponse.data.withdraws.records.map(t => {
+      t.type = "withdraw";
+    });
     const transfers = deposits
       .concat(withdraws)
       .map(t => convertKeysToCamelCase(t));
