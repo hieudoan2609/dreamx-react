@@ -66,11 +66,12 @@ class Account extends Component {
   };
 
   extractTokensData = () => {
-    const { web3 } = singletons;
-
     if (!this.props.account.address) {
       return [];
     }
+
+    const { web3 } = singletons;
+
     const extractedData = this.props.tokens.filtered.map(t =>
       extractKeysFromObject(t, [
         "name",
@@ -109,6 +110,10 @@ class Account extends Component {
   };
 
   extractTransfersData = () => {
+    if (!this.props.account.address) {
+      return [];
+    }
+
     const { tokens } = this.props;
     const extractedData = this.props.transfers.filtered.map(transfer => {
       const token = tokens.all.filter(
