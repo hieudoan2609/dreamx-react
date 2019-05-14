@@ -13,6 +13,8 @@ $dark-primary-shade: #d26127;
 $dark-secondary: #232d44;
 $dark-secondary-tint: #384256;
 $dark-secondary-shade: #1f283d;
+$buy: #27d68a;
+$sell: #f36972;
 $darken: rgba(1, 1, 1, 0.5);
 $overlay: rgba(130,130,130,.1);
 
@@ -31,6 +33,12 @@ $overlay: rgba(130,130,130,.1);
         margin-right: 0px;
       }
     }
+  }
+  .deposit {
+    color: $buy;
+  }
+  .withdraw {
+    color: $sell;
   }
   &.light {
     .action {

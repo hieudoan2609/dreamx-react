@@ -16,7 +16,11 @@ import {
   transferEnterEntireBalance,
   transfersFilter
 } from "../actions";
-import { extractKeysFromObject, truncateNumberOutput } from "../helpers";
+import {
+  extractKeysFromObject,
+  truncateNumberOutput,
+  capitalize
+} from "../helpers";
 import ModalWrapper from "./ModalWrapper";
 import TransferModal from "./TransferModal";
 import TransferCompleteModal from "./TransferCompleteModal";
@@ -114,7 +118,10 @@ class Account extends Component {
       const amount = truncateNumberOutput(Web3.utils.fromWei(transfer.amount));
       const date = moment(transfer.createdAt).format("MMMM Do YYYY, h:mm:ss A");
       const transactionHash = `${transfer.transactionHash.substring(0, 10)}...`;
-      return { coin, amount, transactionHash, status, date };
+      const type = (
+        <span className={transfer.type}>{capitalize(transfer.type)}</span>
+      );
+      return { type, coin, amount, transactionHash, status, date };
     });
     return extractedData;
   };

@@ -16,6 +16,7 @@ export const transfersLoadAccountAsync = accountAddress => {
     });
     const withdraws = transfersResponse.data.withdraws.records.map(t => {
       t.type = "withdraw";
+      return t;
     });
     const transfers = deposits
       .concat(withdraws)
