@@ -31,20 +31,22 @@ export const transfersLoadAccountAsync = accountAddress => {
 export const transfersFilter = searchValue => {
   return (dispatch, getState) => {
     const regex = new RegExp(searchValue, "gmi");
-    const { transfers } = getState();
+    const { transfers, tokens } = getState();
     const allTransfers = transfers.all;
-    console.log(searchValue);
 
-    // let filtered = [];
-    // for (let transfer of allTransfers) {
-    //   if (regex.test(token.symbol) || regex.test(token.name)) {
-    //     filtered.push(token);
-    //   }
-    // }
+    let filtered = [];
+    for (let transfer of allTransfers) {
+      const token = tokens.all.filter(
+        t => t.address === transfer.tokenAddress
+      )[0];
+      if (regex.test(token.symbol) || regex.test(token.name)) {
+        filtered.push(transfer);
+      }
+    }
 
-    // dispatch({
-    //   type: TOKENS_FILTER,
-    //   payload: { filtered, searchValue }
-    // });
+    dispatch({
+      type: TRANSFERS_FILTER,
+      payload: { filtered, searchValue }
+    });
   };
 };
