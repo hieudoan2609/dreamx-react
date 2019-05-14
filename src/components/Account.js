@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Web3 from "web3";
-import moment from "moment";
 
 import Login from "./Login";
 import TabMenu from "./TabMenu";
@@ -103,6 +102,7 @@ class Account extends Component {
         excludeFromSorting={["actions"]}
         searchValue={this.props.tokens.searchValue}
         handleSearch={this.props.tokensFilter}
+        dataName="assets"
       />
     );
   };
@@ -116,7 +116,8 @@ class Account extends Component {
       const status = transfer.blockNumber ? "Completed" : "Pending";
       const coin = token.symbol;
       const amount = truncateNumberOutput(Web3.utils.fromWei(transfer.amount));
-      const date = moment(transfer.createdAt).format("MMMM Do YYYY, h:mm:ss A");
+      // const date = moment(transfer.createdAt).format("MMMM Do YYYY, h:mm:ss A");
+      const date = transfer.createdAt;
       const transactionHash = `${transfer.transactionHash.substring(0, 10)}...`;
       const type = (
         <span className={transfer.type}>{capitalize(transfer.type)}</span>
@@ -136,7 +137,8 @@ class Account extends Component {
         searchValue={this.props.transfers.searchValue}
         handleSearch={this.props.transfersFilter}
         excludeFromSorting={["transactionHash", "status"]}
-        dateFormat={"MMMM Do YYYY, h:mm:ss A"}
+        dateColumn="date"
+        dataName="transfers"
       />
     );
   };

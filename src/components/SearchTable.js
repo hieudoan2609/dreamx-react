@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { Component } from "react";
 // import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -62,7 +63,7 @@ class SearchTable extends Component {
     this.setState({ orderBy, order });
   };
 
-  renderAssetTable = () => {
+  renderTable = () => {
     return (
       <div className="table-responsive">
         <table className="table">
@@ -91,9 +92,16 @@ class SearchTable extends Component {
               getSorting(this.state.order, this.state.orderBy)
             ).map((row, i) => (
               <tr key={i}>
-                {Object.keys(row).map(key => (
-                  <td key={key}>{row[key]}</td>
-                ))}
+                {Object.keys(row).map(key => {
+                  if (this.props.dateColumn && key === this.props.dateColumn) {
+                    const format =
+                      this.props.dateFormat || "MMMM Do YYYY, h:mm:ss a";
+                    const formattedDate = moment(row[key]).format(format);
+                    return <td key={key}>{formattedDate}</td>;
+                  }
+
+                  return <td key={key}>{row[key]}</td>;
+                })}
               </tr>
             ))}
           </tbody>
@@ -102,8 +110,12 @@ class SearchTable extends Component {
     );
   };
 
-  renderNoAssetAvailable = () => {
-    return <div className="not-available">No assets coule be found.</div>;
+  renderEmptyTable = () => {
+    return (
+      <div className="not-available">
+        No {this.props.dataName} coule be found.
+      </div>
+    );
   };
 
   handleSearchInput = e => {
@@ -128,8 +140,8 @@ class SearchTable extends Component {
           />
         </div>
 
-        {this.props.data.length === 0 && this.renderNoAssetAvailable()}
-        {this.props.data.length > 0 && this.renderAssetTable()}
+        {this.props.data.length === 0 && this.renderEmptyTable()}
+        {this.props.data.length > 0 && this.renderTable()}
       </div>
     );
   }
@@ -148,10 +160,13 @@ SearchTable.propTypes = {
   data: PropTypes.array.isRequired, // [ { column: value, ... }, ... ]
   searchInputPlaceholder: PropTypes.string.isRequired,
   defaultOrderBy: PropTypes.string.isRequired,
-  excludeFromSorting: PropTypes.array,
   searchValue: PropTypes.string.isRequired,
   handleSearch: PropTypes.func.isRequired,
-  dateFormat: PropTypes.string
+  dataName: PropTypes.string.isRequired,
+  // non-required props
+  excludeFromSorting: PropTypes.array,
+  dateColumn: PropTypes.string, // the data of this column should be raw timestamps and should pass moment(timestamp).isValid(), for example: 2019-05-13T14:03:28.738Z or 1557825217091
+  dateFormat: PropTypes.string // the format to which dateColumn's timestamps should be converted, for example: "MMMM Do YYYY, h:mm:ss A"
 };
 
 export default SearchTable;
