@@ -1,4 +1,3 @@
-import Web3 from "web3";
 import axios from "axios";
 
 import {
@@ -278,7 +277,8 @@ const withdrawAsync = async (dispatch, getState) => {
     return;
   }
 
-  const withdraw = await axios.post(`${HTTP_BASE_URL}/withdraws`, payload);
+  // TODO: update transfers with AJAX response
+  await axios.post(`${HTTP_BASE_URL}/withdraws`, payload);
 
   dispatch({
     type: TRANSFER_COMPLETE
