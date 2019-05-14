@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import "./SearchTable.scss";
-import InputPaginator from "./InputPaginator";
+import Paginator from "./Paginator";
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -118,7 +118,7 @@ class SearchTable extends Component {
         </div>
 
         {this.props.paginated === true && (
-          <InputPaginator theme={this.props.theme} />
+          <Paginator theme={this.props.theme} />
         )}
       </div>
     );
