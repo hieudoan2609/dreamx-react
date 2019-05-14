@@ -51,7 +51,11 @@ class Paginator extends Component {
 // };
 
 Paginator.propTypes = {
-  theme: PropTypes.string.isRequired
+  theme: PropTypes.string.isRequired,
+  page: PropTypes.number.isRequired,
+  perPage: PropTypes.number.isRequired,
+  total: PropTypes.number.isRequired,
+  handlePageChange: PropTypes.func.isRequired
 };
 
 export default Paginator;

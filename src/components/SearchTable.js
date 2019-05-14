@@ -35,7 +35,17 @@ function getSorting(order, orderBy) {
 class SearchTable extends Component {
   state = {
     order: "desc",
-    orderBy: this.props.defaultOrderBy
+    orderBy: this.props.defaultOrderBy,
+    page: 1,
+    perPage: this.props.perPage || 10
+  };
+
+  paginate = records => {
+    const { page, perPage } = this.state;
+    const firstIndex = (page - 1) * perPage;
+    const lastIndex = firstIndex + perPage;
+    const paginated = records.slice(firstIndex, lastIndex);
+    return paginated;
   };
 
   formatNameToUserFriendly = name => {
@@ -64,7 +74,17 @@ class SearchTable extends Component {
     this.setState({ orderBy, order });
   };
 
+  handlePageChange = page => {
+    this.setState({ page });
+  };
+
   renderTable = () => {
+    const sorted = stableSort(
+      this.props.data,
+      getSorting(this.state.order, this.state.orderBy)
+    );
+    const records = this.props.paginated ? this.paginate(sorted) : sorted;
+
     return (
       <div className="table-wrapper">
         <div className="table-responsive">
@@ -93,10 +113,7 @@ class SearchTable extends Component {
               </tr>
             </thead>
             <tbody>
-              {stableSort(
-                this.props.data,
-                getSorting(this.state.order, this.state.orderBy)
-              ).map((row, i) => (
+              {records.map((row, i) => (
                 <tr key={i}>
                   {Object.keys(row).map(key => {
                     if (
@@ -118,7 +135,13 @@ class SearchTable extends Component {
         </div>
 
         {this.props.paginated === true && (
-          <Paginator theme={this.props.theme} />
+          <Paginator
+            theme={this.props.theme}
+            page={this.state.page}
+            perPage={this.state.perPage}
+            total={this.props.data.length}
+            handlePageChange={this.handlePageChange}
+          />
         )}
       </div>
     );
@@ -181,7 +204,8 @@ SearchTable.propTypes = {
   excludeFromSorting: PropTypes.array,
   dateColumn: PropTypes.string, // the data of this column should be raw timestamps and should pass moment(timestamp).isValid(), for example: 2019-05-13T14:03:28.738Z or 1557825217091
   dateFormat: PropTypes.string, // the format to which dateColumn's timestamps should be converted, for example: "MMMM Do YYYY, h:mm:ss A"
-  paginated: PropTypes.bool
+  paginated: PropTypes.bool,
+  perPage: PropTypes.number
 };
 
 export default SearchTable;
