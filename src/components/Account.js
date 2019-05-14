@@ -18,7 +18,8 @@ import {
 import {
   extractKeysFromObject,
   truncateNumberOutput,
-  capitalize
+  capitalize,
+  getEtherscanTransaction
 } from "../helpers";
 import ModalWrapper from "./ModalWrapper";
 import TransferModal from "./TransferModal";
@@ -116,9 +117,17 @@ class Account extends Component {
       const status = transfer.blockNumber ? "Completed" : "Pending";
       const coin = token.symbol;
       const amount = truncateNumberOutput(Web3.utils.fromWei(transfer.amount));
-      // const date = moment(transfer.createdAt).format("MMMM Do YYYY, h:mm:ss A");
       const date = transfer.createdAt;
-      const transactionHash = `${transfer.transactionHash.substring(0, 10)}...`;
+      const transactionHash = (
+        <a
+          href={getEtherscanTransaction(
+            transfer.transactionHash,
+            this.props.app.networkName
+          )}
+          target="_blank"
+          rel="noopener noreferrer"
+        >{`${transfer.transactionHash.substring(0, 10)}...`}</a>
+      );
       const type = (
         <span className={transfer.type}>{capitalize(transfer.type)}</span>
       );

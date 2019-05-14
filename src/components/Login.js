@@ -5,6 +5,7 @@ import Loading from "./Loading";
 import { accountLoginAsync, accountLogout } from "../actions";
 import "./Login.scss";
 import Button from "./Button";
+import { capitalize } from "../helpers";
 
 class Login extends Component {
   refreshPage = () => {
@@ -64,8 +65,8 @@ class Login extends Component {
         <div className="card-body">
           <h5 className="card-title">Wrong network detected</h5>
           <p className="card-text">
-            Please set MetaMask's network to {this.props.app.networkName} and
-            try again.
+            Please set MetaMask's network to{" "}
+            {capitalize(this.props.app.networkName)} and try again.
           </p>
           <Button
             theme={this.props.app.theme}

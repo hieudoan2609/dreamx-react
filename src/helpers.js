@@ -3,7 +3,7 @@ import singletons from "./singletons";
 
 export const getNetworkNameFromId = networkId => {
   networkId = parseInt(networkId);
-  const networks = { Mainnet: 1, Kovan: 42, Ropsten: 3, Rinkeby: 4 };
+  const networks = { mainnet: 1, kovan: 42, ropsten: 3, rinkeby: 4 };
   for (let network in networks) {
     if (networks[network] === networkId) {
       return network;
@@ -86,4 +86,14 @@ export const convertKeysToCamelCase = obj => {
     delete obj[key];
   }
   return obj;
+};
+
+export const getEtherscanTransaction = (transactionHash, networkName) => {
+  let result;
+  if (networkName === "mainnet") {
+    result = `https://etherscan.io/tx/${transactionHash}`;
+  } else {
+    result = `https://${networkName}.etherscan.io/tx/${transactionHash}`;
+  }
+  return result;
 };
