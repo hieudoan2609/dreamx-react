@@ -36,13 +36,13 @@ class SearchTable extends Component {
   state = {
     order: "desc",
     orderBy: this.props.defaultOrderBy,
-    page: 1,
+    currentPage: 1,
     perPage: this.props.perPage || 10
   };
 
   paginate = records => {
-    const { page, perPage } = this.state;
-    const firstIndex = (page - 1) * perPage;
+    const { currentPage, perPage } = this.state;
+    const firstIndex = (currentPage - 1) * perPage;
     const lastIndex = firstIndex + perPage;
     const paginated = records.slice(firstIndex, lastIndex);
     return paginated;
@@ -74,8 +74,8 @@ class SearchTable extends Component {
     this.setState({ orderBy, order });
   };
 
-  handlePageChange = page => {
-    this.setState({ page });
+  handlePageChange = pageNumber => {
+    this.setState({ currentPage: parseInt(pageNumber) });
   };
 
   renderTable = () => {
@@ -137,7 +137,7 @@ class SearchTable extends Component {
         {this.props.paginated === true && (
           <Paginator
             theme={this.props.theme}
-            page={this.state.page}
+            currentPage={this.state.currentPage}
             perPage={this.state.perPage}
             total={this.props.data.length}
             handlePageChange={this.handlePageChange}

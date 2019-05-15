@@ -24,6 +24,7 @@ $icon-size: 24px;
   justify-content: center;
   align-items: center;
   position: relative;
+  user-select: none;
   ul {
     margin: 1rem 0px;
     background-color: $overlay;
