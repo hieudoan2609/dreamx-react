@@ -90,6 +90,9 @@ class SearchTable extends Component {
   };
 
   renderTable = () => {
+    const totalPages = this.props.paginated
+      ? Math.ceil(this.props.data.length / this.props.perPage)
+      : undefined;
     const sorted = stableSort(
       this.props.data,
       getSorting(this.state.order, this.state.orderBy)
@@ -145,12 +148,12 @@ class SearchTable extends Component {
           </table>
         </div>
 
-        {this.props.paginated === true && (
+        {this.props.paginated === true && totalPages > 1 && (
           <Paginator
             theme={this.props.theme}
             currentPage={this.state.currentPage}
             perPage={this.state.perPage}
-            totalRecords={this.props.data.length}
+            totalPages={totalPages}
             handlePageChange={this.handlePageChange}
           />
         )}

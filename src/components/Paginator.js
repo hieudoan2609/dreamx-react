@@ -8,7 +8,7 @@ import "./Paginator.scss";
 class Paginator extends Component {
   state = {
     firstPage: 1,
-    lastPage: Math.floor(this.props.totalRecords / this.props.perPage)
+    lastPage: this.props.totalPages
   };
 
   onPageLinkClick = e => {
@@ -101,7 +101,7 @@ Paginator.propTypes = {
   theme: PropTypes.string.isRequired,
   currentPage: PropTypes.number.isRequired,
   perPage: PropTypes.number.isRequired,
-  totalRecords: PropTypes.number.isRequired,
+  totalPages: PropTypes.number.isRequired,
   handlePageChange: PropTypes.func.isRequired
 };
 
