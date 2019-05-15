@@ -156,7 +156,7 @@ class Account extends Component {
         dateColumn="date"
         dataName="transfers"
         paginated={true}
-        perPage={2}
+        perPage={20}
       />
     );
   };

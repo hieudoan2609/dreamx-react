@@ -7,7 +7,7 @@ import "./Paginator.scss";
 
 class Paginator extends Component {
   state = {
-    totalLinks: 5
+    totalLinks: this.props.totalPages > 5 ? 5 : this.props.totalPages
   };
 
   onPageLinkClick = e => {
