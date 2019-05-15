@@ -6,13 +6,24 @@ import _ from "lodash";
 import "./Paginator.scss";
 
 class Paginator extends Component {
+  state = {
+    firstPage: 1,
+    lastPage: Math.floor(this.props.totalRecords / this.props.perPage)
+  };
+
   onPageLinkClick = e => {
     const target = e.currentTarget;
 
     let pageNumber;
     if (target.id === "prev") {
+      if (this.props.currentPage === this.state.firstPage) {
+        return;
+      }
       pageNumber = this.props.currentPage - 1;
     } else if (target.id === "next") {
+      if (this.props.currentPage === this.state.lastPage) {
+        return;
+      }
       pageNumber = this.props.currentPage + 1;
     } else {
       pageNumber = target.id;
@@ -45,7 +56,11 @@ class Paginator extends Component {
         <nav aria-label="navigation">
           <ul className="pagination">
             <li
-              className="page-item"
+              className={`page-item ${
+                this.props.currentPage === this.state.firstPage
+                  ? "disabled"
+                  : ""
+              }`}
               id={"prev"}
               onClick={this.onPageLinkClick}
             >
@@ -57,7 +72,9 @@ class Paginator extends Component {
             {this.renderPageLinks()}
 
             <li
-              className="page-item"
+              className={`page-item ${
+                this.props.currentPage === this.state.lastPage ? "disabled" : ""
+              }`}
               id={"next"}
               onClick={this.onPageLinkClick}
             >
@@ -84,7 +101,7 @@ Paginator.propTypes = {
   theme: PropTypes.string.isRequired,
   currentPage: PropTypes.number.isRequired,
   perPage: PropTypes.number.isRequired,
-  total: PropTypes.number.isRequired,
+  totalRecords: PropTypes.number.isRequired,
   handlePageChange: PropTypes.func.isRequired
 };
 

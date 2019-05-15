@@ -139,7 +139,7 @@ class SearchTable extends Component {
             theme={this.props.theme}
             currentPage={this.state.currentPage}
             perPage={this.state.perPage}
-            total={this.props.data.length}
+            totalRecords={this.props.data.length}
             handlePageChange={this.handlePageChange}
           />
         )}
