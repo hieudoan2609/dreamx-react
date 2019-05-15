@@ -167,6 +167,7 @@ class SearchTable extends Component {
   };
 
   handleSearchInput = e => {
+    this.setState({ currentPage: 1 });
     this.props.handleSearch(e.target.value);
   };
 
