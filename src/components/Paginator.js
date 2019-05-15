@@ -7,21 +7,22 @@ import "./Paginator.scss";
 
 class Paginator extends Component {
   state = {
-    firstPage: 1,
-    lastPage: this.props.totalPages
+    totalLinks: 5
   };
 
   onPageLinkClick = e => {
     const target = e.currentTarget;
+    const firstPage = 1;
+    const lastPage = this.props.totalPages;
 
     let pageNumber;
     if (target.id === "prev") {
-      if (this.props.currentPage === this.state.firstPage) {
+      if (this.props.currentPage === firstPage) {
         return;
       }
       pageNumber = this.props.currentPage - 1;
     } else if (target.id === "next") {
-      if (this.props.currentPage === this.state.lastPage) {
+      if (this.props.currentPage === lastPage) {
         return;
       }
       pageNumber = this.props.currentPage + 1;
@@ -33,8 +34,18 @@ class Paginator extends Component {
   };
 
   renderPageLinks = () => {
-    return _.times(5, i => {
-      const currentPage = i + 1;
+    if (this.props.currentPage < 3) {
+      return this.renderPageLinksFromPage(1);
+    } else if (this.props.currentPage > this.props.totalPages - 2) {
+      return this.renderPageLinksFromPage(this.props.totalPages - 4);
+    } else {
+      return this.renderPageLinksFromPage(this.props.currentPage - 2);
+    }
+  };
+
+  renderPageLinksFromPage = pageNumber => {
+    return _.times(this.state.totalLinks, i => {
+      const currentPage = i + pageNumber;
       return (
         <li
           className={`page-item ${
@@ -51,15 +62,16 @@ class Paginator extends Component {
   };
 
   render() {
+    const firstPage = 1;
+    const lastPage = this.props.totalPages;
+
     return (
       <div className={`Paginator ${this.props.theme}`}>
         <nav aria-label="navigation">
           <ul className="pagination">
             <li
               className={`page-item ${
-                this.props.currentPage === this.state.firstPage
-                  ? "disabled"
-                  : ""
+                this.props.currentPage === firstPage ? "disabled" : ""
               }`}
               id={"prev"}
               onClick={this.onPageLinkClick}
@@ -73,7 +85,7 @@ class Paginator extends Component {
 
             <li
               className={`page-item ${
-                this.props.currentPage === this.state.lastPage ? "disabled" : ""
+                this.props.currentPage === lastPage ? "disabled" : ""
               }`}
               id={"next"}
               onClick={this.onPageLinkClick}
