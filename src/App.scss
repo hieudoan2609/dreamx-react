@@ -20,7 +20,8 @@ $overlay: rgba(130,130,130,.1);
 
 .App {
   position: relative;
-  min-height: 100vh;
+  // min-height: 100vh;
+  min-height: 5000px;
   &.light {
     background-color: $light-secondary;
     color: $light-text;

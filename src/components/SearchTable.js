@@ -33,6 +33,11 @@ function getSorting(order, orderBy) {
 }
 
 class SearchTable extends Component {
+  constructor(props) {
+    super(props);
+    this.table = React.createRef();
+  }
+
   state = {
     order: "desc",
     orderBy: this.props.defaultOrderBy,
@@ -76,6 +81,12 @@ class SearchTable extends Component {
 
   handlePageChange = pageNumber => {
     this.setState({ currentPage: parseInt(pageNumber) });
+    const offset = 200;
+    const tableTop =
+      this.table.current.getBoundingClientRect().top +
+      window.pageYOffset -
+      offset;
+    window.scrollTo(0, tableTop);
   };
 
   renderTable = () => {
@@ -86,7 +97,7 @@ class SearchTable extends Component {
     const records = this.props.paginated ? this.paginate(sorted) : sorted;
 
     return (
-      <div className="table-wrapper">
+      <div className="table-wrapper" ref={this.table}>
         <div className="table-responsive">
           <table className="table">
             <thead>
