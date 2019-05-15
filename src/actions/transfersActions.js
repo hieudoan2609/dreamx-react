@@ -10,17 +10,9 @@ export const transfersLoadAccountAsync = accountAddress => {
     const transfersResponse = await axios.get(
       `${HTTP_BASE_URL}/transfers/${accountAddress}`
     );
-    const deposits = transfersResponse.data.deposits.records.map(t => {
-      t.type = "deposit";
-      return t;
-    });
-    const withdraws = transfersResponse.data.withdraws.records.map(t => {
-      t.type = "withdraw";
-      return t;
-    });
-    const transfers = deposits
-      .concat(withdraws)
-      .map(t => convertKeysToCamelCase(t));
+    const transfers = transfersResponse.data.records.map(t =>
+      convertKeysToCamelCase(t)
+    );
     dispatch({
       type: TRANSFERS_LOAD,
       payload: { transfers }
@@ -59,11 +51,9 @@ export const updateNewTransfersAsync = newTransfers => {
     newTransfers.map(t => convertKeysToCamelCase(t));
     const { transfers } = getState();
     const updatedTransfers = transfers.all.concat(newTransfers);
-    console.log(newTransfers);
-    console.log(transfers.all[0]);
-    // dispatch({
-    //   type: TRANSFERS_LOAD,
-    //   payload: { transfers: updatedTransfers }
-    // });
+    dispatch({
+      type: TRANSFERS_LOAD,
+      payload: { transfers: updatedTransfers }
+    });
   };
 };

@@ -80,13 +80,13 @@ class SearchTable extends Component {
   };
 
   handlePageChange = pageNumber => {
-    this.setState({ currentPage: parseInt(pageNumber) });
     const offset = 200;
     const tableTop =
       this.table.current.getBoundingClientRect().top +
       window.pageYOffset -
       offset;
     window.scrollTo(0, tableTop);
+    this.setState({ currentPage: parseInt(pageNumber) });
   };
 
   renderTable = () => {
