@@ -50,3 +50,20 @@ export const transfersFilter = searchValue => {
     });
   };
 };
+
+export const updateNewTransfersAsync = newTransfers => {
+  return async (dispatch, getState) => {
+    if (!(newTransfers instanceof Array)) {
+      newTransfers = [newTransfers];
+    }
+    newTransfers.map(t => convertKeysToCamelCase(t));
+    const { transfers } = getState();
+    const updatedTransfers = transfers.all.concat(newTransfers);
+    console.log(newTransfers);
+    console.log(transfers.all[0]);
+    // dispatch({
+    //   type: TRANSFERS_LOAD,
+    //   payload: { transfers: updatedTransfers }
+    // });
+  };
+};
