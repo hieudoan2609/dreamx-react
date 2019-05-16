@@ -34,7 +34,7 @@ class Paginator extends Component {
   };
 
   renderPageLinks = () => {
-    if (this.props.currentPage < 3) {
+    if (this.props.currentPage < 3 || this.props.totalPages < 5) {
       return this.renderPageLinksFromPage(1);
     } else if (this.props.currentPage > this.props.totalPages - 2) {
       return this.renderPageLinksFromPage(this.props.totalPages - 4);
