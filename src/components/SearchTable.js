@@ -100,7 +100,7 @@ class SearchTable extends Component {
     const records = this.props.paginated ? this.paginate(sorted) : sorted;
 
     return (
-      <div className="table-wrapper" ref={this.table}>
+      <div className={`table-wrapper ${this.props.dataName}`} ref={this.table}>
         <div className="table-responsive">
           <table className="table">
             <thead>
