@@ -3,7 +3,7 @@ import React, { Component } from "react";
 // import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import "./SearchTable.scss";
+import "./FixedHeightTable.scss";
 import Paginator from "./Paginator";
 
 function desc(a, b, orderBy) {
@@ -32,7 +32,7 @@ function getSorting(order, orderBy) {
     : (a, b) => -desc(a, b, orderBy);
 }
 
-class SearchTable extends Component {
+class FixedHeightTable extends Component {
   constructor(props) {
     super(props);
     this.table = React.createRef();
@@ -80,13 +80,23 @@ class SearchTable extends Component {
   };
 
   handlePageChange = pageNumber => {
-    const offset = 200;
-    const tableTop =
-      this.table.current.getBoundingClientRect().top +
-      window.pageYOffset -
-      offset;
-    window.scrollTo(0, tableTop);
     this.setState({ currentPage: parseInt(pageNumber) });
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    const previousPage = prevState.currentPage;
+    const currentPage = this.state.currentPage;
+    if (previousPage !== currentPage) {
+      this.scrollToTableTop();
+    }
+  };
+
+  scrollToTableTop = () => {
+    const offset = 200;
+    const currentScrolled = window.pageYOffset;
+    const tableTop =
+      this.table.current.getBoundingClientRect().top + currentScrolled - offset;
+    window.scrollTo(0, tableTop);
   };
 
   renderTable = () => {
@@ -101,7 +111,7 @@ class SearchTable extends Component {
 
     return (
       <div className={`table-wrapper ${this.props.dataName}`} ref={this.table}>
-        <div className="table-responsive">
+        <div className="table-responsive" style={{ height: this.props.height }}>
           <table className="table">
             <thead>
               <tr>
@@ -176,7 +186,7 @@ class SearchTable extends Component {
 
   render() {
     return (
-      <div className={`SearchTable ${this.props.theme}`}>
+      <div className={`FixedHeightTable ${this.props.theme}`}>
         <div className="input-group">
           <div className="input-group-prepend">
             <span className="input-group-text" id="inputGroupPrepend3">
@@ -207,7 +217,7 @@ class SearchTable extends Component {
 //  getChartData
 // };
 
-SearchTable.propTypes = {
+FixedHeightTable.propTypes = {
   theme: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired, // [ { column: value, ... }, ... ]
   searchInputPlaceholder: PropTypes.string.isRequired,
@@ -215,6 +225,7 @@ SearchTable.propTypes = {
   searchValue: PropTypes.string.isRequired,
   handleSearch: PropTypes.func.isRequired,
   dataName: PropTypes.string.isRequired,
+  height: PropTypes.number.isRequired,
   // non-required props
   excludeFromSorting: PropTypes.array,
   dateColumn: PropTypes.string, // the data of this column should be raw timestamps and should pass moment(timestamp).isValid(), for example: 2019-05-13T14:03:28.738Z or 1557825217091
@@ -223,4 +234,4 @@ SearchTable.propTypes = {
   perPage: PropTypes.number
 };
 
-export default SearchTable;
+export default FixedHeightTable;

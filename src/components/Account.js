@@ -4,7 +4,7 @@ import Web3 from "web3";
 
 import Login from "./Login";
 import TabMenu from "./TabMenu";
-import SearchTable from "./SearchTable";
+import FixedHeightTable from "./FixedHeightTable";
 import "./Account.scss";
 import {
   tokensFilter,
@@ -29,7 +29,10 @@ import singletons from "../singletons";
 class Account extends Component {
   state = {
     tabs: ["assets", "transfers", "orders", "trades"],
-    currentTab: "assets"
+    currentTab: "assets",
+    paginated: true,
+    perPage: 15,
+    tableHeight: 780
   };
 
   addActionsColumn = data => {
@@ -94,9 +97,9 @@ class Account extends Component {
     this.setState({ currentTab: tab });
   };
 
-  renderAssetSearchTable = () => {
+  renderAssetFixedHeightTable = () => {
     return (
-      <SearchTable
+      <FixedHeightTable
         theme={this.props.app.theme}
         data={this.extractTokensData()}
         searchInputPlaceholder="Search by asset name or symbol..."
@@ -105,6 +108,9 @@ class Account extends Component {
         searchValue={this.props.tokens.searchValue}
         handleSearch={this.props.tokensFilter}
         dataName="assets"
+        paginated={this.state.paginated}
+        perPage={this.state.perPage}
+        height={this.state.tableHeight}
       />
     );
   };
@@ -143,9 +149,9 @@ class Account extends Component {
     return extractedData;
   };
 
-  renderTransferSearchTable = () => {
+  renderTransferFixedHeightTable = () => {
     return (
-      <SearchTable
+      <FixedHeightTable
         theme={this.props.app.theme}
         data={this.extractTransfersData()}
         searchInputPlaceholder="Search by asset name or symbol..."
@@ -155,17 +161,18 @@ class Account extends Component {
         excludeFromSorting={["transactionHash", "status"]}
         dateColumn="date"
         dataName="transfers"
-        paginated={true}
-        perPage={15}
+        paginated={this.state.paginated}
+        perPage={this.state.perPage}
+        height={this.state.tableHeight}
       />
     );
   };
 
-  renderOrderSearchTable = () => {
+  renderOrderFixedHeightTable = () => {
     return <div>ORDERS</div>;
   };
 
-  renderTradeSearchTable = () => {
+  renderTradeFixedHeightTable = () => {
     return <div>TRADES</div>;
   };
 
@@ -249,11 +256,14 @@ class Account extends Component {
             onChange={this.handleTabChange}
           />
 
-          {this.state.currentTab === "assets" && this.renderAssetSearchTable()}
-          {this.state.currentTab === "orders" && this.renderOrderSearchTable()}
+          {this.state.currentTab === "assets" &&
+            this.renderAssetFixedHeightTable()}
+          {this.state.currentTab === "orders" &&
+            this.renderOrderFixedHeightTable()}
           {this.state.currentTab === "transfers" &&
-            this.renderTransferSearchTable()}
-          {this.state.currentTab === "trades" && this.renderTradeSearchTable()}
+            this.renderTransferFixedHeightTable()}
+          {this.state.currentTab === "trades" &&
+            this.renderTradeFixedHeightTable()}
         </div>
       </div>
     );
