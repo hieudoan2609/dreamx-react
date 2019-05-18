@@ -14,7 +14,9 @@ import {
   transferHide,
   transferHandleSubmitAsync,
   transferEnterEntireBalance,
-  transfersHandleSearchInput
+  transfersHandleSearchInput,
+  transfersClearSearch,
+  tokensClearSearch
 } from "../actions";
 import {
   extractKeysFromObject,
@@ -111,6 +113,7 @@ class Account extends Component {
         paginated={this.state.paginated}
         perPage={this.state.perPage}
         height={this.state.tableHeight}
+        clearSearch={this.props.tokensClearSearch}
       />
     );
   };
@@ -163,6 +166,7 @@ class Account extends Component {
         paginated={this.state.paginated}
         perPage={this.state.perPage}
         height={this.state.tableHeight}
+        clearSearch={this.props.transfersClearSearch}
       />
     );
   };
@@ -297,7 +301,9 @@ const mapActionsToProps = {
   transferHide,
   transferHandleSubmitAsync,
   transferEnterEntireBalance,
-  transfersHandleSearchInput
+  transfersHandleSearchInput,
+  transfersClearSearch,
+  tokensClearSearch
 };
 
 export default connect(

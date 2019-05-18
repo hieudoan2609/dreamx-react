@@ -96,6 +96,10 @@ class Table extends Component {
     }
   };
 
+  componentWillMount = () => {
+    this.props.clearSearch();
+  };
+
   scrollToTableTop = () => {
     const offset = 200;
     const currentScrolled = window.pageYOffset;
@@ -215,7 +219,8 @@ Table.propTypes = {
   perPage: PropTypes.number,
   height: PropTypes.number,
   searchable: PropTypes.bool,
-  searchValue: PropTypes.string // required if table is searchable
+  searchValue: PropTypes.string, // required if table is searchable
+  clearSearch: PropTypes.func // required if table is searchable
 };
 
 export default Table;

@@ -1,8 +1,20 @@
 import axios from "axios";
 
-import { TRANSFERS_FILTER, TRANSFERS_LOAD } from "./types";
+import {
+  TRANSFERS_FILTER,
+  TRANSFERS_LOAD,
+  TRANSFERS_CLEAR_FILTER
+} from "./types";
 import config from "../config";
 import { convertKeysToCamelCase } from "../helpers";
+
+export const transfersClearSearch = () => {
+  return dispatch => {
+    dispatch({
+      type: TRANSFERS_CLEAR_FILTER
+    });
+  };
+};
 
 export const transfersLoadAccountAsync = accountAddress => {
   return async dispatch => {

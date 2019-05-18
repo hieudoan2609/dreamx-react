@@ -1,7 +1,19 @@
 import axios from "axios";
 
-import { TOKENS_FILTER, TOKENS_LOAD } from "../actions/types";
+import {
+  TOKENS_FILTER,
+  TOKENS_LOAD,
+  TOKENS_CLEAR_FILTER
+} from "../actions/types";
 import config from "../config";
+
+export const tokensClearSearch = () => {
+  return dispatch => {
+    dispatch({
+      type: TOKENS_CLEAR_FILTER
+    });
+  };
+};
 
 export const tokensHandleSearchInput = e => {
   return (dispatch, getState) => {

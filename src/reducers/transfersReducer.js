@@ -1,4 +1,8 @@
-import { TRANSFERS_LOAD, TRANSFERS_FILTER } from "../actions/types";
+import {
+  TRANSFERS_LOAD,
+  TRANSFERS_FILTER,
+  TRANSFERS_CLEAR_FILTER
+} from "../actions/types";
 
 const INITIAL_STATE = {
   all: [],
@@ -19,6 +23,12 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         filtered: action.payload.filtered,
         searchValue: action.payload.searchValue
+      };
+    case TRANSFERS_CLEAR_FILTER:
+      return {
+        ...state,
+        filtered: state.all,
+        searchValue: ""
       };
     default:
       return state;
