@@ -214,6 +214,7 @@ Table.propTypes = {
   paginated: PropTypes.bool,
   perPage: PropTypes.number,
   height: PropTypes.number,
+  searchable: PropTypes.bool,
   searchValue: PropTypes.string // required if table is searchable
 };
 

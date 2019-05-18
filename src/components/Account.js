@@ -103,11 +103,10 @@ class Account extends Component {
       <Table
         theme={this.props.app.theme}
         data={this.extractTokensData()}
-        searchInputPlaceholder="Search by asset name or symbol..."
         defaultOrderBy="totalBalance"
         excludeFromSorting={["actions"]}
+        searchable={true}
         searchValue={this.props.tokens.searchValue}
-        handleSearch={this.props.tokensFilter}
         dataName="assets"
         paginated={this.state.paginated}
         perPage={this.state.perPage}
@@ -155,10 +154,9 @@ class Account extends Component {
       <Table
         theme={this.props.app.theme}
         data={this.extractTransfersData()}
-        searchInputPlaceholder="Search by asset name or symbol..."
         defaultOrderBy="date"
+        searchable={true}
         searchValue={this.props.transfers.searchValue}
-        handleSearch={this.props.transfersFilter}
         excludeFromSorting={["transactionHash", "status"]}
         dateColumn="date"
         dataName="transfers"
