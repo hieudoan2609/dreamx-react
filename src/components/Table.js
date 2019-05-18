@@ -86,8 +86,13 @@ class Table extends Component {
   componentDidUpdate = (prevProps, prevState) => {
     const previousPage = prevState.currentPage;
     const currentPage = this.state.currentPage;
+    const previousSearchValue = prevProps.searchValue;
+    const currentSearchValue = this.props.searchValue;
     if (previousPage !== currentPage) {
       this.scrollToTableTop();
+    }
+    if (previousSearchValue !== currentSearchValue) {
+      this.setState({ currentPage: 1 });
     }
   };
 
@@ -179,29 +184,9 @@ class Table extends Component {
     );
   };
 
-  handleSearchInput = e => {
-    this.setState({ currentPage: 1 });
-    this.props.handleSearch(e.target.value);
-  };
-
   render() {
     return (
       <div className={`Table ${this.props.theme}`}>
-        <div className="input-group">
-          <div className="input-group-prepend">
-            <span className="input-group-text" id="inputGroupPrepend3">
-              <ion-icon name="search" />
-            </span>
-          </div>
-          <input
-            className="form-control search"
-            placeholder={this.props.searchInputPlaceholder}
-            spellCheck="false"
-            value={this.props.searchValue}
-            onChange={this.handleSearchInput}
-          />
-        </div>
-
         {this.props.data.length === 0 && this.renderEmptyTable()}
         {this.props.data.length > 0 && this.renderTable()}
       </div>
@@ -222,16 +207,14 @@ Table.propTypes = {
   dataName: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired, // [ { column: value, ... }, ... ]
   defaultOrderBy: PropTypes.string.isRequired,
-  searchInputPlaceholder: PropTypes.string.isRequired,
-  searchValue: PropTypes.string.isRequired,
-  handleSearch: PropTypes.func.isRequired,
   // non-required props
   excludeFromSorting: PropTypes.array,
   dateColumn: PropTypes.string, // the data of this column should be raw timestamps and should pass moment(timestamp).isValid(), for example: 2019-05-13T14:03:28.738Z or 1557825217091
   dateFormat: PropTypes.string, // the format to which dateColumn's timestamps should be converted, for example: "MMMM Do YYYY, h:mm:ss A"
   paginated: PropTypes.bool,
   perPage: PropTypes.number,
-  height: PropTypes.number
+  height: PropTypes.number,
+  searchValue: PropTypes.string // required if table is searchable
 };
 
 export default Table;

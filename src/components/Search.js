@@ -5,10 +5,6 @@ import PropTypes from "prop-types";
 import "./Search.scss";
 
 class Search extends Component {
-  handleSearchInput = e => {
-    this.props.handleSearch(e.target.value);
-  };
-
   render() {
     return (
       <div className={`Search ${this.props.theme}`}>
@@ -23,7 +19,7 @@ class Search extends Component {
             placeholder={this.props.searchInputPlaceholder}
             spellCheck="false"
             value={this.props.searchValue}
-            onChange={this.handleSearchInput}
+            onChange={this.props.handleSearchInput}
           />
         </div>
       </div>
@@ -43,7 +39,7 @@ Search.propTypes = {
   theme: PropTypes.string.isRequired,
   searchInputPlaceholder: PropTypes.string.isRequired,
   searchValue: PropTypes.string.isRequired,
-  handleSearch: PropTypes.func.isRequired
+  handleSearchInput: PropTypes.func.isRequired
 };
 
 export default Search;

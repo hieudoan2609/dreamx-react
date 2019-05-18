@@ -235,12 +235,19 @@ class Account extends Component {
   };
 
   renderSearchBox = () => {
-    console.log(this.props.transfer.type);
+    let searchValue, handleSearchInput;
+    if (this.state.currentTab === "assets") {
+      searchValue = this.props.tokens.searchValue;
+      handleSearchInput = this.props.tokensFilter;
+    } else if (this.state.currentTab === "transfers") {
+      searchValue = this.props.transfers.searchValue;
+      handleSearchInput = this.props.transfersFilter;
+    }
     return (
       <Search
         searchInputPlaceholder="Search by asset name or symbol..."
-        searchValue={this.props.tokens.searchValue}
-        handleSearch={this.props.tokensFilter}
+        searchValue={searchValue}
+        handleSearchInput={handleSearchInput}
         theme={this.props.app.theme}
       />
     );
