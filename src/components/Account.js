@@ -100,24 +100,6 @@ class Account extends Component {
     this.setState({ currentTab: tab });
   };
 
-  renderAssetTable = () => {
-    return (
-      <Table
-        theme={this.props.app.theme}
-        data={this.extractTokensData()}
-        defaultOrderBy="totalBalance"
-        excludeFromSorting={["actions"]}
-        searchable={true}
-        searchValue={this.props.tokens.searchValue}
-        dataName="assets"
-        paginated={this.state.paginated}
-        perPage={this.state.perPage}
-        height={this.state.tableHeight}
-        clearSearch={this.props.tokensClearSearch}
-      />
-    );
-  };
-
   extractTransfersData = () => {
     if (!this.props.account.address) {
       return [];
@@ -158,15 +140,33 @@ class Account extends Component {
         theme={this.props.app.theme}
         data={this.extractTransfersData()}
         defaultOrderBy="date"
+        excludeFromSorting={["transactionHash", "status"]}
         searchable={true}
         searchValue={this.props.transfers.searchValue}
-        excludeFromSorting={["transactionHash", "status"]}
         dateColumn="date"
         dataName="transfers"
         paginated={this.state.paginated}
         perPage={this.state.perPage}
         height={this.state.tableHeight}
         clearSearch={this.props.transfersClearSearch}
+      />
+    );
+  };
+
+  renderAssetTable = () => {
+    return (
+      <Table
+        theme={this.props.app.theme}
+        data={this.extractTokensData()}
+        defaultOrderBy="totalBalance"
+        excludeFromSorting={["actions"]}
+        searchable={true}
+        searchValue={this.props.tokens.searchValue}
+        dataName="assets"
+        paginated={this.state.paginated}
+        perPage={this.state.perPage}
+        height={this.state.tableHeight}
+        clearSearch={this.props.tokensClearSearch}
       />
     );
   };
