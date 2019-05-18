@@ -20,8 +20,9 @@ export const transfersLoadAccountAsync = accountAddress => {
   };
 };
 
-export const transfersFilter = searchValue => {
+export const transfersHandleSearchInput = e => {
   return (dispatch, getState) => {
+    const searchValue = e.target.value;
     const regex = new RegExp(searchValue, "gmi");
     const { transfers, tokens } = getState();
     const allTransfers = transfers.all;

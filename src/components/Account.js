@@ -8,13 +8,13 @@ import Search from "./Search";
 import Table from "./Table";
 import "./Account.scss";
 import {
-  tokensFilter,
+  tokensHandleSearchInput,
   transferShow,
   transferHandleAmountChange,
   transferHide,
   transferHandleSubmitAsync,
   transferEnterEntireBalance,
-  transfersFilter
+  transfersHandleSearchInput
 } from "../actions";
 import {
   extractKeysFromObject,
@@ -236,10 +236,10 @@ class Account extends Component {
     let searchValue, handleSearchInput;
     if (this.state.currentTab === "assets") {
       searchValue = this.props.tokens.searchValue;
-      handleSearchInput = this.props.tokensFilter;
+      handleSearchInput = this.props.tokensHandleSearchInput;
     } else if (this.state.currentTab === "transfers") {
       searchValue = this.props.transfers.searchValue;
-      handleSearchInput = this.props.transfersFilter;
+      handleSearchInput = this.props.transfersHandleSearchInput;
     }
     return (
       <Search
@@ -291,13 +291,13 @@ const mapStateToProps = ({ app, account, tokens, transfer, transfers }) => {
 };
 
 const mapActionsToProps = {
-  tokensFilter,
+  tokensHandleSearchInput,
   transferShow,
   transferHandleAmountChange,
   transferHide,
   transferHandleSubmitAsync,
   transferEnterEntireBalance,
-  transfersFilter
+  transfersHandleSearchInput
 };
 
 export default connect(

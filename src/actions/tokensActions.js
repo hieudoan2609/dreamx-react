@@ -3,8 +3,9 @@ import axios from "axios";
 import { TOKENS_FILTER, TOKENS_LOAD } from "../actions/types";
 import config from "../config";
 
-export const tokensFilter = searchValue => {
+export const tokensHandleSearchInput = e => {
   return (dispatch, getState) => {
+    const searchValue = e.target.value;
     const regex = new RegExp(searchValue, "gmi");
     const { tokens } = getState();
     const allTokens = tokens.all;
