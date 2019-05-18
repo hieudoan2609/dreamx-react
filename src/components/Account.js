@@ -4,7 +4,7 @@ import Web3 from "web3";
 
 import Login from "./Login";
 import TabMenu from "./TabMenu";
-import FixedHeightTable from "./FixedHeightTable";
+import Table from "./Table";
 import "./Account.scss";
 import {
   tokensFilter,
@@ -97,9 +97,9 @@ class Account extends Component {
     this.setState({ currentTab: tab });
   };
 
-  renderAssetFixedHeightTable = () => {
+  renderAssetTable = () => {
     return (
-      <FixedHeightTable
+      <Table
         theme={this.props.app.theme}
         data={this.extractTokensData()}
         searchInputPlaceholder="Search by asset name or symbol..."
@@ -149,9 +149,9 @@ class Account extends Component {
     return extractedData;
   };
 
-  renderTransferFixedHeightTable = () => {
+  renderTransferTable = () => {
     return (
-      <FixedHeightTable
+      <Table
         theme={this.props.app.theme}
         data={this.extractTransfersData()}
         searchInputPlaceholder="Search by asset name or symbol..."
@@ -168,11 +168,11 @@ class Account extends Component {
     );
   };
 
-  renderOrderFixedHeightTable = () => {
+  renderOrderTable = () => {
     return <div>ORDERS</div>;
   };
 
-  renderTradeFixedHeightTable = () => {
+  renderTradeTable = () => {
     return <div>TRADES</div>;
   };
 
@@ -256,14 +256,10 @@ class Account extends Component {
             onChange={this.handleTabChange}
           />
 
-          {this.state.currentTab === "assets" &&
-            this.renderAssetFixedHeightTable()}
-          {this.state.currentTab === "orders" &&
-            this.renderOrderFixedHeightTable()}
-          {this.state.currentTab === "transfers" &&
-            this.renderTransferFixedHeightTable()}
-          {this.state.currentTab === "trades" &&
-            this.renderTradeFixedHeightTable()}
+          {this.state.currentTab === "assets" && this.renderAssetTable()}
+          {this.state.currentTab === "orders" && this.renderOrderTable()}
+          {this.state.currentTab === "transfers" && this.renderTransferTable()}
+          {this.state.currentTab === "trades" && this.renderTradeTable()}
         </div>
       </div>
     );

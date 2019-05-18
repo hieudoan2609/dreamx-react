@@ -3,7 +3,7 @@ import React, { Component } from "react";
 // import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import "./FixedHeightTable.scss";
+import "./Table.scss";
 import Paginator from "./Paginator";
 
 function desc(a, b, orderBy) {
@@ -32,7 +32,7 @@ function getSorting(order, orderBy) {
     : (a, b) => -desc(a, b, orderBy);
 }
 
-class FixedHeightTable extends Component {
+class Table extends Component {
   constructor(props) {
     super(props);
     this.table = React.createRef();
@@ -186,7 +186,7 @@ class FixedHeightTable extends Component {
 
   render() {
     return (
-      <div className={`FixedHeightTable ${this.props.theme}`}>
+      <div className={`Table ${this.props.theme}`}>
         <div className="input-group">
           <div className="input-group-prepend">
             <span className="input-group-text" id="inputGroupPrepend3">
@@ -217,7 +217,7 @@ class FixedHeightTable extends Component {
 //  getChartData
 // };
 
-FixedHeightTable.propTypes = {
+Table.propTypes = {
   theme: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired, // [ { column: value, ... }, ... ]
   searchInputPlaceholder: PropTypes.string.isRequired,
@@ -234,4 +234,4 @@ FixedHeightTable.propTypes = {
   height: PropTypes.number
 };
 
-export default FixedHeightTable;
+export default Table;
