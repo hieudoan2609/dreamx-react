@@ -4,6 +4,7 @@ import Web3 from "web3";
 
 import Login from "./Login";
 import TabMenu from "./TabMenu";
+import Search from "./Search";
 import Table from "./Table";
 import "./Account.scss";
 import {
@@ -233,6 +234,18 @@ class Account extends Component {
     );
   };
 
+  renderSearchBox = () => {
+    console.log(this.props.transfer.type);
+    return (
+      <Search
+        searchInputPlaceholder="Search by asset name or symbol..."
+        searchValue={this.props.tokens.searchValue}
+        handleSearch={this.props.tokensFilter}
+        theme={this.props.app.theme}
+      />
+    );
+  };
+
   render() {
     return (
       <div className={`Account ${this.props.app.theme}`}>
@@ -255,6 +268,8 @@ class Account extends Component {
             theme={this.props.app.theme}
             onChange={this.handleTabChange}
           />
+
+          {this.renderSearchBox()}
 
           {this.state.currentTab === "assets" && this.renderAssetTable()}
           {this.state.currentTab === "orders" && this.renderOrderTable()}

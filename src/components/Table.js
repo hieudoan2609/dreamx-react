@@ -219,12 +219,12 @@ class Table extends Component {
 
 Table.propTypes = {
   theme: PropTypes.string.isRequired,
+  dataName: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired, // [ { column: value, ... }, ... ]
-  searchInputPlaceholder: PropTypes.string.isRequired,
   defaultOrderBy: PropTypes.string.isRequired,
+  searchInputPlaceholder: PropTypes.string.isRequired,
   searchValue: PropTypes.string.isRequired,
   handleSearch: PropTypes.func.isRequired,
-  dataName: PropTypes.string.isRequired,
   // non-required props
   excludeFromSorting: PropTypes.array,
   dateColumn: PropTypes.string, // the data of this column should be raw timestamps and should pass moment(timestamp).isValid(), for example: 2019-05-13T14:03:28.738Z or 1557825217091
