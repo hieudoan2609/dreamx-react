@@ -5,7 +5,6 @@ import Web3 from "web3";
 import Login from "./Login";
 import TabMenu from "./TabMenu";
 import Search from "./Search";
-import Table from "./Table";
 import "./Account.scss";
 import {
   tokensHandleSearchInput,
@@ -27,7 +26,7 @@ import {
 import ModalWrapper from "./ModalWrapper";
 import TransferModal from "./TransferModal";
 import TransferCompleteModal from "./TransferCompleteModal";
-import TableGroup from "./TableGroup";
+import FixedHeightTable from "./FixedHeightTable";
 import singletons from "../singletons";
 
 class Account extends Component {
@@ -137,7 +136,7 @@ class Account extends Component {
 
   renderTransferTable = () => {
     return (
-      <Table
+      <FixedHeightTable
         theme={this.props.app.theme}
         data={this.extractTransfersData()}
         defaultOrderBy="date"
@@ -147,6 +146,8 @@ class Account extends Component {
         dateColumn="date"
         dataName="transfers"
         paginated={this.state.paginated}
+        perPage={this.state.perPage}
+        height={this.state.tableHeight}
         clearSearch={this.props.transfersClearSearch}
       />
     );
@@ -154,7 +155,7 @@ class Account extends Component {
 
   renderAssetTable = () => {
     return (
-      <Table
+      <FixedHeightTable
         theme={this.props.app.theme}
         data={this.extractTokensData()}
         defaultOrderBy="totalBalance"
@@ -163,6 +164,8 @@ class Account extends Component {
         searchValue={this.props.tokens.searchValue}
         dataName="assets"
         paginated={this.state.paginated}
+        perPage={this.state.perPage}
+        height={this.state.tableHeight}
         clearSearch={this.props.tokensClearSearch}
       />
     );
@@ -252,18 +255,6 @@ class Account extends Component {
     );
   };
 
-  renderTable = () => {
-    if (this.state.currentTab === "assets") {
-      return this.renderAssetTable();
-    } else if (this.state.currentTab === "orders") {
-      return this.renderOrderTable();
-    } else if (this.state.currentTab === "transfers") {
-      return this.renderTransferTable();
-    } else if (this.state.currentTab === "trades") {
-      return this.renderTradesTable();
-    }
-  };
-
   render() {
     return (
       <div className={`Account ${this.props.app.theme}`}>
@@ -289,12 +280,10 @@ class Account extends Component {
 
           {this.renderSearchBox()}
 
-          <TableGroup
-            height={this.state.tableHeight}
-            perPage={this.state.perPage}
-          >
-            {this.renderTable()}
-          </TableGroup>
+          {this.state.currentTab === "assets" && this.renderAssetTable()}
+          {this.state.currentTab === "orders" && this.renderOrderTable()}
+          {this.state.currentTab === "transfers" && this.renderTransferTable()}
+          {this.state.currentTab === "trades" && this.renderTradeTable()}
         </div>
       </div>
     );

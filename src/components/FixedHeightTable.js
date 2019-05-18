@@ -3,10 +3,26 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 // import "./FixedHeightTable.scss";
+import Table from "./Table";
 
 class FixedHeightTable extends Component {
   render() {
-    return <p>FixedHeightTable</p>;
+    return (
+      <Table
+        theme={this.props.theme}
+        data={this.props.data}
+        defaultOrderBy={this.props.defaultOrderBy}
+        excludeFromSorting={this.props.excludeFromSorting}
+        searchable={this.props.searchable}
+        searchValue={this.props.searchValue}
+        dateColumn={this.props.dateColumn}
+        dataName={this.props.dataName}
+        paginated={this.props.paginated}
+        perPage={this.props.perPage}
+        height={this.props.height}
+        clearSearch={this.props.clearSearch}
+      />
+    );
   }
 }
 
@@ -18,9 +34,21 @@ class FixedHeightTable extends Component {
 //  getChartData
 // };
 
-FixedHeightTable.propTypes = {
+Table.propTypes = {
+  theme: PropTypes.string.isRequired,
+  dataName: PropTypes.string.isRequired,
+  data: PropTypes.array.isRequired, // [ { column: value, ... }, ... ]
+  defaultOrderBy: PropTypes.string.isRequired,
+  perPage: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  perPage: PropTypes.number.isRequired
+  // non-required props
+  excludeFromSorting: PropTypes.array,
+  dateColumn: PropTypes.string, // the data of this column should be raw timestamps and should pass moment(timestamp).isValid(), for example: 2019-05-13T14:03:28.738Z or 1557825217091
+  dateFormat: PropTypes.string, // the format to which dateColumn's timestamps should be converted, for example: "MMMM Do YYYY, h:mm:ss A"
+  paginated: PropTypes.bool,
+  searchable: PropTypes.bool,
+  searchValue: PropTypes.string, // required if table is searchable
+  clearSearch: PropTypes.func // required if table is searchable
 };
 
 export default FixedHeightTable;
