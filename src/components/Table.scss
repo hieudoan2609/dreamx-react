@@ -92,10 +92,12 @@ $icon-small: 14px;
     }
   }
   .not-available {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 94px;
+    div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 94px;
+    }
   }
 }
 

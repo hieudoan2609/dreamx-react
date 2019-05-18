@@ -178,8 +178,8 @@ class Table extends Component {
 
   renderEmptyTable = () => {
     return (
-      <div className="not-available">
-        No {this.props.dataName} coule be found.
+      <div className="not-available" style={{ height: this.props.height }}>
+        <div>No {this.props.dataName} coule be found.</div>
       </div>
     );
   };
