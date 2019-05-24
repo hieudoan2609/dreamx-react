@@ -31,10 +31,8 @@ export const loadTheme = () => {
 
 export const initializeAppAsync = () => {
   return async dispatch => {
-    const { HTTP_BASE_URL } = config;
-    const contract = await axios.get(
-      `${HTTP_BASE_URL}/return_contract_address`
-    );
+    const { HTTP_API_URL } = config;
+    const contract = await axios.get(`${HTTP_API_URL}/return_contract_address`);
     await dispatch(tokensLoadAsync());
     dispatch({
       type: APP_INITIALIZE,

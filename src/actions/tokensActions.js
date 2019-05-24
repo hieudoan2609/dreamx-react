@@ -38,8 +38,8 @@ export const tokensHandleSearchInput = e => {
 
 export const tokensLoadAsync = () => {
   return async dispatch => {
-    const { HTTP_BASE_URL } = config;
-    const tokens = await axios.get(`${HTTP_BASE_URL}/tokens`);
+    const { HTTP_API_URL } = config;
+    const tokens = await axios.get(`${HTTP_API_URL}/tokens`);
 
     let tokensWithInitialBalances = [];
     for (let token of tokens.data.records) {
@@ -66,9 +66,9 @@ export const tokensLoadAsync = () => {
 export const tokensLoadAccountAsync = accountAddress => {
   return async (dispatch, getState) => {
     const { tokens } = getState();
-    const { HTTP_BASE_URL } = config;
+    const { HTTP_API_URL } = config;
     const balancesResponse = await axios.get(
-      `${HTTP_BASE_URL}/balances/${accountAddress}`
+      `${HTTP_API_URL}/balances/${accountAddress}`
     );
     let tokensWithUserBalances = tokens.all;
     for (let index in tokensWithUserBalances) {
