@@ -20,7 +20,7 @@ export const transfersLoadAccountAsync = accountAddress => {
   return async dispatch => {
     const { API_HTTP_ROOT } = config;
 
-    let transfers = [];
+    let transfers;
     try {
       const transfersResponse = await axios.get(
         `${API_HTTP_ROOT}/transfers/${accountAddress}`
@@ -28,7 +28,9 @@ export const transfersLoadAccountAsync = accountAddress => {
       transfers = transfersResponse.data.records.map(t =>
         convertKeysToCamelCase(t)
       );
-    } catch {}
+    } catch {
+      transfers = [];
+    }
 
     dispatch({
       type: TRANSFERS_LOAD,
