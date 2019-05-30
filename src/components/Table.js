@@ -43,7 +43,7 @@ class Table extends Component {
     orderBy: this.props.defaultOrderBy,
     currentPage: 1,
     perPage: this.props.perPage || 10,
-    sortedRecords: [],
+    data: [],
     sorted: false
   };
 
@@ -63,7 +63,7 @@ class Table extends Component {
       .replace(/\b\w/g, l => l.toUpperCase());
   };
 
-  handleSortAsync = async property => {
+  handleSort = property => {
     if (
       this.props.excludeFromSorting &&
       this.props.excludeFromSorting.includes(property)
@@ -78,40 +78,16 @@ class Table extends Component {
       order = "asc";
     }
 
-    await this.setState({ orderBy, order });
+    const data = stableSort(this.props.data, getSorting(order, orderBy));
 
-    this.sortRecords(this.props.data);
-  };
-
-  sortRecords = newRecords => {
-    const sortedRecords = stableSort(
-      newRecords,
-      getSorting(this.state.order, this.state.orderBy)
-    );
-    const sorted = true;
-    this.setState({ sortedRecords, sorted });
-  };
-
-  updateRecordsAndPreserveOrder = newRecords => {
-    const { sortedRecords } = this.state;
-    const { identifiedBy } = this.props;
-
-    let updatedRecords = [];
-    for (let record of sortedRecords) {
-      const newRecord = newRecords.filter(
-        r => r[identifiedBy] === record[identifiedBy]
-      )[0];
-      updatedRecords.push(newRecord);
-    }
-
-    this.setState({ sortedRecords: updatedRecords });
+    this.setState({ orderBy, order, data });
   };
 
   handlePageChange = pageNumber => {
     this.setState({ currentPage: parseInt(pageNumber) });
   };
 
-  componentDidUpdate = (prevProps, prevState) => {
+  componentDidUpdate = async (prevProps, prevState) => {
     const previousPage = prevState.currentPage;
     const currentPage = this.state.currentPage;
     const previousSearchValue = prevProps.searchValue;
@@ -120,19 +96,35 @@ class Table extends Component {
       this.scrollToTableTop();
     }
     if (previousSearchValue !== currentSearchValue) {
-      this.setState({ currentPage: 1 });
+      await this.setState({ currentPage: 1, sorted: false });
     }
 
     const previousData = prevProps.data;
     const currentData = this.props.data;
-    const sorted = this.state.sorted;
     if (currentData.length !== 0 && previousData !== currentData) {
-      if (!sorted) {
-        this.sortRecords(currentData);
-      } else {
-        this.updateRecordsAndPreserveOrder(currentData);
-      }
+      this.loadData(currentData);
     }
+  };
+
+  loadData = newData => {
+    let { sorted, order, orderBy, data } = this.state;
+    const { identifiedBy } = this.props;
+
+    if (!sorted) {
+      sorted = true;
+      data = stableSort(newData, getSorting(order, orderBy));
+    } else {
+      const updatedData = [];
+      for (let datum of data) {
+        const newDatum = newData.filter(
+          d => d[identifiedBy] === datum[identifiedBy]
+        )[0];
+        updatedData.push(newDatum);
+      }
+      data = updatedData;
+    }
+
+    this.setState({ data, sorted });
   };
 
   componentWillMount = () => {
@@ -152,8 +144,8 @@ class Table extends Component {
       ? Math.ceil(this.props.data.length / this.props.perPage)
       : undefined;
     const records = this.props.paginated
-      ? this.paginate(this.state.sortedRecords)
-      : this.state.sortedRecords;
+      ? this.paginate(this.state.data)
+      : this.state.data;
 
     return (
       <div className={`table-wrapper ${this.props.dataName}`} ref={this.table}>
@@ -165,7 +157,7 @@ class Table extends Component {
                   <th
                     scope="col"
                     key={col}
-                    onClick={() => this.handleSortAsync(col)}
+                    onClick={() => this.handleSort(col)}
                   >
                     <div className="body">
                       {this.state.orderBy === col && (
