@@ -13,11 +13,18 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case TOKENS_LOAD:
-      return {
-        ...state,
-        all: action.payload.tokens,
-        filtered: action.payload.tokens
-      };
+      if (state.searchValue) {
+        return {
+          ...state,
+          all: action.payload.tokens
+        };
+      } else {
+        return {
+          ...state,
+          all: action.payload.tokens,
+          filtered: action.payload.tokens
+        };
+      }
     case TOKENS_FILTER:
       return {
         ...state,
