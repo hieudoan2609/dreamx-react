@@ -44,7 +44,7 @@ class Table extends Component {
     currentPage: 1,
     perPage: this.props.perPage || 10,
     data: [],
-    sorted: false
+    loaded: false
   };
 
   paginate = records => {
@@ -92,26 +92,31 @@ class Table extends Component {
     const currentPage = this.state.currentPage;
     const previousSearchValue = prevProps.searchValue;
     const currentSearchValue = this.props.searchValue;
+    const previousData = prevProps.data;
+    const currentData = this.props.data;
+
     if (previousPage !== currentPage) {
       this.scrollToTableTop();
     }
-    if (previousSearchValue !== currentSearchValue) {
-      await this.setState({ currentPage: 1, sorted: false });
+
+    if (
+      previousSearchValue !== currentSearchValue ||
+      previousData.length !== currentData.length
+    ) {
+      await this.setState({ currentPage: 1, loaded: false });
     }
 
-    const previousData = prevProps.data;
-    const currentData = this.props.data;
     if (currentData.length !== 0 && previousData !== currentData) {
       this.loadData(currentData);
     }
   };
 
   loadData = newData => {
-    let { sorted, order, orderBy, data } = this.state;
+    let { loaded, order, orderBy, data } = this.state;
     const { identifiedBy } = this.props;
 
-    if (!sorted) {
-      sorted = true;
+    if (!loaded) {
+      loaded = true;
       data = stableSort(newData, getSorting(order, orderBy));
     } else {
       const updatedData = [];
@@ -124,7 +129,7 @@ class Table extends Component {
       data = updatedData;
     }
 
-    this.setState({ data, sorted });
+    this.setState({ data, loaded });
   };
 
   componentWillMount = () => {
