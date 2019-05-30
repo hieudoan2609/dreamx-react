@@ -6,6 +6,7 @@ import {
   TOKENS_CLEAR_FILTER
 } from "../actions/types";
 import config from "../config";
+import singletons, { setSingleton } from "../singletons";
 
 export const tokensClearSearch = () => {
   return dispatch => {
@@ -65,18 +66,43 @@ export const tokensLoadAsync = () => {
 
 export const tokensLoadAccountAsync = accountAddress => {
   return async (dispatch, getState) => {
-    const { tokens } = getState();
     const { API_HTTP_ROOT } = config;
     const balancesResponse = await axios.get(
       `${API_HTTP_ROOT}/balances/${accountAddress}`
     );
-    let tokensWithUserBalances = tokens.all;
-    for (let index in tokensWithUserBalances) {
-      const token = tokensWithUserBalances[index];
+    dispatch(loadTokenBalances(balancesResponse.data.records));
+    dispatch(initializeCableSubscriptions(accountAddress));
+  };
+};
+
+const initializeCableSubscriptions = accountAddress => {
+  return (dispatch, getState) => {
+    const { cable } = singletons;
+
+    const accountBalancesSubscription = cable.subscriptions.create(
+      { channel: "AccountBalancesChannel", account_address: accountAddress },
+      {
+        connected: () => {},
+        received: data => {
+          dispatch(loadTokenBalances(data.payload));
+        }
+      }
+    );
+
+    setSingleton("accountBalancesSubscription", accountBalancesSubscription);
+  };
+};
+
+const loadTokenBalances = newBalances => {
+  return (dispatch, getState) => {
+    const { tokens } = getState();
+    let loadedBalances = tokens.all;
+    for (let index in loadedBalances) {
+      const token = loadedBalances[index];
       token.availableBalance = "0";
       token.inOrders = "0";
       token.totalBalance = "0";
-      for (let balance of balancesResponse.data.records) {
+      for (let balance of newBalances) {
         if (token.address === balance.token_address) {
           token.availableBalance = balance.balance;
           token.inOrders = balance.hold_balance;
@@ -89,7 +115,7 @@ export const tokensLoadAccountAsync = accountAddress => {
     dispatch({
       type: TOKENS_LOAD,
       payload: {
-        tokens: tokensWithUserBalances
+        tokens: loadedBalances
       }
     });
   };
