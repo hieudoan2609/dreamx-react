@@ -1,3 +1,4 @@
 export default {
-  HTTP_API_URL: "https://api.odin.trade"
+  API_HTTP_ROOT: "https://api.odin.trade",
+  API_WS_ROOT: "wss://api.odin.trade/cable"
 };

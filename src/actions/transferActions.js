@@ -223,7 +223,7 @@ const depositEntireBalanceAsync = async (dispatch, getState) => {
 
 const withdrawAsync = async (dispatch, getState) => {
   const { web3 } = singletons;
-  const { HTTP_API_URL } = config;
+  const { API_HTTP_ROOT } = config;
   const { transfer, tokens, account, app } = getState();
   const tokenSymbol = transfer.symbol;
   const accountAddress = account.address;
@@ -279,7 +279,7 @@ const withdrawAsync = async (dispatch, getState) => {
   }
 
   const withdrawsResponse = await axios.post(
-    `${HTTP_API_URL}/withdraws`,
+    `${API_HTTP_ROOT}/withdraws`,
     payload
   );
   const withdraw = withdrawsResponse.data;

@@ -48,7 +48,7 @@ export const accountLoginAsync = () => {
       const accounts = await window.ethereum.enable();
       const address = accounts[0];
       addMetamaskListeners(dispatch);
-      initializeSingletons(app, tokens);
+      initializeAccountSingletons(app, tokens);
       await dispatch(tokensLoadAccountAsync(address));
       await dispatch(transfersLoadAccountAsync(address));
 
@@ -72,7 +72,7 @@ export const accountLogout = () => {
   };
 };
 
-const initializeSingletons = (app, tokens) => {
+const initializeAccountSingletons = (app, tokens) => {
   const web3 = new Web3(Web3.givenProvider);
   const exchangeInstance = new web3.eth.Contract(Exchange, app.contractAddress);
   const tokenInstances = {};

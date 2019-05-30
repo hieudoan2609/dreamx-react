@@ -4,6 +4,8 @@ import { APP_TOGGLE_THEME, APP_INITIALIZE } from "../actions/types";
 import { tokensLoadAsync } from ".";
 import { getNetworkNameFromId } from "../helpers";
 import config from "../config";
+import { setSingleton } from "../singletons";
+import ActionCable from "actioncable";
 
 export const toggleTheme = () => {
   return async (dispatch, getState) => {
@@ -31,9 +33,11 @@ export const loadTheme = () => {
 
 export const initializeAppAsync = () => {
   return async dispatch => {
-    const { HTTP_API_URL } = config;
-    const contract = await axios.get(`${HTTP_API_URL}/return_contract_address`);
+    const contract = await axios.get(
+      `${config.API_HTTP_ROOT}/return_contract_address`
+    );
     await dispatch(tokensLoadAsync());
+    initializeAppSingletons();
     dispatch({
       type: APP_INITIALIZE,
       payload: {
@@ -43,4 +47,9 @@ export const initializeAppAsync = () => {
       }
     });
   };
+};
+
+const initializeAppSingletons = () => {
+  const cable = ActionCable.createConsumer(config.API_WS_ROOT);
+  setSingleton("cable", cable);
 };

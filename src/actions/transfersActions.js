@@ -18,9 +18,9 @@ export const transfersClearSearch = () => {
 
 export const transfersLoadAccountAsync = accountAddress => {
   return async dispatch => {
-    const { HTTP_API_URL } = config;
+    const { API_HTTP_ROOT } = config;
     const transfersResponse = await axios.get(
-      `${HTTP_API_URL}/transfers/${accountAddress}`
+      `${API_HTTP_ROOT}/transfers/${accountAddress}`
     );
     const transfers = transfersResponse.data.records.map(t =>
       convertKeysToCamelCase(t)
