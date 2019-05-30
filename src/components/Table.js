@@ -42,7 +42,9 @@ class Table extends Component {
     order: "desc",
     orderBy: this.props.defaultOrderBy,
     currentPage: 1,
-    perPage: this.props.perPage || 10
+    perPage: this.props.perPage || 10,
+    sortedRecords: [],
+    sorted: false
   };
 
   paginate = records => {
@@ -61,7 +63,7 @@ class Table extends Component {
       .replace(/\b\w/g, l => l.toUpperCase());
   };
 
-  handleSort = property => {
+  handleSortAsync = async property => {
     if (
       this.props.excludeFromSorting &&
       this.props.excludeFromSorting.includes(property)
@@ -76,7 +78,33 @@ class Table extends Component {
       order = "asc";
     }
 
-    this.setState({ orderBy, order });
+    await this.setState({ orderBy, order });
+
+    this.sortRecords(this.props.data);
+  };
+
+  sortRecords = newRecords => {
+    const sortedRecords = stableSort(
+      newRecords,
+      getSorting(this.state.order, this.state.orderBy)
+    );
+    const sorted = true;
+    this.setState({ sortedRecords, sorted });
+  };
+
+  updateRecordsAndPreserveOrder = newRecords => {
+    const { sortedRecords } = this.state;
+    const { identifiedBy } = this.props;
+
+    let updatedRecords = [];
+    for (let record of sortedRecords) {
+      const newRecord = newRecords.filter(
+        r => r[identifiedBy] === record[identifiedBy]
+      )[0];
+      updatedRecords.push(newRecord);
+    }
+
+    this.setState({ sortedRecords: updatedRecords });
   };
 
   handlePageChange = pageNumber => {
@@ -93,6 +121,17 @@ class Table extends Component {
     }
     if (previousSearchValue !== currentSearchValue) {
       this.setState({ currentPage: 1 });
+    }
+
+    const previousData = prevProps.data;
+    const currentData = this.props.data;
+    const sorted = this.state.sorted;
+    if (currentData.length !== 0 && previousData !== currentData) {
+      if (!sorted) {
+        this.sortRecords(currentData);
+      } else {
+        this.updateRecordsAndPreserveOrder(currentData);
+      }
     }
   };
 
@@ -112,11 +151,9 @@ class Table extends Component {
     const totalPages = this.props.paginated
       ? Math.ceil(this.props.data.length / this.props.perPage)
       : undefined;
-    const sorted = stableSort(
-      this.props.data,
-      getSorting(this.state.order, this.state.orderBy)
-    );
-    const records = this.props.paginated ? this.paginate(sorted) : sorted;
+    const records = this.props.paginated
+      ? this.paginate(this.state.sortedRecords)
+      : this.state.sortedRecords;
 
     return (
       <div className={`table-wrapper ${this.props.dataName}`} ref={this.table}>
@@ -128,7 +165,7 @@ class Table extends Component {
                   <th
                     scope="col"
                     key={col}
-                    onClick={() => this.handleSort(col)}
+                    onClick={() => this.handleSortAsync(col)}
                   >
                     <div className="body">
                       {this.state.orderBy === col && (
@@ -211,6 +248,7 @@ Table.propTypes = {
   dataName: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired, // [ { column: value, ... }, ... ]
   defaultOrderBy: PropTypes.string.isRequired,
+  identifiedBy: PropTypes.string.isRequired, // a unique attribute that can be used to identify records from one another, for example { symbol: "ONE", balance: "1.66" } can be identified by the "symbol" key since it is unique
   // non-required props
   excludeFromSorting: PropTypes.array,
   dateColumn: PropTypes.string, // the data of this column should be raw timestamps and should pass moment(timestamp).isValid(), for example: 2019-05-13T14:03:28.738Z or 1557825217091

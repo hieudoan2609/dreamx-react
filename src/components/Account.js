@@ -149,6 +149,7 @@ class Account extends Component {
         perPage={this.state.perPage}
         height={this.state.tableHeight}
         clearSearch={this.props.transfersClearSearch}
+        identifiedBy="id"
       />
     );
   };
@@ -167,6 +168,7 @@ class Account extends Component {
         perPage={this.state.perPage}
         height={this.state.tableHeight}
         clearSearch={this.props.tokensClearSearch}
+        identifiedBy="symbol"
       />
     );
   };

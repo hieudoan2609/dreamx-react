@@ -21,6 +21,7 @@ class FixedHeightTable extends Component {
         perPage={this.props.perPage}
         height={this.props.height}
         clearSearch={this.props.clearSearch}
+        identifiedBy={this.props.identifiedBy}
       />
     );
   }
@@ -34,13 +35,14 @@ class FixedHeightTable extends Component {
 //  getChartData
 // };
 
-Table.propTypes = {
+FixedHeightTable.propTypes = {
   theme: PropTypes.string.isRequired,
   dataName: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired, // [ { column: value, ... }, ... ]
   defaultOrderBy: PropTypes.string.isRequired,
   perPage: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
+  identifiedBy: PropTypes.string.isRequired, // a unique attribute that can be used to identify records from one another, for example { symbol: "ONE", balance: "1.66" } can be identified by the "symbol" key since it is unique
   // non-required props
   excludeFromSorting: PropTypes.array,
   dateColumn: PropTypes.string, // the data of this column should be raw timestamps and should pass moment(timestamp).isValid(), for example: 2019-05-13T14:03:28.738Z or 1557825217091
