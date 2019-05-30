@@ -19,12 +19,17 @@ export const transfersClearSearch = () => {
 export const transfersLoadAccountAsync = accountAddress => {
   return async dispatch => {
     const { API_HTTP_ROOT } = config;
-    const transfersResponse = await axios.get(
-      `${API_HTTP_ROOT}/transfers/${accountAddress}`
-    );
-    const transfers = transfersResponse.data.records.map(t =>
-      convertKeysToCamelCase(t)
-    );
+
+    let transfers = [];
+    try {
+      const transfersResponse = await axios.get(
+        `${API_HTTP_ROOT}/transfers/${accountAddress}`
+      );
+      transfers = transfersResponse.data.records.map(t =>
+        convertKeysToCamelCase(t)
+      );
+    } catch {}
+
     dispatch({
       type: TRANSFERS_LOAD,
       payload: { transfers }

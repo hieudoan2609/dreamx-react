@@ -70,7 +70,9 @@ export const tokensLoadAccountAsync = accountAddress => {
     const balancesResponse = await axios.get(
       `${API_HTTP_ROOT}/balances/${accountAddress}`
     );
-    dispatch(loadTokenBalances(balancesResponse.data.records));
+    const newBalances = balancesResponse.data.records;
+    const reInitialize = true;
+    dispatch(loadTokenBalances(newBalances, reInitialize));
     dispatch(initializeCableSubscriptions(accountAddress));
   };
 };
@@ -93,15 +95,17 @@ const initializeCableSubscriptions = accountAddress => {
   };
 };
 
-const loadTokenBalances = newBalances => {
+const loadTokenBalances = (newBalances, reInitialize = false) => {
   return (dispatch, getState) => {
     const { tokens } = getState();
     let loadedBalances = tokens.all;
     for (let index in loadedBalances) {
       const token = loadedBalances[index];
-      token.availableBalance = "0";
-      token.inOrders = "0";
-      token.totalBalance = "0";
+      if (reInitialize) {
+        token.availableBalance = "0";
+        token.inOrders = "0";
+        token.totalBalance = "0";
+      }
       for (let balance of newBalances) {
         if (token.address === balance.token_address) {
           token.availableBalance = balance.balance;
