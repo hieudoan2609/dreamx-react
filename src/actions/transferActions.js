@@ -7,7 +7,8 @@ import {
   TRANSFER_ERROR,
   TRANSFER_PENDING_ON,
   TRANSFER_PENDING_OFF,
-  TRANSFER_COMPLETE
+  TRANSFER_COMPLETE,
+  TRANSFER_FAILED
 } from "../actions/types";
 import { getOnchainBalanceAsync, truncateNumberInput } from "../helpers";
 import singletons from "../singletons";
@@ -278,16 +279,24 @@ const withdrawAsync = async (dispatch, getState) => {
     return;
   }
 
-  const withdrawsResponse = await axios.post(
-    `${API_HTTP_ROOT}/withdraws`,
-    payload
-  );
-  const withdraw = withdrawsResponse.data;
-  await dispatch(updateNewTransfersAsync(withdraw));
+  try {
+    const withdrawsResponse = await axios.post(
+      `${API_HTTP_ROOT}/withdraws`,
+      payload
+    );
+    const withdraw = withdrawsResponse.data;
+    await dispatch(updateNewTransfersAsync(withdraw));
 
-  dispatch({
-    type: TRANSFER_COMPLETE
-  });
+    dispatch({
+      type: TRANSFER_COMPLETE
+    });
+  } catch (err) {
+    if (err.toString() === "Error: Request failed with status code 503") {
+      dispatch({
+        type: TRANSFER_FAILED
+      });
+    }
+  }
 };
 
 const generateWithdrawPayloadAsync = async ({

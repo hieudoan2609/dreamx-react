@@ -241,6 +241,7 @@ class Account extends Component {
         theme={this.props.app.theme}
         onHide={this.props.transferHide}
         type={this.props.transfer.type}
+        success={this.props.transfer.success}
       />
     );
   };

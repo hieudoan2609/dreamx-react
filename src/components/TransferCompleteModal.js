@@ -6,11 +6,11 @@ import "./TransferCompleteModal.scss";
 import Button from "./Button";
 
 class TransferCompleteModal extends Component {
-  render() {
+  renderModalBody = () => {
     const action = this.props.type === "deposit" ? "Deposit" : "Withdrawal";
 
-    return (
-      <div className={`TransferCompleteModal ${this.props.theme}`}>
+    if (this.props.success) {
+      return (
         <div className="modal-body">
           <ion-icon name="checkmark-circle" />
           <h5 className="modal-title">Complete</h5>
@@ -21,6 +21,25 @@ class TransferCompleteModal extends Component {
             Close
           </Button>
         </div>
+      );
+    } else {
+      return (
+        <div className="modal-body">
+          <ion-icon name="settings" />
+          <h5 className="modal-title">Maintenance</h5>
+          <p>System is under maintenance, please try again later.</p>
+          <Button theme={this.props.theme} onClick={this.props.onHide}>
+            Close
+          </Button>
+        </div>
+      );
+    }
+  };
+
+  render() {
+    return (
+      <div className={`TransferCompleteModal ${this.props.theme}`}>
+        {this.renderModalBody()}
       </div>
     );
   }
@@ -37,7 +56,8 @@ class TransferCompleteModal extends Component {
 TransferCompleteModal.propTypes = {
   theme: PropTypes.string.isRequired,
   onHide: PropTypes.func.isRequired,
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
+  success: PropTypes.bool.isRequired
 };
 
 export default TransferCompleteModal;

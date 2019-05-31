@@ -5,7 +5,8 @@ import {
   TRANSFER_ERROR,
   TRANSFER_PENDING_ON,
   TRANSFER_PENDING_OFF,
-  TRANSFER_COMPLETE
+  TRANSFER_COMPLETE,
+  TRANSFER_FAILED
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -17,13 +18,16 @@ const INITIAL_STATE = {
   symbol: "",
   pending: false,
   completed: false,
-  show: false
+  show: false,
+  success: false
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case TRANSFER_FAILED:
+      return { ...state, pending: false, completed: true, success: false };
     case TRANSFER_COMPLETE:
-      return { ...state, pending: false, completed: true };
+      return { ...state, pending: false, completed: true, success: true };
     case TRANSFER_PENDING_OFF:
       return { ...state, pending: false };
     case TRANSFER_PENDING_ON:
