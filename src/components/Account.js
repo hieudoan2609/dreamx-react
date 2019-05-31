@@ -114,16 +114,23 @@ class Account extends Component {
       const coin = token.symbol;
       const amount = truncateNumberOutput(Web3.utils.fromWei(transfer.amount));
       const date = transfer.createdAt;
-      const transactionHash = (
-        <a
-          href={getEtherscanTransaction(
-            transfer.transactionHash,
-            this.props.app.networkName
-          )}
-          target="_blank"
-          rel="noopener noreferrer"
-        >{`${transfer.transactionHash.substring(0, 10)}...`}</a>
-      );
+
+      let transactionHash;
+      if (transfer.transactionHash) {
+        transactionHash = (
+          <a
+            href={getEtherscanTransaction(
+              transfer.transactionHash,
+              this.props.app.networkName
+            )}
+            target="_blank"
+            rel="noopener noreferrer"
+          >{`${transfer.transactionHash.substring(0, 10)}...`}</a>
+        );
+      } else {
+        transactionHash = "Pending";
+      }
+
       const type = (
         <div className={`transfer-type ${transfer.type}`}>
           {capitalize(transfer.type)}
