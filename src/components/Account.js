@@ -26,7 +26,7 @@ import {
 import ModalWrapper from "./ModalWrapper";
 import TransferModal from "./TransferModal";
 import TransferCompleteModal from "./TransferCompleteModal";
-import FixedHeightTable from "./FixedHeightTable";
+import DynamicFixedHeightTable from "./DynamicFixedHeightTable";
 import singletons from "../singletons";
 
 class Account extends Component {
@@ -144,12 +144,11 @@ class Account extends Component {
 
   renderTransferTable = () => {
     return (
-      <FixedHeightTable
+      <DynamicFixedHeightTable
         theme={this.props.app.theme}
         data={this.extractTransfersData()}
         defaultOrderBy="date"
         excludeFromSorting={["transactionHash", "status"]}
-        excludeFromRendering={["id"]}
         searchable={true}
         searchValue={this.props.transfers.searchValue}
         dateColumn="date"
@@ -158,14 +157,13 @@ class Account extends Component {
         perPage={this.state.perPage}
         height={this.state.tableHeight}
         clearSearch={this.props.transfersClearSearch}
-        identifiedBy="id"
       />
     );
   };
 
   renderAssetTable = () => {
     return (
-      <FixedHeightTable
+      <DynamicFixedHeightTable
         theme={this.props.app.theme}
         data={this.extractTokensData()}
         defaultOrderBy="totalBalance"
@@ -177,7 +175,6 @@ class Account extends Component {
         perPage={this.state.perPage}
         height={this.state.tableHeight}
         clearSearch={this.props.tokensClearSearch}
-        identifiedBy="symbol"
       />
     );
   };
