@@ -114,7 +114,6 @@ class Account extends Component {
       const coin = token.symbol;
       const amount = truncateNumberOutput(Web3.utils.fromWei(transfer.amount));
       const date = transfer.createdAt;
-      const id = transfer.id;
 
       let transactionHash;
       if (transfer.transactionHash) {
@@ -137,7 +136,7 @@ class Account extends Component {
           {capitalize(transfer.type)}
         </div>
       );
-      return { type, coin, amount, transactionHash, status, date, id };
+      return { type, coin, amount, transactionHash, status, date };
     });
     return extractedData;
   };
