@@ -7,6 +7,7 @@ import {
 } from "./types";
 import config from "../config";
 import { convertKeysToCamelCase } from "../helpers";
+import singletons, { setSingleton } from "../singletons";
 
 export const transfersClearSearch = () => {
   return dispatch => {
@@ -31,6 +32,8 @@ export const transfersLoadAccountAsync = accountAddress => {
     } catch {
       transfers = [];
     }
+
+    dispatch(initializeCableSubscriptions(accountAddress));
 
     dispatch({
       type: TRANSFERS_LOAD,
@@ -75,5 +78,24 @@ export const updateNewTransfersAsync = newTransfers => {
       type: TRANSFERS_LOAD,
       payload: { transfers: updatedTransfers }
     });
+  };
+};
+
+const initializeCableSubscriptions = accountAddress => {
+  return (dispatch, getState) => {
+    const { cable } = singletons;
+
+    const accountTransfersSubscription = cable.subscriptions.create(
+      { channel: "AccountTransfersChannel", account_address: accountAddress },
+      {
+        connected: () => {},
+        received: data => {
+          // dispatch(loadTokenBalances(data.payload));
+          console.log(data);
+        }
+      }
+    );
+
+    setSingleton("accountTransfersSubscription", accountTransfersSubscription);
   };
 };
