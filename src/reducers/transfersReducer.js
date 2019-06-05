@@ -13,11 +13,18 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case TRANSFERS_LOAD:
-      return {
-        ...state,
-        all: action.payload.transfers,
-        filtered: action.payload.transfers
-      };
+      if (state.searchValue) {
+        return {
+          ...state,
+          all: action.payload.transfers
+        };
+      } else {
+        return {
+          ...state,
+          all: action.payload.transfers,
+          filtered: action.payload.transfers
+        };
+      }
     case TRANSFERS_FILTER:
       return {
         ...state,

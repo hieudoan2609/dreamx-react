@@ -13,7 +13,6 @@ import {
 import { getOnchainBalanceAsync, truncateNumberInput } from "../helpers";
 import singletons from "../singletons";
 import config from "../config";
-import { updateNewTransfersAsync } from ".";
 
 export const transferShow = payload => {
   return {
@@ -280,12 +279,7 @@ const withdrawAsync = async (dispatch, getState) => {
   }
 
   try {
-    const withdrawsResponse = await axios.post(
-      `${API_HTTP_ROOT}/withdraws`,
-      payload
-    );
-    const withdraw = withdrawsResponse.data;
-    await dispatch(updateNewTransfersAsync(withdraw));
+    await axios.post(`${API_HTTP_ROOT}/withdraws`, payload);
 
     dispatch({
       type: TRANSFER_COMPLETE
