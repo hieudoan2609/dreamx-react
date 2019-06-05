@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 
 import Market from "./components/Market";
 import Account from "./components/Account";
-import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 import Menu from "./components/Menu";
 import Loading from "./components/Loading";
@@ -20,12 +19,9 @@ const logo = require("./images/logo.svg");
 
 const navItems = [
   {
-    label: "home",
-    pathname: "/"
-  },
-  {
     label: "market",
-    pathname: "/market/ETH_NJA"
+    pathname: "/market",
+    root: true
   },
   {
     label: "account",
@@ -62,8 +58,8 @@ class App extends Component {
                 />
 
                 <Switch>
-                  <Route exact path="/" component={Home} />
-                  <Route path="/market/:symbol" component={Market} />
+                  <Route exact path="/" component={Market} />
+                  <Route path="/market/:symbol?" component={Market} />
                   <Route path="/account" component={Account} />
                   <Route component={NotFound} />
                 </Switch>

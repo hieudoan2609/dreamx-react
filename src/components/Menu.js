@@ -69,7 +69,9 @@ class Menu extends Component {
 
     let activeItem;
     if (currentTopLevelPath === "") {
-      activeItem = this.props.navItems.filter(item => item.pathname === "/")[0];
+      activeItem =
+        this.props.navItems.filter(item => item.pathname === "/")[0] ||
+        this.props.navItems.filter(item => item.root === true)[0];
     } else {
       activeItem = this.props.navItems.filter(
         item => item.pathname.split("/")[1] === currentTopLevelPath
