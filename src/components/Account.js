@@ -16,7 +16,8 @@ import {
   transfersHandleSearchInput,
   transfersClearSearch,
   tokensClearSearch,
-  accountOrdersHandleSearchInput
+  accountOrdersHandleSearchInput,
+  accountOrdersClearSearch
 } from "../actions";
 import {
   extractKeysFromObject,
@@ -106,8 +107,9 @@ class Account extends Component {
       return [];
     }
 
-    const { tokens } = this.props;
-    const extractedData = this.props.transfers.filtered.map(transfer => {
+    const { tokens, transfers } = this.props;
+    console.log(transfers);
+    const extractedData = transfers.filtered.map(transfer => {
       const token = tokens.all.filter(
         t => t.address === transfer.tokenAddress
       )[0];
@@ -205,7 +207,7 @@ class Account extends Component {
     return extractedData;
   };
 
-  renderOrderTable = () => {
+  renderOrdersTable = () => {
     return (
       <DynamicFixedHeightTable
         theme={this.props.app.theme}
@@ -213,13 +215,13 @@ class Account extends Component {
         defaultOrderBy="date"
         excludeFromSorting={["transactionHash", "status"]}
         searchable={true}
-        searchValue={this.props.transfers.searchValue}
+        searchValue={this.props.accountOrders.searchValue}
         dateColumn="date"
         dataName="orders"
         paginated={this.state.paginated}
         perPage={this.state.perPage}
         height={this.state.tableHeight}
-        clearSearch={this.props.transfersClearSearch}
+        clearSearch={this.props.accountOrdersClearSearch}
       />
     );
   };
@@ -334,7 +336,7 @@ class Account extends Component {
           {this.renderSearchBox()}
 
           {this.state.currentTab === "assets" && this.renderAssetsTable()}
-          {this.state.currentTab === "orders" && this.renderOrderTable()}
+          {this.state.currentTab === "orders" && this.renderOrdersTable()}
           {this.state.currentTab === "transfers" && this.renderTransfersTable()}
           {this.state.currentTab === "trades" && this.renderTradeTable()}
         </div>
@@ -357,7 +359,8 @@ const mapActionsToProps = {
   transfersHandleSearchInput,
   transfersClearSearch,
   tokensClearSearch,
-  accountOrdersHandleSearchInput
+  accountOrdersHandleSearchInput,
+  accountOrdersClearSearch
 };
 
 export default connect(

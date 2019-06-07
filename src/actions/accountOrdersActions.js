@@ -1,6 +1,10 @@
 // import axios from "axios";
 
-import { ACCOUNT_ORDERS_FILTER, ACCOUNT_ORDERS_LOAD } from "../actions/types";
+import {
+  ACCOUNT_ORDERS_FILTER,
+  ACCOUNT_ORDERS_LOAD,
+  ACCOUNT_ORDERS_CLEAR_FILTER
+} from "../actions/types";
 // import config from "../config";
 // import { convertKeysToCamelCase } from "../helpers";
 import singletons from "../singletons";
@@ -296,19 +300,29 @@ export const accountOrdersHandleSearchInput = e => {
 
 const filterAccountOrders = (searchValue, reApply = false) => {
   return (dispatch, getState) => {
-    const { orders, tokens } = getState();
+    const { accountOrders, tokens } = getState();
 
     if (reApply) {
-      searchValue = orders.searchValue;
+      searchValue = accountOrders.searchValue;
     }
 
     const regex = new RegExp(searchValue, "gmi");
-    const allOrders = orders.all;
+    const allOrders = accountOrders.all;
 
     let filtered = [];
     for (let order of allOrders) {
-      const token = tokens.all.filter(t => t.address === order.tokenAddress)[0];
-      if (regex.test(token.symbol) || regex.test(token.name)) {
+      const giveToken = tokens.all.filter(
+        t => t.address === order.giveTokenAddress
+      )[0];
+      const takeToken = tokens.all.filter(
+        t => t.address === order.takeTokenAddress
+      )[0];
+      if (
+        regex.test(giveToken.symbol) ||
+        regex.test(giveToken.name) ||
+        regex.test(takeToken.symbol) ||
+        regex.test(takeToken.name)
+      ) {
         filtered.push(order);
       }
     }
@@ -316,6 +330,14 @@ const filterAccountOrders = (searchValue, reApply = false) => {
     dispatch({
       type: ACCOUNT_ORDERS_FILTER,
       payload: { filtered, searchValue }
+    });
+  };
+};
+
+export const accountOrdersClearSearch = () => {
+  return dispatch => {
+    dispatch({
+      type: ACCOUNT_ORDERS_CLEAR_FILTER
     });
   };
 };
