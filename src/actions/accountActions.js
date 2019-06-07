@@ -9,7 +9,11 @@ import {
   ACCOUNT_LOADED,
   ACCOUNT_METAMASK_NOTREADY
 } from "../actions/types";
-import { tokensLoadAccountAsync, transfersLoadAccountAsync } from ".";
+import {
+  tokensLoadAccountAsync,
+  transfersLoadAccountAsync,
+  accountOrdersLoadAsync
+} from ".";
 import { transferHide } from "./";
 import { setSingleton } from "../singletons";
 import Exchange from "../ABI/Exchange.json";
@@ -51,6 +55,7 @@ export const accountLoginAsync = () => {
       initializeAccountSingletons(app, tokens);
       await dispatch(tokensLoadAccountAsync(address));
       await dispatch(transfersLoadAccountAsync(address));
+      await dispatch(accountOrdersLoadAsync(address));
 
       dispatch({
         type: ACCOUNT_LOGIN,

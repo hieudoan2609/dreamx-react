@@ -185,7 +185,7 @@ class Table extends Component {
           }
 
           if (this.props.dateColumn && key === this.props.dateColumn) {
-            const format = this.props.dateFormat || "MMMM Do YYYY, h:mm:ss a";
+            const format = this.props.dateFormat || "MM-DD HH:mm:ss";
             const formattedDate = moment(row[key]).format(format);
             return <td key={key}>{formattedDate}</td>;
           }

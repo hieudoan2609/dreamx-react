@@ -1,7 +1,7 @@
 import {
-  MARKETS_FILTER,
-  MARKETS_CLEAR_FILTER,
-  MARKETS_LOAD
+  ACCOUNT_ORDERS_FILTER,
+  ACCOUNT_ORDERS_CLEAR_FILTER,
+  ACCOUNT_ORDERS_LOAD
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -12,7 +12,7 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case MARKETS_LOAD:
+    case ACCOUNT_ORDERS_LOAD:
       if (state.searchValue) {
         return {
           ...state,
@@ -25,13 +25,13 @@ export default (state = INITIAL_STATE, action) => {
           filtered: action.payload.data
         };
       }
-    case MARKETS_FILTER:
+    case ACCOUNT_ORDERS_FILTER:
       return {
         ...state,
         filtered: action.payload.filtered,
         searchValue: action.payload.searchValue
       };
-    case MARKETS_CLEAR_FILTER:
+    case ACCOUNT_ORDERS_CLEAR_FILTER:
       return {
         ...state,
         filtered: state.all,

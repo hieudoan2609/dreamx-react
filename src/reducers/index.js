@@ -5,7 +5,8 @@ import appReducer from "./appReducer";
 import tokensReducer from "./tokensReducer";
 import transferReducer from "./transferReducer";
 import transfersReducer from "./transfersReducer";
-import ordersReducer from "./ordersReducer";
+import accountOrdersReducer from "./accountOrdersReducer";
+import marketsReducer from "./marketsReducer";
 import { RESET_INITIAL_STATE } from "../actions/types";
 
 const indexReducer = combineReducers({
@@ -14,7 +15,8 @@ const indexReducer = combineReducers({
   tokens: tokensReducer,
   transfer: transferReducer,
   transfers: transfersReducer,
-  orders: ordersReducer
+  accountOrders: accountOrdersReducer,
+  markets: marketsReducer
 });
 
 const rootReducer = (state, action) => {

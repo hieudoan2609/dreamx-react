@@ -16,7 +16,7 @@ import {
   transfersHandleSearchInput,
   transfersClearSearch,
   tokensClearSearch,
-  ordersHandleSearchInput
+  accountOrdersHandleSearchInput
 } from "../actions";
 import {
   extractKeysFromObject,
@@ -133,7 +133,7 @@ class Account extends Component {
       }
 
       const type = (
-        <div className={`transfer-type ${transfer.type}`}>
+        <div className={`pill ${transfer.type}`}>
           {capitalize(transfer.type)}
         </div>
       );
@@ -179,25 +179,29 @@ class Account extends Component {
     );
   };
 
-  extractOrdersData = () => {
-    // market, type, price, amount, total, filled, status, date, cancel all
+  extractAccountOrdersData = () => {
+    // marketSymbol, type, price, amount, total, filled, status, date, cancel all
     if (!this.props.account.address) {
       return [];
     }
 
-    const { orders, tokens } = this.props;
+    const { accountOrders } = this.props;
 
-    const extractedData = orders.filtered.map(order => {
-      const giveToken = tokens.all.filter(
-        t => t.address === order.giveTokenAddress
+    const extractedData = accountOrders.filtered.map(accountOrder => {
+      const { price, amount, filled } = accountOrder;
+      const type = (
+        <div className={`pill ${accountOrder.type}`}>
+          {capitalize(accountOrder.type)}
+        </div>
       );
-      const takeToken = tokens.all.filter(
-        t => t.address === order.takeTokenAddress
-      );
-      // const market = `${giveToken}`
+      const total = `${accountOrder.total} ETH`;
+      const status = capitalize(accountOrder.status);
+      const market = accountOrder.marketSymbol;
+      const date = accountOrder.createdAt;
 
-      return { giveToken: order.giveTokenAddress };
+      return { market, type, price, amount, total, filled, status, date };
     });
+
     return extractedData;
   };
 
@@ -205,13 +209,13 @@ class Account extends Component {
     return (
       <DynamicFixedHeightTable
         theme={this.props.app.theme}
-        data={this.extractOrdersData()}
+        data={this.extractAccountOrdersData()}
         defaultOrderBy="date"
         excludeFromSorting={["transactionHash", "status"]}
         searchable={true}
         searchValue={this.props.transfers.searchValue}
         dateColumn="date"
-        dataName="transfers"
+        dataName="orders"
         paginated={this.state.paginated}
         perPage={this.state.perPage}
         height={this.state.tableHeight}
@@ -291,8 +295,8 @@ class Account extends Component {
       searchValue = this.props.transfers.searchValue;
       handleSearchInput = this.props.transfersHandleSearchInput;
     } else if (this.state.currentTab === "orders") {
-      searchValue = this.props.orders.searchValue;
-      handleSearchInput = this.props.ordersHandleSearchInput;
+      searchValue = this.props.accountOrders.searchValue;
+      handleSearchInput = this.props.accountOrdersHandleSearchInput;
     }
     return (
       <Search
@@ -339,15 +343,8 @@ class Account extends Component {
   }
 }
 
-const mapStateToProps = ({
-  app,
-  account,
-  tokens,
-  transfer,
-  transfers,
-  orders
-}) => {
-  return { app, account, tokens, transfer, transfers, orders };
+const mapStateToProps = state => {
+  return state;
 };
 
 const mapActionsToProps = {
@@ -360,7 +357,7 @@ const mapActionsToProps = {
   transfersHandleSearchInput,
   transfersClearSearch,
   tokensClearSearch,
-  ordersHandleSearchInput
+  accountOrdersHandleSearchInput
 };
 
 export default connect(
