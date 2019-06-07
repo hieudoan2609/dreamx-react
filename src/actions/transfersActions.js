@@ -60,7 +60,11 @@ const initializeCableSubscriptions = accountAddress => {
   };
 };
 
-const updateNewTransfersAsync = newTransfers => {
+export const updateNewTransfersAsync = newTransfers => {
+  if (!Array.isArray(newTransfers)) {
+    newTransfers = [newTransfers];
+  }
+
   return async (dispatch, getState) => {
     newTransfers.map(t => convertKeysToCamelCase(t));
     const { transfers } = getState();

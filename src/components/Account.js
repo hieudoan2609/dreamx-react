@@ -40,39 +40,6 @@ class Account extends Component {
     tableHeight: 780
   };
 
-  // addAssetsActionsColumn = data => {
-  //   for (let row of data) {
-  //     const depositModalPayload = {
-  //       type: "deposit",
-  //       name: row.name,
-  //       symbol: row.symbol
-  //     };
-  //     const withdrawModalPayload = {
-  //       type: "withdraw",
-  //       name: row.name,
-  //       symbol: row.symbol
-  //     };
-
-  //     row["actions"] = (
-  //       <div className="actions">
-  //         <div
-  //           className="action"
-  //           onClick={() => this.props.transferShow(depositModalPayload)}
-  //         >
-  //           deposit
-  //         </div>
-  //         <div
-  //           className="action"
-  //           onClick={() => this.props.transferShow(withdrawModalPayload)}
-  //         >
-  //           withdraw
-  //         </div>
-  //       </div>
-  //     );
-  //   }
-  //   return data;
-  // };
-
   extractAssetsData = () => {
     if (!this.props.account.address) {
       return [];
