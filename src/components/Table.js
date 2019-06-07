@@ -42,9 +42,7 @@ class Table extends Component {
     order: "desc",
     orderBy: this.props.defaultOrderBy,
     currentPage: 1,
-    perPage: this.props.perPage || 10,
-    data: [],
-    loaded: false
+    perPage: this.props.perPage || 10
   };
 
   paginate = records => {
@@ -78,58 +76,24 @@ class Table extends Component {
       order = "asc";
     }
 
-    const data = stableSort(this.props.data, getSorting(order, orderBy));
-
-    this.setState({ orderBy, order, data });
+    this.setState({ orderBy, order });
   };
 
   handlePageChange = pageNumber => {
     this.setState({ currentPage: parseInt(pageNumber) });
   };
 
-  componentDidUpdate = async (prevProps, prevState) => {
+  componentDidUpdate = (prevProps, prevState) => {
     const previousPage = prevState.currentPage;
     const currentPage = this.state.currentPage;
     const previousSearchValue = prevProps.searchValue;
     const currentSearchValue = this.props.searchValue;
-    const previousData = prevProps.data;
-    const currentData = this.props.data;
-
     if (previousPage !== currentPage) {
       this.scrollToTableTop();
     }
-
-    if (
-      previousSearchValue !== currentSearchValue ||
-      previousData.length !== currentData.length
-    ) {
-      await this.setState({ currentPage: 1, loaded: false });
+    if (previousSearchValue !== currentSearchValue) {
+      this.setState({ currentPage: 1 });
     }
-
-    if (currentData.length !== 0 && previousData !== currentData) {
-      this.loadData(currentData);
-    }
-  };
-
-  loadData = newData => {
-    let { loaded, order, orderBy, data } = this.state;
-    const { identifiedBy } = this.props;
-
-    if (!loaded) {
-      loaded = true;
-      data = stableSort(newData, getSorting(order, orderBy));
-    } else {
-      const updatedData = [];
-      for (let datum of data) {
-        const newDatum = newData.filter(
-          d => d[identifiedBy] === datum[identifiedBy]
-        )[0];
-        updatedData.push(newDatum);
-      }
-      data = updatedData;
-    }
-
-    this.setState({ data, loaded });
   };
 
   componentWillMount = () => {
@@ -144,71 +108,61 @@ class Table extends Component {
     window.scrollTo(0, tableTop);
   };
 
-  renderTableHead = () => {
-    return Object.keys(this.props.data[0]).map(col => {
-      if (
-        this.props.excludeFromRendering &&
-        this.props.excludeFromRendering.includes(col)
-      ) {
-        return null;
-      }
-
-      return (
-        <th scope="col" key={col} onClick={() => this.handleSort(col)}>
-          <div className="body">
-            {this.state.orderBy === col && (
-              <div className={`icon ${this.state.order}`}>
-                <ion-icon name="arrow-dropdown" />
-              </div>
-            )}
-
-            <div className="text">{this.formatNameToUserFriendly(col)}</div>
-          </div>
-        </th>
-      );
-    });
-  };
-
-  renderTableBody = () => {
-    const records = this.props.paginated
-      ? this.paginate(this.state.data)
-      : this.state.data;
-
-    return records.map((row, i) => (
-      <tr key={i}>
-        {Object.keys(row).map(key => {
-          if (
-            this.props.excludeFromRendering &&
-            this.props.excludeFromRendering.includes(key)
-          ) {
-            return null;
-          }
-
-          if (this.props.dateColumn && key === this.props.dateColumn) {
-            const format = this.props.dateFormat || "MM-DD HH:mm:ss";
-            const formattedDate = moment(row[key]).format(format);
-            return <td key={key}>{formattedDate}</td>;
-          }
-
-          return <td key={key}>{row[key]}</td>;
-        })}
-      </tr>
-    ));
-  };
-
   renderTable = () => {
     const totalPages = this.props.paginated
       ? Math.ceil(this.props.data.length / this.props.perPage)
       : undefined;
+    const sorted = stableSort(
+      this.props.data,
+      getSorting(this.state.order, this.state.orderBy)
+    );
+    const records = this.props.paginated ? this.paginate(sorted) : sorted;
 
     return (
       <div className={`table-wrapper ${this.props.dataName}`} ref={this.table}>
         <div className="table-responsive" style={{ height: this.props.height }}>
           <table className="table">
             <thead>
-              <tr>{this.renderTableHead()}</tr>
+              <tr>
+                {Object.keys(this.props.data[0]).map(col => (
+                  <th
+                    scope="col"
+                    key={col}
+                    onClick={() => this.handleSort(col)}
+                  >
+                    <div className="body">
+                      {this.state.orderBy === col && (
+                        <div className={`icon ${this.state.order}`}>
+                          <ion-icon name="arrow-dropdown" />
+                        </div>
+                      )}
+
+                      <div className="text">
+                        {this.formatNameToUserFriendly(col)}
+                      </div>
+                    </div>
+                  </th>
+                ))}
+              </tr>
             </thead>
-            <tbody>{this.renderTableBody()}</tbody>
+            <tbody>
+              {records.map((row, i) => (
+                <tr key={i}>
+                  {Object.keys(row).map(key => {
+                    if (
+                      this.props.dateColumn &&
+                      key === this.props.dateColumn
+                    ) {
+                      const format = this.props.dateFormat || "MM-DD HH:mm:ss";
+                      const formattedDate = moment(row[key]).format(format);
+                      return <td key={key}>{formattedDate}</td>;
+                    }
+
+                    return <td key={key}>{row[key]}</td>;
+                  })}
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
 
@@ -256,10 +210,8 @@ Table.propTypes = {
   dataName: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired, // [ { column: value, ... }, ... ]
   defaultOrderBy: PropTypes.string.isRequired,
-  identifiedBy: PropTypes.string.isRequired, // a unique attribute that can be used to identify records from one another, for example { symbol: "ONE", balance: "1.66" } can be identified by the "symbol" key since it is unique
   // non-required props
   excludeFromSorting: PropTypes.array,
-  excludeFromRendering: PropTypes.array,
   dateColumn: PropTypes.string, // the data of this column should be raw timestamps and should pass moment(timestamp).isValid(), for example: 2019-05-13T14:03:28.738Z or 1557825217091
   dateFormat: PropTypes.string, // the format to which dateColumn's timestamps should be converted, for example: "MMMM Do YYYY, h:mm:ss A"
   paginated: PropTypes.bool,
@@ -267,7 +219,8 @@ Table.propTypes = {
   height: PropTypes.number,
   searchable: PropTypes.bool,
   searchValue: PropTypes.string, // required if table is searchable
-  clearSearch: PropTypes.func // required if table is searchable
+  clearSearch: PropTypes.func, // required if table is searchable,
+  clickableHeaders: PropTypes.array // [ { columnName: string, onClick: func } ]
 };
 
 export default Table;

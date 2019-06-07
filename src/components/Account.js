@@ -28,7 +28,7 @@ import {
 import ModalWrapper from "./ModalWrapper";
 import TransferModal from "./TransferModal";
 import TransferCompleteModal from "./TransferCompleteModal";
-import DynamicFixedHeightTable from "./DynamicFixedHeightTable";
+import FixedHeightTable from "./FixedHeightTable";
 import singletons from "../singletons";
 
 class Account extends Component {
@@ -40,38 +40,38 @@ class Account extends Component {
     tableHeight: 780
   };
 
-  addActionsColumn = data => {
-    for (let row of data) {
-      const depositModalPayload = {
-        type: "deposit",
-        name: row.name,
-        symbol: row.symbol
-      };
-      const withdrawModalPayload = {
-        type: "withdraw",
-        name: row.name,
-        symbol: row.symbol
-      };
+  // addAssetsActionsColumn = data => {
+  //   for (let row of data) {
+  //     const depositModalPayload = {
+  //       type: "deposit",
+  //       name: row.name,
+  //       symbol: row.symbol
+  //     };
+  //     const withdrawModalPayload = {
+  //       type: "withdraw",
+  //       name: row.name,
+  //       symbol: row.symbol
+  //     };
 
-      row["actions"] = (
-        <div className="actions">
-          <div
-            className="action"
-            onClick={() => this.props.transferShow(depositModalPayload)}
-          >
-            deposit
-          </div>
-          <div
-            className="action"
-            onClick={() => this.props.transferShow(withdrawModalPayload)}
-          >
-            withdraw
-          </div>
-        </div>
-      );
-    }
-    return data;
-  };
+  //     row["actions"] = (
+  //       <div className="actions">
+  //         <div
+  //           className="action"
+  //           onClick={() => this.props.transferShow(depositModalPayload)}
+  //         >
+  //           deposit
+  //         </div>
+  //         <div
+  //           className="action"
+  //           onClick={() => this.props.transferShow(withdrawModalPayload)}
+  //         >
+  //           withdraw
+  //         </div>
+  //       </div>
+  //     );
+  //   }
+  //   return data;
+  // };
 
   extractAssetsData = () => {
     if (!this.props.account.address) {
@@ -90,12 +90,37 @@ class Account extends Component {
       ])
     );
     for (let row of extractedData) {
+      const depositModalPayload = {
+        type: "deposit",
+        name: row.name,
+        symbol: row.symbol
+      };
+      const withdrawModalPayload = {
+        type: "withdraw",
+        name: row.name,
+        symbol: row.symbol
+      };
       row.availableBalance = web3.utils.fromWei(row.availableBalance);
       row.inOrders = web3.utils.fromWei(row.inOrders);
       row.totalBalance = web3.utils.fromWei(row.totalBalance);
+      row.actions = (
+        <div className="actions">
+          <div
+            className="action"
+            onClick={() => this.props.transferShow(depositModalPayload)}
+          >
+            deposit
+          </div>
+          <div
+            className="action"
+            onClick={() => this.props.transferShow(withdrawModalPayload)}
+          >
+            withdraw
+          </div>
+        </div>
+      );
     }
-    const dataWithActionsColumn = this.addActionsColumn(extractedData);
-    return dataWithActionsColumn;
+    return extractedData;
   };
 
   handleTabChange = tab => {
@@ -108,7 +133,6 @@ class Account extends Component {
     }
 
     const { tokens, transfers } = this.props;
-    console.log(transfers);
     const extractedData = transfers.filtered.map(transfer => {
       const token = tokens.all.filter(
         t => t.address === transfer.tokenAddress
@@ -146,11 +170,10 @@ class Account extends Component {
 
   renderTransfersTable = () => {
     return (
-      <DynamicFixedHeightTable
+      <FixedHeightTable
         theme={this.props.app.theme}
         data={this.extractTransfersData()}
         defaultOrderBy="date"
-        excludeFromSorting={["transactionHash", "status"]}
         searchable={true}
         searchValue={this.props.transfers.searchValue}
         dateColumn="date"
@@ -165,7 +188,7 @@ class Account extends Component {
 
   renderAssetsTable = () => {
     return (
-      <DynamicFixedHeightTable
+      <FixedHeightTable
         theme={this.props.app.theme}
         data={this.extractAssetsData()}
         defaultOrderBy="totalBalance"
@@ -200,20 +223,39 @@ class Account extends Component {
       const status = capitalize(accountOrder.status);
       const market = accountOrder.marketSymbol;
       const date = accountOrder.createdAt;
+      const cancelAll = (
+        <div className="actions">
+          <div className="action">cancel</div>
+        </div>
+      );
 
-      return { market, type, price, amount, total, filled, status, date };
+      return {
+        market,
+        type,
+        price,
+        amount,
+        total,
+        filled,
+        status,
+        date,
+        cancelAll
+      };
     });
 
     return extractedData;
   };
 
+  handleCancelAll = () => {
+    console.log("CANCEL ALL");
+  };
+
   renderOrdersTable = () => {
     return (
-      <DynamicFixedHeightTable
+      <FixedHeightTable
         theme={this.props.app.theme}
         data={this.extractAccountOrdersData()}
         defaultOrderBy="date"
-        excludeFromSorting={["transactionHash", "status"]}
+        excludeFromSorting={["cancelAll"]}
         searchable={true}
         searchValue={this.props.accountOrders.searchValue}
         dateColumn="date"

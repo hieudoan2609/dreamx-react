@@ -11,18 +11,17 @@ class FixedHeightTable extends Component {
       <Table
         theme={this.props.theme}
         data={this.props.data}
-        defaultOrderBy={this.props.defaultOrderBy}
-        excludeFromSorting={this.props.excludeFromSorting}
-        excludeFromRendering={this.props.excludeFromRendering}
-        searchable={this.props.searchable}
-        searchValue={this.props.searchValue}
-        dateColumn={this.props.dateColumn}
         dataName={this.props.dataName}
-        paginated={this.props.paginated}
+        defaultOrderBy={this.props.defaultOrderBy}
         perPage={this.props.perPage}
         height={this.props.height}
+        excludeFromSorting={this.props.excludeFromSorting}
+        dateColumn={this.props.dateColumn}
+        searchable={this.props.searchable}
+        paginated={this.props.paginated}
+        searchValue={this.props.searchValue}
         clearSearch={this.props.clearSearch}
-        identifiedBy={this.props.identifiedBy}
+        clickableHeaders={this.props.clickableHeaders}
       />
     );
   }
@@ -43,16 +42,15 @@ FixedHeightTable.propTypes = {
   defaultOrderBy: PropTypes.string.isRequired,
   perPage: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  identifiedBy: PropTypes.string.isRequired, // a unique attribute that can be used to identify records from one another, for example { symbol: "ONE", balance: "1.66" } can be identified by the "symbol" key since it is unique
   // non-required props
   excludeFromSorting: PropTypes.array,
-  excludeFromRendering: PropTypes.array,
   dateColumn: PropTypes.string, // the data of this column should be raw timestamps and should pass moment(timestamp).isValid(), for example: 2019-05-13T14:03:28.738Z or 1557825217091
   dateFormat: PropTypes.string, // the format to which dateColumn's timestamps should be converted, for example: "MMMM Do YYYY, h:mm:ss A"
   paginated: PropTypes.bool,
   searchable: PropTypes.bool,
   searchValue: PropTypes.string, // required if table is searchable
-  clearSearch: PropTypes.func // required if table is searchable
+  clearSearch: PropTypes.func, // required if table is searchable
+  clickableHeaders: PropTypes.array // [ { columnName: string, onClick: func } ]
 };
 
 export default FixedHeightTable;
