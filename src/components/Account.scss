@@ -35,10 +35,16 @@ $overlay: rgba(130,130,130,.1);
     }
   }
   .pill {
-    // width: 90px;
+    box-sizing: border-box;
     text-align: center;
     border-radius: .25rem;
     color: $dark-text;
+    &.deposit, &.withdraw {
+      width: 90px;
+    }
+    &.buy, &.sell {
+      width: 50px;
+    }
     &.deposit, &.buy {
       background-color: $buy;
     }
