@@ -50,7 +50,7 @@ FixedHeightTable.propTypes = {
   searchable: PropTypes.bool,
   searchValue: PropTypes.string, // required if table is searchable
   clearSearch: PropTypes.func, // required if table is searchable
-  clickableHeaders: PropTypes.array // [ { columnName: string, onClick: func } ]
+  clickableHeaders: PropTypes.array // [ { name: string, onClick: func } ]
 };
 
 export default FixedHeightTable;

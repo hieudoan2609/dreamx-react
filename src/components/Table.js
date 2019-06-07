@@ -108,6 +108,52 @@ class Table extends Component {
     window.scrollTo(0, tableTop);
   };
 
+  renderTableHeaders = () => {
+    return Object.keys(this.props.data[0]).map(col => {
+      if (this.props.clickableHeaders) {
+        for (let header of this.props.clickableHeaders) {
+          if (header.name === col) {
+            // this is a clickable header, replace the default sorting behavior
+            return (
+              <th
+                scope="col"
+                key={col}
+                onClick={header.onClick}
+                className="clickable"
+              >
+                <div className="body">
+                  {this.state.orderBy === col && (
+                    <div className={`icon ${this.state.order}`}>
+                      <ion-icon name="arrow-dropdown" />
+                    </div>
+                  )}
+
+                  <div className="text">
+                    {this.formatNameToUserFriendly(col)}
+                  </div>
+                </div>
+              </th>
+            );
+          }
+        }
+      }
+
+      return (
+        <th scope="col" key={col} onClick={() => this.handleSort(col)}>
+          <div className="body">
+            {this.state.orderBy === col && (
+              <div className={`icon ${this.state.order}`}>
+                <ion-icon name="arrow-dropdown" />
+              </div>
+            )}
+
+            <div className="text">{this.formatNameToUserFriendly(col)}</div>
+          </div>
+        </th>
+      );
+    });
+  };
+
   renderTable = () => {
     const totalPages = this.props.paginated
       ? Math.ceil(this.props.data.length / this.props.perPage)
@@ -123,27 +169,7 @@ class Table extends Component {
         <div className="table-responsive" style={{ height: this.props.height }}>
           <table className="table">
             <thead>
-              <tr>
-                {Object.keys(this.props.data[0]).map(col => (
-                  <th
-                    scope="col"
-                    key={col}
-                    onClick={() => this.handleSort(col)}
-                  >
-                    <div className="body">
-                      {this.state.orderBy === col && (
-                        <div className={`icon ${this.state.order}`}>
-                          <ion-icon name="arrow-dropdown" />
-                        </div>
-                      )}
-
-                      <div className="text">
-                        {this.formatNameToUserFriendly(col)}
-                      </div>
-                    </div>
-                  </th>
-                ))}
-              </tr>
+              <tr>{this.renderTableHeaders()}</tr>
             </thead>
             <tbody>
               {records.map((row, i) => (
@@ -220,7 +246,7 @@ Table.propTypes = {
   searchable: PropTypes.bool,
   searchValue: PropTypes.string, // required if table is searchable
   clearSearch: PropTypes.func, // required if table is searchable,
-  clickableHeaders: PropTypes.array // [ { columnName: string, onClick: func } ]
+  clickableHeaders: PropTypes.array // [ { name: string, onClick: func } ], clickable headers are unsortable
 };
 
 export default Table;

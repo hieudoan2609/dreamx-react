@@ -12,6 +12,8 @@ $dark-secondary-shade: #1f283d;
 $overlay: rgba(130,130,130,.1);
 $icon-medium: 24px;
 $icon-small: 14px;
+$light-primary-shade: #26327f;
+$dark-primary-shade: #d26127;
 
 *:focus {
   box-shadow: none !important;
@@ -83,11 +85,27 @@ $icon-small: 14px;
   }
   &.light {
     .table, .search, .input-group-prepend span {
+      th {
+        &.clickable {
+          color: $light-primary;
+          &:hover {
+            color: $light-primary-shade;
+          }
+        }
+      }
       color: $light-text;
     }
   }
   &.dark {
     .table, .search, .input-group-prepend span {
+      th {
+        &.clickable {
+          color: $dark-primary;
+          &:hover {
+            color: $dark-primary-shade;
+          }
+        }
+      }
       color: $dark-text;
     }
   }
