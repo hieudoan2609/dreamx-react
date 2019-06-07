@@ -58,7 +58,7 @@ export const tokensLoadAsync = () => {
     dispatch({
       type: TOKENS_LOAD,
       payload: {
-        tokens: tokensWithInitialBalances
+        data: tokensWithInitialBalances
       }
     });
   };
@@ -119,7 +119,7 @@ const loadTokenBalances = (newBalances, reInitialize = false) => {
     dispatch({
       type: TOKENS_LOAD,
       payload: {
-        tokens: loadedBalances
+        data: loadedBalances
       }
     });
   };

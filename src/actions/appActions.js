@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { APP_TOGGLE_THEME, APP_INITIALIZE } from "../actions/types";
-import { tokensLoadAsync } from ".";
+import { tokensLoadAsync, marketsLoadAsync } from ".";
 import { getNetworkNameFromId } from "../helpers";
 import config from "../config";
 import { setSingleton } from "../singletons";
@@ -37,6 +37,7 @@ export const initializeAppAsync = () => {
       `${config.API_HTTP_ROOT}/return_contract_address`
     );
     await dispatch(tokensLoadAsync());
+    await dispatch(marketsLoadAsync());
     initializeAppSingletons();
     dispatch({
       type: APP_INITIALIZE,

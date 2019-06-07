@@ -37,7 +37,7 @@ export const transfersLoadAccountAsync = accountAddress => {
 
     dispatch({
       type: TRANSFERS_LOAD,
-      payload: { transfers }
+      payload: { data: transfers }
     });
   };
 };
@@ -80,7 +80,7 @@ const updateNewTransfersAsync = newTransfers => {
 
     dispatch({
       type: TRANSFERS_LOAD,
-      payload: { transfers: updatedTransfers }
+      payload: { data: updatedTransfers }
     });
 
     dispatch(filterTransfers());

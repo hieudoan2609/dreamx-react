@@ -1,7 +1,7 @@
 import {
-  TRANSFERS_LOAD,
-  TRANSFERS_FILTER,
-  TRANSFERS_CLEAR_FILTER
+  MARKETS_FILTER,
+  MARKETS_CLEAR_FILTER,
+  MARKETS_LOAD
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -12,26 +12,26 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case TRANSFERS_LOAD:
+    case MARKETS_LOAD:
       if (state.searchValue) {
         return {
           ...state,
-          all: action.payload.data
+          all: action.payload.markets
         };
       } else {
         return {
           ...state,
-          all: action.payload.data,
-          filtered: action.payload.data
+          all: action.payload.markets,
+          filtered: action.payload.markets
         };
       }
-    case TRANSFERS_FILTER:
+    case MARKETS_FILTER:
       return {
         ...state,
         filtered: action.payload.filtered,
         searchValue: action.payload.searchValue
       };
-    case TRANSFERS_CLEAR_FILTER:
+    case MARKETS_CLEAR_FILTER:
       return {
         ...state,
         filtered: state.all,

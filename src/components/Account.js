@@ -15,7 +15,8 @@ import {
   transferEnterEntireBalance,
   transfersHandleSearchInput,
   transfersClearSearch,
-  tokensClearSearch
+  tokensClearSearch,
+  ordersHandleSearchInput
 } from "../actions";
 import {
   extractKeysFromObject,
@@ -71,7 +72,7 @@ class Account extends Component {
     return data;
   };
 
-  extractTokensData = () => {
+  extractAssetsData = () => {
     if (!this.props.account.address) {
       return [];
     }
@@ -141,7 +142,7 @@ class Account extends Component {
     return extractedData;
   };
 
-  renderTransferTable = () => {
+  renderTransfersTable = () => {
     return (
       <DynamicFixedHeightTable
         theme={this.props.app.theme}
@@ -160,11 +161,11 @@ class Account extends Component {
     );
   };
 
-  renderAssetTable = () => {
+  renderAssetsTable = () => {
     return (
       <DynamicFixedHeightTable
         theme={this.props.app.theme}
-        data={this.extractTokensData()}
+        data={this.extractAssetsData()}
         defaultOrderBy="totalBalance"
         excludeFromSorting={["actions"]}
         searchable={true}
@@ -178,8 +179,45 @@ class Account extends Component {
     );
   };
 
+  extractOrdersData = () => {
+    // market, type, price, amount, total, filled, status, date, cancel all
+    if (!this.props.account.address) {
+      return [];
+    }
+
+    const { orders, tokens } = this.props;
+
+    const extractedData = orders.filtered.map(order => {
+      const giveToken = tokens.all.filter(
+        t => t.address === order.giveTokenAddress
+      );
+      const takeToken = tokens.all.filter(
+        t => t.address === order.takeTokenAddress
+      );
+      // const market = `${giveToken}`
+
+      return { giveToken: order.giveTokenAddress };
+    });
+    return extractedData;
+  };
+
   renderOrderTable = () => {
-    return <div>ORDERS</div>;
+    return (
+      <DynamicFixedHeightTable
+        theme={this.props.app.theme}
+        data={this.extractOrdersData()}
+        defaultOrderBy="date"
+        excludeFromSorting={["transactionHash", "status"]}
+        searchable={true}
+        searchValue={this.props.transfers.searchValue}
+        dateColumn="date"
+        dataName="transfers"
+        paginated={this.state.paginated}
+        perPage={this.state.perPage}
+        height={this.state.tableHeight}
+        clearSearch={this.props.transfersClearSearch}
+      />
+    );
   };
 
   renderTradeTable = () => {
@@ -252,6 +290,9 @@ class Account extends Component {
     } else if (this.state.currentTab === "transfers") {
       searchValue = this.props.transfers.searchValue;
       handleSearchInput = this.props.transfersHandleSearchInput;
+    } else if (this.state.currentTab === "orders") {
+      searchValue = this.props.orders.searchValue;
+      handleSearchInput = this.props.ordersHandleSearchInput;
     }
     return (
       <Search
@@ -288,9 +329,9 @@ class Account extends Component {
 
           {this.renderSearchBox()}
 
-          {this.state.currentTab === "assets" && this.renderAssetTable()}
+          {this.state.currentTab === "assets" && this.renderAssetsTable()}
           {this.state.currentTab === "orders" && this.renderOrderTable()}
-          {this.state.currentTab === "transfers" && this.renderTransferTable()}
+          {this.state.currentTab === "transfers" && this.renderTransfersTable()}
           {this.state.currentTab === "trades" && this.renderTradeTable()}
         </div>
       </div>
@@ -298,8 +339,15 @@ class Account extends Component {
   }
 }
 
-const mapStateToProps = ({ app, account, tokens, transfer, transfers }) => {
-  return { app, account, tokens, transfer, transfers };
+const mapStateToProps = ({
+  app,
+  account,
+  tokens,
+  transfer,
+  transfers,
+  orders
+}) => {
+  return { app, account, tokens, transfer, transfers, orders };
 };
 
 const mapActionsToProps = {
@@ -311,7 +359,8 @@ const mapActionsToProps = {
   transferEnterEntireBalance,
   transfersHandleSearchInput,
   transfersClearSearch,
-  tokensClearSearch
+  tokensClearSearch,
+  ordersHandleSearchInput
 };
 
 export default connect(

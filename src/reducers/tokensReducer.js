@@ -16,13 +16,13 @@ export default (state = INITIAL_STATE, action) => {
       if (state.searchValue) {
         return {
           ...state,
-          all: action.payload.tokens
+          all: action.payload.data
         };
       } else {
         return {
           ...state,
-          all: action.payload.tokens,
-          filtered: action.payload.tokens
+          all: action.payload.data,
+          filtered: action.payload.data
         };
       }
     case TOKENS_FILTER:
