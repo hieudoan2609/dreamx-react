@@ -44,6 +44,9 @@ $icon-small: 14px;
   &.dark {
     .search, .input-group-prepend span {
       color: $dark-text;
+      ion-icon {
+        color: #777777;
+      }
     }
   }
 }
