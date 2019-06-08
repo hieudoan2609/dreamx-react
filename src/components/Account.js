@@ -39,7 +39,7 @@ class Account extends Component {
     currentTab: "assets",
     paginated: true,
     perPage: 15,
-    tableHeight: 780
+    tableHeight: 783
   };
 
   extractAssetsData = () => {
