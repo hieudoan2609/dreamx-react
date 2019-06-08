@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 // import { connect } from "react-redux";
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 
 import "./Chart.scss";
 
 class Chart extends Component {
   render() {
-    return <p>Chart</p>;
+    return <div className={`Chart card ${this.props.theme}`}>Chart</div>;
   }
 }
 
@@ -18,10 +18,8 @@ class Chart extends Component {
 //  getChartData
 // };
 
-// Chart.propTypes = {
-//   logo: PropTypes.string.isRequired,
-//   navItems: PropTypes.array.isRequired, // [ { label, pathname }, ... ]
-//   toggleTheme: PropTypes.func.isRequired
-// };
+Chart.propTypes = {
+  theme: PropTypes.string.isRequired
+};
 
 export default Chart;

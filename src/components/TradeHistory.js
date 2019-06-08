@@ -2,13 +2,13 @@ import React, { Component } from "react";
 // import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import "./MarketsTable.scss";
+import "./TradeHistory.scss";
 
-class MarketsTable extends Component {
+class TradeHistory extends Component {
   render() {
     return (
-      <div className={`MarketsTable card ${this.props.theme}`}>
-        MarketsTable
+      <div className={`TradeHistory card ${this.props.theme}`}>
+        TradeHistory
       </div>
     );
   }
@@ -19,11 +19,11 @@ class MarketsTable extends Component {
 // };
 
 // const mapActionsToProps = {
-//  getChartData
+//  getTradeHistoryData
 // };
 
-MarketsTable.propTypes = {
+TradeHistory.propTypes = {
   theme: PropTypes.string.isRequired
 };
 
-export default MarketsTable;
+export default TradeHistory;
