@@ -19,30 +19,24 @@ class Market extends Component {
             <Chart theme={this.props.app.theme} />
           </div>
           <div className="col-lg-4">
-            <MarketsTable theme={this.props.app.theme} />
+            <Trade theme={this.props.app.theme} />
           </div>
         </div>
 
         <div className="row">
-          <div className="col-lg-4">
-            <Trade theme={this.props.app.theme} />
-          </div>
-          <div className="col-lg-8">
+          <div className="col-lg-12">
             <MarketOrders theme={this.props.app.theme} />
           </div>
         </div>
 
         <div className="row">
-          <div className="col-lg-6">
+          <div className="col-lg-4">
             <BuyBook theme={this.props.app.theme} />
           </div>
-          <div className="col-lg-6">
+          <div className="col-lg-4">
             <SellBook theme={this.props.app.theme} />
           </div>
-        </div>
-
-        <div className="row">
-          <div className="col-12">
+          <div className="col-lg-4">
             <TradeHistory theme={this.props.app.theme} />
           </div>
         </div>

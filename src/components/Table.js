@@ -97,7 +97,9 @@ class Table extends Component {
   };
 
   componentWillMount = () => {
-    this.props.clearSearch();
+    if (this.props.clearSearch) {
+      this.props.clearSearch();
+    }
   };
 
   scrollToTableTop = () => {
@@ -173,7 +175,7 @@ class Table extends Component {
             </thead>
             <tbody>
               {records.map((row, i) => (
-                <tr key={i}>
+                <tr>
                   {Object.keys(row).map(key => {
                     if (
                       this.props.dateColumn &&
@@ -181,10 +183,18 @@ class Table extends Component {
                     ) {
                       const format = this.props.dateFormat || "MM-DD HH:mm:ss";
                       const formattedDate = moment(row[key]).format(format);
-                      return <td key={key}>{formattedDate}</td>;
+                      return (
+                        <td key={key} className={`${key}`}>
+                          {formattedDate}
+                        </td>
+                      );
                     }
 
-                    return <td key={key}>{row[key]}</td>;
+                    return (
+                      <td key={key} className={`${key}`}>
+                        {row[key]}
+                      </td>
+                    );
                   })}
                 </tr>
               ))}

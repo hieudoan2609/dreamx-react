@@ -20,4 +20,22 @@ $overlay: rgba(130,130,130,.1);
 
 .MarketsTable {
   height: 450px;
+  .body {
+    position: relative;
+  }
+  .Table {
+    .table-responsive {
+      .table {
+        tbody {
+          tr {
+            border-top: 0px;
+            td.price {
+              font-size: .8rem;
+              font-weight: 100;
+            }
+          }
+        }
+      }
+    }
+  }
 }
