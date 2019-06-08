@@ -12,7 +12,8 @@ import {
 import {
   tokensLoadAccountAsync,
   transfersLoadAccountAsync,
-  accountOrdersLoadAsync
+  accountOrdersLoadAsync,
+  accountTradesLoadAsync
 } from ".";
 import { transferHide } from "./";
 import { setSingleton } from "../singletons";
@@ -56,7 +57,7 @@ export const accountLoginAsync = () => {
       await dispatch(tokensLoadAccountAsync(address));
       await dispatch(transfersLoadAccountAsync(address));
       await dispatch(accountOrdersLoadAsync(address));
-
+      await dispatch(accountTradesLoadAsync(address));
       dispatch({
         type: ACCOUNT_LOGIN,
         payload: { address }

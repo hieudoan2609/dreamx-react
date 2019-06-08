@@ -1,12 +1,8 @@
-// import axios from "axios";
-
 import {
   ACCOUNT_ORDERS_FILTER,
   ACCOUNT_ORDERS_LOAD,
   ACCOUNT_ORDERS_CLEAR_FILTER
 } from "../actions/types";
-// import config from "../config";
-// import { convertKeysToCamelCase } from "../helpers";
 import singletons from "../singletons";
 
 const accountOrdersData = [
@@ -46,7 +42,7 @@ const accountOrdersData = [
     status: "open",
     nonce: "1551036154000",
     expiryTimestampInMilliseconds: "1506550595000",
-    hash: "0x853c9a43f316e19a8bc5b0e8513d7dd500b5df308dd1b558721c40beeec3541b",
+    hash: "0xfe4c3f5cdbf185b452466f9449d66a44464d9b9b4adee6ef75e536c7d579316a",
     createdAt: "2019-06-07T15:15:44.498Z"
   },
   {
