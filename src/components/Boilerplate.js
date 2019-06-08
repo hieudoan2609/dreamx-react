@@ -6,7 +6,7 @@ import "./Boilerplate.scss";
 
 class Boilerplate extends Component {
   render() {
-    return <p>Boilerplate</p>;
+    return <div>Boilerplate</div>;
   }
 }
 

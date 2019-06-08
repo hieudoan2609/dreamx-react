@@ -3,10 +3,15 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import "./Chart.scss";
+import Ticker from "./Ticker.js";
 
 class Chart extends Component {
   render() {
-    return <div className={`Chart card ${this.props.theme}`}>Chart</div>;
+    return (
+      <div className={`Chart card ${this.props.theme}`}>
+        <Ticker theme={this.props.theme} />
+      </div>
+    );
   }
 }
 

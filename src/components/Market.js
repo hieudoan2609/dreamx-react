@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import Chart from "./Chart";
-import MarketsTable from "./MarketsTable";
 import Trade from "./Trade";
 import MarketOrders from "./MarketOrders";
 import BuyBook from "./BuyBook";
