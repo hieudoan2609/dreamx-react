@@ -172,7 +172,6 @@ class Account extends Component {
   };
 
   extractAccountOrdersData = () => {
-    // marketSymbol, type, price, amount, total, filled, status, date, cancel all
     if (!this.props.account.address) {
       return [];
     }
@@ -238,8 +237,54 @@ class Account extends Component {
     );
   };
 
-  renderTradeTable = () => {
-    return <div>TRADES</div>;
+  extractAccountTradesData = () => {
+    if (!this.props.account.address) {
+      return [];
+    }
+
+    const { accountTrades } = this.props;
+
+    const extractedData = accountTrades.filtered.map(t => {
+      const { price, amount } = t;
+      const type = <div className={`pill ${t.type}`}>{capitalize(t.type)}</div>;
+      const total = `${t.total} ETH`;
+      const market = t.marketSymbol;
+      const date = t.createdAt;
+      const fee = `${truncateNumberOutput(t.fee)} ETH`;
+
+      return {
+        market,
+        type,
+        price,
+        amount,
+        fee,
+        total,
+        date
+      };
+    });
+
+    return extractedData;
+  };
+
+  renderAccountTradesTable = () => {
+    return (
+      <FixedHeightTable
+        theme={this.props.app.theme}
+        data={this.extractAccountTradesData()}
+        defaultOrderBy="date"
+        searchable={true}
+        searchValue={this.props.accountOrders.searchValue}
+        dateColumn="date"
+        dataName="orders"
+        paginated={this.state.paginated}
+        perPage={this.state.perPage}
+        height={this.state.tableHeight}
+        clearSearch={this.props.accountOrdersClearSearch}
+        clickableHeaders={[
+          { name: "cancelAll", onClick: this.handleCancelAll }
+        ]}
+      />
+    );
   };
 
   renderFrontModal = () => {
@@ -350,7 +395,8 @@ class Account extends Component {
           {this.state.currentTab === "assets" && this.renderAssetsTable()}
           {this.state.currentTab === "orders" && this.renderOrdersTable()}
           {this.state.currentTab === "transfers" && this.renderTransfersTable()}
-          {this.state.currentTab === "trades" && this.renderTradeTable()}
+          {this.state.currentTab === "trades" &&
+            this.renderAccountTradesTable()}
         </div>
       </div>
     );
