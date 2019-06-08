@@ -7,17 +7,19 @@ import TabMenu from "./TabMenu";
 import Search from "./Search";
 import "./Account.scss";
 import {
-  tokensHandleSearchInput,
   transferShow,
   transferHandleAmountChange,
   transferHide,
   transferHandleSubmitAsync,
   transferEnterEntireBalance,
+  tokensHandleSearchInput,
+  tokensClearSearch,
   transfersHandleSearchInput,
   transfersClearSearch,
-  tokensClearSearch,
   accountOrdersHandleSearchInput,
-  accountOrdersClearSearch
+  accountOrdersClearSearch,
+  accountTradesHandleSearchInput,
+  accountTradesClearSearch
 } from "../actions";
 import {
   extractKeysFromObject,
@@ -273,13 +275,13 @@ class Account extends Component {
         data={this.extractAccountTradesData()}
         defaultOrderBy="date"
         searchable={true}
-        searchValue={this.props.accountOrders.searchValue}
+        searchValue={this.props.accountTrades.searchValue}
         dateColumn="date"
-        dataName="orders"
+        dataName="trades"
         paginated={this.state.paginated}
         perPage={this.state.perPage}
         height={this.state.tableHeight}
-        clearSearch={this.props.accountOrdersClearSearch}
+        clearSearch={this.props.accountTradesClearSearch}
         clickableHeaders={[
           { name: "cancelAll", onClick: this.handleCancelAll }
         ]}
@@ -356,6 +358,9 @@ class Account extends Component {
     } else if (this.state.currentTab === "orders") {
       searchValue = this.props.accountOrders.searchValue;
       handleSearchInput = this.props.accountOrdersHandleSearchInput;
+    } else if (this.state.currentTab === "trades") {
+      searchValue = this.props.accountTrades.searchValue;
+      handleSearchInput = this.props.accountTradesHandleSearchInput;
     }
     return (
       <Search
@@ -408,17 +413,19 @@ const mapStateToProps = state => {
 };
 
 const mapActionsToProps = {
-  tokensHandleSearchInput,
   transferShow,
   transferHandleAmountChange,
   transferHide,
   transferHandleSubmitAsync,
   transferEnterEntireBalance,
+  tokensHandleSearchInput,
+  tokensClearSearch,
   transfersHandleSearchInput,
   transfersClearSearch,
-  tokensClearSearch,
   accountOrdersHandleSearchInput,
-  accountOrdersClearSearch
+  accountOrdersClearSearch,
+  accountTradesHandleSearchInput,
+  accountTradesClearSearch
 };
 
 export default connect(
