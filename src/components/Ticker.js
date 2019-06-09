@@ -5,72 +5,55 @@ import PropTypes from "prop-types";
 import "./Ticker.scss";
 import Search from "./Search";
 
-const tickers = [
-  {
-    name: "ONE/ETH",
-    price: "0.12345678",
-    percentChange: 0,
-    active: true
-  },
-  {
-    name: "TWO/ETH",
-    price: "0.12345678",
-    percentChange: 1
-  },
-  {
-    name: "THREE/ETH",
-    price: "0.12345678",
-    percentChange: -1
-  },
-  {
-    name: "FOUR/ETH",
-    price: "0.12345678",
-    percentChange: 0
-  },
-  {
-    name: "FIVE/ETH",
-    price: "0.12345678",
-    percentChange: 0
-  },
-  {
-    name: "SIX/ETH",
-    price: "0.12345678",
-    percentChange: 0
-  },
-  {
-    name: "SEVEN/ETH",
-    price: "0.12345678",
-    percentChange: 0
-  },
-  {
-    name: "EIGHT/ETH",
-    price: "0.12345678",
-    percentChange: 0
-  },
-  {
-    name: "NINE/ETH",
-    price: "0.12345678",
-    percentChange: 0
-  },
-  {
-    name: "TEN/ETH",
-    price: "0.12345678",
-    percentChange: 0
+function desc(a, b, orderBy) {
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
   }
-];
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
+}
+
+function stableSort(rawArray, cmp) {
+  const stabilizedThis = rawArray.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = cmp(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map(el => el[0]);
+}
+
+function getSorting(order, orderBy) {
+  return order === "desc"
+    ? (a, b) => desc(a, b, orderBy)
+    : (a, b) => -desc(a, b, orderBy);
+}
 
 class Ticker extends Component {
+  state = {
+    order: "desc",
+    orderBy: "baseVolume"
+  };
+
   renderTickers = () => {
-    return tickers.map(t => {
+    const sorted = stableSort(
+      this.props.tickers,
+      getSorting(this.state.order, this.state.orderBy)
+    );
+
+    return sorted.map(t => {
       return (
         <div
           className={`ticker ${t.active ? "active" : ""} ${
             t.percentChange > 0 ? "up" : t.percentChange < 0 ? "down" : ""
           }`}
+          key={t.name}
         >
           <div className="body">
             <div className="name">{t.name}</div>
-            <div className="price">{t.price}</div>
+            <div className="price">{t.last}</div>
           </div>
         </div>
       );
@@ -98,7 +81,8 @@ class Ticker extends Component {
 // };
 
 Ticker.propTypes = {
-  theme: PropTypes.string.isRequired
+  theme: PropTypes.string.isRequired,
+  tickers: PropTypes.array.isRequired
 };
 
 export default Ticker;

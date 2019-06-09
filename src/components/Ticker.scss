@@ -43,6 +43,9 @@ $overlay: rgba(130,130,130,.1);
     -webkit-overflow-scrolling: touch;
     .ticker {
       height: 40px;
+      width: 110px;
+      min-width: 110px;
+      max-width: 110px;
       font-size: .8rem;
       box-sizing: border-box;
       line-height: 1.2;

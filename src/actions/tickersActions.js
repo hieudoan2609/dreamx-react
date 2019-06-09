@@ -50,12 +50,10 @@ export const tickersLoadAsync = () => {
     // );
 
     const tickers = tickersData.map(t => {
-      const [baseTokenSymbol, quoteTokenSymbol] = t.marketSymbol.split("_");
-      t.name = `${quoteTokenSymbol}/${baseTokenSymbol}`;
+      const quoteTokenSymbol = t.marketSymbol.split("_")[1];
+      t.name = `${quoteTokenSymbol}`;
       return t;
     });
-
-    console.log(tickers);
 
     dispatch({
       type: TICKERS_LOAD,

@@ -19,7 +19,10 @@ class Market extends Component {
       <div className="Market">
         <div className="row">
           <div className="col-lg-8">
-            <Chart theme={this.props.app.theme} />
+            <Chart
+              theme={this.props.app.theme}
+              tickers={this.props.tickers.filtered}
+            />
           </div>
           <div className="col-lg-4">
             <Trade theme={this.props.app.theme} />
