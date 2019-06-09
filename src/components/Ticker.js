@@ -17,7 +17,10 @@ class Ticker extends Component {
           }`}
           key={t.name}
         >
-          <div className="body">
+          <div
+            className="body"
+            onClick={() => this.props.changeMarket(t.marketSymbol)}
+          >
             <div className="name">{t.name}</div>
             <div className="price">{t.last}</div>
           </div>
@@ -49,7 +52,8 @@ class Ticker extends Component {
 Ticker.propTypes = {
   theme: PropTypes.string.isRequired,
   tickers: PropTypes.array.isRequired,
-  currentMarket: PropTypes.string.isRequired
+  currentMarket: PropTypes.string.isRequired,
+  changeMarket: PropTypes.func.isRequired
 };
 
 export default Ticker;

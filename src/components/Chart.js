@@ -13,6 +13,7 @@ class Chart extends Component {
           theme={this.props.theme}
           tickers={this.props.tickers}
           currentMarket={this.props.currentMarket}
+          changeMarket={this.props.changeMarket}
         />
       </div>
     );
@@ -30,7 +31,8 @@ class Chart extends Component {
 Chart.propTypes = {
   theme: PropTypes.string.isRequired,
   tickers: PropTypes.array.isRequired,
-  currentMarket: PropTypes.string.isRequired
+  currentMarket: PropTypes.string.isRequired,
+  changeMarket: PropTypes.func.isRequired
 };
 
 export default Chart;

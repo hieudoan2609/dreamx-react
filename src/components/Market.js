@@ -8,6 +8,7 @@ import BuyBook from "./BuyBook";
 import SellBook from "./SellBook";
 import TradeHistory from "./TradeHistory";
 import "./Market.scss";
+import { changeMarket } from "../actions";
 
 class Market extends Component {
   componentDidMount = () => {
@@ -23,6 +24,7 @@ class Market extends Component {
               theme={this.props.app.theme}
               tickers={this.props.tickers.filtered}
               currentMarket={this.props.market.currentMarket}
+              changeMarket={this.props.changeMarket}
             />
           </div>
           <div className="col-lg-4">
@@ -56,8 +58,11 @@ const mapStateToProps = state => {
   return state;
 };
 
-// const mapDispatchToProps = {
-//  getChartData
-// };
+const mapActionsToProps = {
+  changeMarket
+};
 
-export default connect(mapStateToProps)(Market);
+export default connect(
+  mapStateToProps,
+  mapActionsToProps
+)(Market);
