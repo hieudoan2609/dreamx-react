@@ -8,7 +8,8 @@ import Search from "./Search";
 const tickers = [
   {
     name: "ONE/ETH",
-    price: "0.12345678"
+    price: "0.12345678",
+    active: true
   },
   {
     name: "TWO/ETH",
@@ -49,13 +50,24 @@ const tickers = [
 ];
 
 class Ticker extends Component {
+  renderTickers = () => {
+    return tickers.map(t => {
+      return (
+        <div className={`ticker ${t.active ? "active" : ""}`}>
+          <div className="name">{t.name}</div>
+          <div className="price">{t.price}</div>
+        </div>
+      );
+    });
+  };
+
   render() {
     return (
       <div className={`Ticker ${this.props.theme}`}>
         <div className="search">
           <Search searchInputPlaceholder="Search..." theme={this.props.theme} />
         </div>
-        <div className="tickers">Tickers</div>
+        <div className="tickers">{this.renderTickers()}</div>
       </div>
     );
   }

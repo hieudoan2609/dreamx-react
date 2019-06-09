@@ -34,6 +34,10 @@ import FixedHeightTable from "./FixedHeightTable";
 import singletons from "../singletons";
 
 class Account extends Component {
+  componentDidMount = () => {
+    window.scrollTo(0, 0);
+  };
+
   state = {
     tabs: ["assets", "transfers", "orders", "trades"],
     currentTab: "assets",

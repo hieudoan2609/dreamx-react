@@ -10,6 +10,10 @@ import TradeHistory from "./TradeHistory";
 import "./Market.scss";
 
 class Market extends Component {
+  componentDidMount = () => {
+    window.scrollTo(0, 0);
+  };
+
   render() {
     return (
       <div className="Market">

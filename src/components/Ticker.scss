@@ -20,9 +20,12 @@ $overlay: rgba(130,130,130,.1);
 
 .Ticker {
   width: 100%;
+  height: 50px;
+  overflow: hidden;
   display: flex;
   > .search {
     height: 50px;
+    min-width: 150px;
     width: 150px;
     .Search {
       .input-group {
@@ -31,28 +34,61 @@ $overlay: rgba(130,130,130,.1);
     }
   }
   > .tickers {
-    height: 50px;
+    height: 60px;
     width: 100%;
+    display: flex;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    .ticker {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 40px;
+      font-size: .8rem;
+      background-color: $overlay;
+      border-radius: .25rem;
+      margin-right: 10px;
+      margin-top: 5px;
+      padding: 0px 5px;
+      box-sizing: border-box;
+      line-height: 1.2;
+      > div {
+        text-align: center;
+      }
+    }
   }
-  // &.light {
-  //   > .search {
-
-  //   }
-  // }
-  // &.dark {
-  //   > .search {
-  //     .Search {
-  //       .input-group {
-  //         background-color: transparent;
-  //       }
-  //     }
-  //   }
-  // }
+  ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 0px;
+    height: 0px;
+  }
+  ::-webkit-scrollbar-track {
+    background: $overlay;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: $dark-primary;
+    cursor: pointer;
+  }
+  &.light {
+    .ticker {
+      &.active {
+        background-color: $light-primary;
+      }
+    }
+  }
+  &.dark {
+    .ticker {
+      &.active {
+        background-color: $dark-primary;
+      }
+    }
+  }
 }
 
 @media (max-width: 575.98px) { 
   .Ticker {
     display: block;
+    height: 100px;
     > .search, .tickers {
       width: 100%;
     }
