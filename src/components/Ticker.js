@@ -7,6 +7,10 @@ import Search from "./Search";
 
 class Ticker extends Component {
   renderTickers = () => {
+    if (this.props.tickers.length === 0) {
+      return <div className="not-found">No tickers could be found.</div>;
+    }
+
     return this.props.tickers.map(t => {
       const active = t.marketSymbol === this.props.currentMarket;
 
@@ -15,14 +19,14 @@ class Ticker extends Component {
           className={`ticker ${active ? "active" : ""} ${
             t.percentChange > 0 ? "up" : t.percentChange < 0 ? "down" : ""
           }`}
-          key={t.name}
+          key={t.tickerSymbol}
         >
           <div
             className="body"
             onClick={() => this.props.changeMarket(t.marketSymbol)}
           >
-            <div className="name">{t.name}</div>
-            <div className="price">{t.last}</div>
+            <div className="name">{t.tickerSymbol}</div>
+            <div className="price">{t.last ? t.last : "N/A"}</div>
           </div>
         </div>
       );
@@ -37,6 +41,7 @@ class Ticker extends Component {
             searchInputPlaceholder="Search..."
             theme={this.props.theme}
             searchValue={this.props.searchValue}
+            handleSearchInput={this.props.handleSearchInput}
           />
         </div>
         <div className="tickers">{this.renderTickers()}</div>
@@ -59,7 +64,7 @@ Ticker.propTypes = {
   currentMarket: PropTypes.string.isRequired,
   changeMarket: PropTypes.func.isRequired,
   searchValue: PropTypes.string.isRequired,
-  handleSearchInput: PropTypes.string.isRequired
+  handleSearchInput: PropTypes.func.isRequired
 };
 
 export default Ticker;

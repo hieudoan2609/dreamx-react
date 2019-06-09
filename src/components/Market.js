@@ -8,7 +8,7 @@ import BuyBook from "./BuyBook";
 import SellBook from "./SellBook";
 import TradeHistory from "./TradeHistory";
 import "./Market.scss";
-import { changeMarket } from "../actions";
+import { changeMarket, tickersHandleSearchInput } from "../actions";
 
 class Market extends Component {
   componentDidMount = () => {
@@ -26,6 +26,7 @@ class Market extends Component {
               currentMarket={this.props.market.currentMarket}
               changeMarket={this.props.changeMarket}
               searchValue={this.props.tickers.searchValue}
+              handleSearchInput={this.props.tickersHandleSearchInput}
             />
           </div>
           <div className="col-lg-4">
@@ -60,7 +61,8 @@ const mapStateToProps = state => {
 };
 
 const mapActionsToProps = {
-  changeMarket
+  changeMarket,
+  tickersHandleSearchInput
 };
 
 export default connect(

@@ -1,59 +1,28 @@
-// import axios from "axios";
+import axios from "axios";
 
-import { TICKERS_LOAD } from "./types";
-// import config from "../config";
-import { stableSort, getSorting } from "../helpers";
+import { TICKERS_LOAD, TICKERS_FILTER, TICKERS_CLEAR_FILTER } from "./types";
+import config from "../config";
+import { stableSort, getSorting, convertKeysToCamelCase } from "../helpers";
 import { changeMarket } from ".";
 
-const tickersData = [
-  {
-    last: 0.00000385,
-    high: 0.00000409,
-    low: 0.00000381,
-    marketSymbol: "ETH_ONE",
-    lowestAsk: 0.00000386,
-    highestBid: 0.00000384,
-    percentChange: -5.4,
-    baseVolume: 17.92612768,
-    quoteVolume: "0"
-  },
-  {
-    last: 114.617,
-    high: 119.458,
-    low: 111.476,
-    marketSymbol: "ETH_TWO",
-    lowestAsk: 114.581,
-    highestBid: 114.561,
-    percentChange: 3.67,
-    baseVolume: 342361.403,
-    quoteVolume: "0"
-  },
-  {
-    last: 0.00079711,
-    high: 0.00081868,
-    low: 0.00078451,
-    marketSymbol: "ETH_THREE",
-    lowestAsk: 0.00079715,
-    highestBid: 0.00079663,
-    percentChange: 0,
-    baseVolume: 6.38719962,
-    quoteVolume: "0"
-  }
-];
-
 export const tickersLoadAsync = () => {
-  return async dispatch => {
-    // const { API_HTTP_ROOT } = config;
+  return async (dispatch, getState) => {
+    const { tokens } = getState();
 
-    // const tickersResponse = await axios.get(`${API_HTTP_ROOT}/tickers`);
-    // tickers = tickersResponse.data.records.map(t =>
-    //     convertKeysToCamelCase(t)
-    // );
+    const { API_HTTP_ROOT } = config;
 
+    const tickersResponse = await axios.get(`${API_HTTP_ROOT}/tickers`);
+    const tickersData = tickersResponse.data.records.map(t =>
+      convertKeysToCamelCase(t)
+    );
     const tickers = stableSort(
       tickersData.map(t => {
         const quoteTokenSymbol = t.marketSymbol.split("_")[1];
-        t.name = `${quoteTokenSymbol}`;
+        const quoteToken = tokens.all.filter(
+          t => t.symbol === quoteTokenSymbol
+        )[0];
+        t.tickerSymbol = quoteToken.symbol;
+        t.tickerName = quoteToken.name;
         return t;
       }),
       getSorting("desc", "baseVolume")
@@ -62,6 +31,42 @@ export const tickersLoadAsync = () => {
     dispatch({
       type: TICKERS_LOAD,
       payload: { data: tickers }
+    });
+  };
+};
+
+export const tickersHandleSearchInput = e => {
+  return dispatch => {
+    const searchValue = e.target.value;
+    dispatch(filterTickers(searchValue));
+  };
+};
+
+const filterTickers = searchValue => {
+  return (dispatch, getState) => {
+    const { tickers } = getState();
+
+    const regex = new RegExp(searchValue, "gmi");
+    const allTickers = tickers.all;
+
+    let filtered = [];
+    for (let t of allTickers) {
+      if (regex.test(t.tickerSymbol) || regex.test(t.tickerName)) {
+        filtered.push(t);
+      }
+    }
+
+    dispatch({
+      type: TICKERS_FILTER,
+      payload: { filtered, searchValue }
+    });
+  };
+};
+
+export const tickersClearSearch = () => {
+  return dispatch => {
+    dispatch({
+      type: TICKERS_CLEAR_FILTER
     });
   };
 };

@@ -36,7 +36,7 @@ Chart.propTypes = {
   currentMarket: PropTypes.string.isRequired,
   changeMarket: PropTypes.func.isRequired,
   searchValue: PropTypes.string.isRequired,
-  handleSearchInput: PropTypes.string.isRequired
+  handleSearchInput: PropTypes.func.isRequired
 };
 
 export default Chart;
