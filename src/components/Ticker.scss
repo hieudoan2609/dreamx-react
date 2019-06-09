@@ -27,6 +27,8 @@ $overlay: rgba(130,130,130,.1);
     height: 50px;
     min-width: 150px;
     width: 150px;
+    box-shadow: 0px 0px 5px rgba(1, 1, 1, 0.1);
+    z-index: 1;
     .Search {
       .input-group {
         background-color: transparent;
@@ -40,20 +42,55 @@ $overlay: rgba(130,130,130,.1);
     overflow-x: scroll;
     -webkit-overflow-scrolling: touch;
     .ticker {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
       height: 40px;
       font-size: .8rem;
-      background-color: $overlay;
-      border-radius: .25rem;
-      margin-right: 10px;
-      margin-top: 5px;
-      padding: 0px 5px;
       box-sizing: border-box;
       line-height: 1.2;
-      > div {
-        text-align: center;
+      margin-top: 5px;
+      padding: 0px 5px;
+      &:first-child {
+        padding-left: 10px;
+      }
+      &:last-child {
+        padding-right: 10px;
+      }
+      &.up {
+        .body {
+          .price {
+            color: $buy;
+          } 
+        }
+      }
+      &.down {
+        .body {
+          .price {
+            color: $sell;
+          } 
+        }
+      }
+      .body {
+        position: relative;
+        cursor: pointer;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-radius: .25rem;
+        padding: 10px;
+        box-shadow: 0px 1px 5px rgba(1, 1, 1, 0.1);
+        overflow: hidden;
+        > div {
+          text-align: center;
+        }
+        &::after {
+          content: "";
+          display: block;
+          position: absolute;
+          bottom: 0px;
+          left: 0px;
+          height: 1px;
+          width: 100%;
+        }
       }
     }
   }
@@ -71,21 +108,38 @@ $overlay: rgba(130,130,130,.1);
   }
   &.light {
     .ticker {
+      .body {
+        background-color: $light-secondary-tint;
+      }
       &.active {
-        background-color: $light-primary;
+        .body {
+          &::after {
+            background-color: $light-primary;
+          }
+        }
       }
     }
   }
   &.dark {
     .ticker {
+      .body {
+        background-color: $overlay;
+      }
       &.active {
-        background-color: $dark-primary;
+        .body {
+          &::after {
+            background-color: $dark-primary;
+          }
+        }
       }
     }
   }
 }
 
 @media (max-width: 575.98px) { 
+  .search {
+    box-shadow: none;
+  }
   .Ticker {
     display: block;
     height: 100px;
