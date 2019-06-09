@@ -87,7 +87,7 @@ export const updateNewTransfersAsync = newTransfers => {
       payload: { data: updatedTransfers }
     });
 
-    dispatch(filterTransfers(transfers.searchValue));
+    dispatch(filterTransfers());
   };
 };
 
@@ -101,6 +101,10 @@ export const transfersHandleSearchInput = e => {
 const filterTransfers = searchValue => {
   return (dispatch, getState) => {
     const { transfers, tokens } = getState();
+
+    if (!searchValue) {
+      searchValue = transfers.searchValue;
+    }
 
     const regex = new RegExp(searchValue, "gmi");
     const allTransfers = transfers.all;
