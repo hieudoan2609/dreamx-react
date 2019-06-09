@@ -6,3 +6,4 @@ export * from "./transfersActions";
 export * from "./accountOrdersActions";
 export * from "./accountTradesActions";
 export * from "./marketsActions";
+export * from "./tickersActions";

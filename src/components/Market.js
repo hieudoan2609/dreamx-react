@@ -48,8 +48,8 @@ class Market extends Component {
   }
 }
 
-const mapStateToProps = ({ app }) => {
-  return { app };
+const mapStateToProps = state => {
+  return state;
 };
 
 // const mapDispatchToProps = {

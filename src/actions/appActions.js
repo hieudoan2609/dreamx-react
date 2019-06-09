@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { APP_TOGGLE_THEME, APP_INITIALIZE } from "../actions/types";
-import { tokensLoadAsync, marketsLoadAsync } from ".";
+import { tokensLoadAsync, marketsLoadAsync, tickersLoadAsync } from ".";
 import { getNetworkNameFromId } from "../helpers";
 import config from "../config";
 import { setSingleton } from "../singletons";
@@ -38,6 +38,7 @@ export const initializeAppAsync = () => {
     );
     await dispatch(tokensLoadAsync());
     await dispatch(marketsLoadAsync());
+    await dispatch(tickersLoadAsync());
     initializeAppSingletons();
     dispatch({
       type: APP_INITIALIZE,

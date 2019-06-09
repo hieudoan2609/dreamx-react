@@ -175,7 +175,7 @@ class Table extends Component {
             </thead>
             <tbody>
               {records.map((row, i) => (
-                <tr>
+                <tr key={i}>
                   {Object.keys(row).map(key => {
                     if (
                       this.props.dateColumn &&
