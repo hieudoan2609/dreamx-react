@@ -25,6 +25,7 @@ class Market extends Component {
               tickers={this.props.tickers.filtered}
               currentMarket={this.props.market.currentMarket}
               changeMarket={this.props.changeMarket}
+              searchValue={this.props.tickers.searchValue}
             />
           </div>
           <div className="col-lg-4">

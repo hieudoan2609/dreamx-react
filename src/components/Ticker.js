@@ -33,7 +33,11 @@ class Ticker extends Component {
     return (
       <div className={`Ticker ${this.props.theme}`}>
         <div className="search">
-          <Search searchInputPlaceholder="Search..." theme={this.props.theme} />
+          <Search
+            searchInputPlaceholder="Search..."
+            theme={this.props.theme}
+            searchValue={this.props.searchValue}
+          />
         </div>
         <div className="tickers">{this.renderTickers()}</div>
       </div>
@@ -53,7 +57,9 @@ Ticker.propTypes = {
   theme: PropTypes.string.isRequired,
   tickers: PropTypes.array.isRequired,
   currentMarket: PropTypes.string.isRequired,
-  changeMarket: PropTypes.func.isRequired
+  changeMarket: PropTypes.func.isRequired,
+  searchValue: PropTypes.string.isRequired,
+  handleSearchInput: PropTypes.string.isRequired
 };
 
 export default Ticker;
