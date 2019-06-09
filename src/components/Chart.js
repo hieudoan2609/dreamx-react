@@ -9,7 +9,11 @@ class Chart extends Component {
   render() {
     return (
       <div className={`Chart card ${this.props.theme}`}>
-        <Ticker theme={this.props.theme} tickers={this.props.tickers} />
+        <Ticker
+          theme={this.props.theme}
+          tickers={this.props.tickers}
+          currentMarket={this.props.currentMarket}
+        />
       </div>
     );
   }
@@ -25,7 +29,8 @@ class Chart extends Component {
 
 Chart.propTypes = {
   theme: PropTypes.string.isRequired,
-  tickers: PropTypes.array.isRequired
+  tickers: PropTypes.array.isRequired,
+  currentMarket: PropTypes.string.isRequired
 };
 
 export default Chart;

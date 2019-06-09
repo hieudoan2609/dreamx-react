@@ -2,7 +2,8 @@
 
 import { TICKERS_LOAD } from "./types";
 // import config from "../config";
-// import { convertKeysToCamelCase } from "../helpers";
+import { stableSort, getSorting } from "../helpers";
+import { changeMarket } from ".";
 
 const tickersData = [
   {
@@ -49,12 +50,15 @@ export const tickersLoadAsync = () => {
     //     convertKeysToCamelCase(t)
     // );
 
-    const tickers = tickersData.map(t => {
-      const quoteTokenSymbol = t.marketSymbol.split("_")[1];
-      t.name = `${quoteTokenSymbol}`;
-      return t;
-    });
-
+    const tickers = stableSort(
+      tickersData.map(t => {
+        const quoteTokenSymbol = t.marketSymbol.split("_")[1];
+        t.name = `${quoteTokenSymbol}`;
+        return t;
+      }),
+      getSorting("desc", "baseVolume")
+    );
+    dispatch(changeMarket(tickers[0].marketSymbol));
     dispatch({
       type: TICKERS_LOAD,
       payload: { data: tickers }

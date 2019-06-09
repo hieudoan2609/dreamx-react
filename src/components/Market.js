@@ -22,6 +22,7 @@ class Market extends Component {
             <Chart
               theme={this.props.app.theme}
               tickers={this.props.tickers.filtered}
+              currentMarket={this.props.market.currentMarket}
             />
           </div>
           <div className="col-lg-4">

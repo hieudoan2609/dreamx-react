@@ -9,6 +9,7 @@ import accountOrdersReducer from "./accountOrdersReducer";
 import accountTradesReducer from "./accountTradesReducer";
 import marketsReducer from "./marketsReducer";
 import tickersReducer from "./tickersReducer";
+import marketReducer from "./marketReducer";
 import { RESET_INITIAL_STATE } from "../actions/types";
 
 const indexReducer = combineReducers({
@@ -20,7 +21,8 @@ const indexReducer = combineReducers({
   accountOrders: accountOrdersReducer,
   markets: marketsReducer,
   accountTrades: accountTradesReducer,
-  tickers: tickersReducer
+  tickers: tickersReducer,
+  market: marketReducer
 });
 
 const rootReducer = (state, action) => {
