@@ -1,11 +1,16 @@
 import React, { Component } from "react";
 // import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { withRouter } from "react-router";
 
 import "./Ticker.scss";
 import Search from "./Search";
 
 class Ticker extends Component {
+  changeMarket = marketSymbol => {
+    this.props.history.push(`/market/${marketSymbol}`);
+  };
+
   renderTickers = () => {
     if (this.props.tickers.length === 0) {
       return <div className="not-found">No tickers could be found.</div>;
@@ -23,7 +28,7 @@ class Ticker extends Component {
         >
           <div
             className="body"
-            onClick={() => this.props.changeMarket(t.marketSymbol)}
+            onClick={() => this.changeMarket(t.marketSymbol)}
           >
             <div className="name">{t.tickerSymbol}</div>
             <div className="price">{t.last ? t.last : "N/A"}</div>
@@ -62,9 +67,8 @@ Ticker.propTypes = {
   theme: PropTypes.string.isRequired,
   tickers: PropTypes.array.isRequired,
   currentMarket: PropTypes.string.isRequired,
-  changeMarket: PropTypes.func.isRequired,
   searchValue: PropTypes.string.isRequired,
   handleSearchInput: PropTypes.func.isRequired
 };
 
-export default Ticker;
+export default withRouter(Ticker);

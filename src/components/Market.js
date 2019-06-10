@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router";
 
 import Chart from "./Chart";
 import Trade from "./Trade";
@@ -8,11 +9,40 @@ import BuyBook from "./BuyBook";
 import SellBook from "./SellBook";
 import TradeHistory from "./TradeHistory";
 import "./Market.scss";
-import { changeMarket, tickersHandleSearchInput } from "../actions";
+import {
+  marketUpdateCurrentMarket,
+  tickersHandleSearchInput
+} from "../actions";
 
 class Market extends Component {
   componentDidMount = () => {
+    this.redirectIfNotValidMarket();
     window.scrollTo(0, 0);
+    // sync currentMarket on componentDidMount if url param is valid
+    const currentMarket = this.props.match.params.marketSymbol;
+    if (currentMarket) {
+      this.props.marketUpdateCurrentMarket(currentMarket);
+    }
+  };
+
+  componentDidUpdate = prevProps => {
+    this.redirectIfNotValidMarket();
+    // sync currentMarket on componentDidUpdate if url param is valid
+    const currentMarket = this.props.match.params.marketSymbol;
+    const previousMarket = prevProps.match.params.marketSymbol;
+    const marketChanged = currentMarket !== previousMarket;
+    if (marketChanged && currentMarket) {
+      this.props.marketUpdateCurrentMarket(currentMarket);
+    }
+  };
+
+  redirectIfNotValidMarket = () => {
+    const currentMarket = this.props.match.params.marketSymbol;
+    const defaultTicker = this.props.tickers.all[0];
+    if (!currentMarket && defaultTicker) {
+      const defaultMarket = defaultTicker.marketSymbol;
+      this.props.history.push(`/market/${defaultMarket}`);
+    }
   };
 
   render() {
@@ -24,7 +54,6 @@ class Market extends Component {
               theme={this.props.app.theme}
               tickers={this.props.tickers.filtered}
               currentMarket={this.props.market.currentMarket}
-              changeMarket={this.props.changeMarket}
               searchValue={this.props.tickers.searchValue}
               handleSearchInput={this.props.tickersHandleSearchInput}
             />
@@ -61,11 +90,13 @@ const mapStateToProps = state => {
 };
 
 const mapActionsToProps = {
-  changeMarket,
+  marketUpdateCurrentMarket,
   tickersHandleSearchInput
 };
 
-export default connect(
-  mapStateToProps,
-  mapActionsToProps
-)(Market);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapActionsToProps
+  )(Market)
+);

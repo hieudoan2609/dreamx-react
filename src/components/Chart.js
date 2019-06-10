@@ -13,7 +13,6 @@ class Chart extends Component {
           theme={this.props.theme}
           tickers={this.props.tickers}
           currentMarket={this.props.currentMarket}
-          changeMarket={this.props.changeMarket}
           searchValue={this.props.searchValue}
           handleSearchInput={this.props.handleSearchInput}
         />
@@ -34,7 +33,6 @@ Chart.propTypes = {
   theme: PropTypes.string.isRequired,
   tickers: PropTypes.array.isRequired,
   currentMarket: PropTypes.string.isRequired,
-  changeMarket: PropTypes.func.isRequired,
   searchValue: PropTypes.string.isRequired,
   handleSearchInput: PropTypes.func.isRequired
 };

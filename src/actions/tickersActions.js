@@ -3,7 +3,7 @@ import axios from "axios";
 import { TICKERS_LOAD, TICKERS_FILTER, TICKERS_CLEAR_FILTER } from "./types";
 import config from "../config";
 import { stableSort, getSorting, convertKeysToCamelCase } from "../helpers";
-import { changeMarket } from ".";
+// import { marketUpdateCurrentMarket } from ".";
 
 export const tickersLoadAsync = () => {
   return async (dispatch, getState) => {
@@ -27,7 +27,9 @@ export const tickersLoadAsync = () => {
       }),
       getSorting("desc", "baseVolume")
     );
-    dispatch(changeMarket(tickers[0].marketSymbol));
+    // if (!market.currentMarket) {
+    //   dispatch(marketUpdateCurrentMarket(tickers[0].marketSymbol));
+    // }
     dispatch({
       type: TICKERS_LOAD,
       payload: { data: tickers }

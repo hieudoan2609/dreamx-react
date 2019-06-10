@@ -59,7 +59,7 @@ class App extends Component {
 
                 <Switch>
                   <Route exact path="/" component={Market} />
-                  <Route path="/market/:symbol?" component={Market} />
+                  <Route path="/market/:marketSymbol?" component={Market} />
                   <Route path="/account" component={Account} />
                   <Route component={NotFound} />
                 </Switch>
