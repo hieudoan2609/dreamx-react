@@ -16,9 +16,16 @@ class Trade extends Component {
     this.setState({ currentTab: tab });
   };
 
+  renderNotLoggedInOverlay = () => {
+    if (!this.props.account.address) {
+      return <div className="not-logged-in">Please log in to trade.</div>;
+    }
+  };
+
   render() {
     return (
       <div className={`Trade card ${this.props.app.theme}`}>
+        {this.renderNotLoggedInOverlay()}
         <TabMenu
           items={this.state.tabs}
           currentItem={this.state.currentTab}

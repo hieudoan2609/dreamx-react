@@ -7,7 +7,8 @@ import {
   ACCOUNT_METAMASK_WRONGNETWORK,
   ACCOUNT_LOADING,
   ACCOUNT_LOADED,
-  ACCOUNT_METAMASK_NOTREADY
+  ACCOUNT_METAMASK_NOTREADY,
+  APP_LOADED
 } from "../actions/types";
 import {
   tokensLoadAccountAsync,
@@ -32,6 +33,7 @@ export const accountLoginAsync = () => {
       dispatch({
         type: ACCOUNT_METAMASK_UNAVAILABLE
       });
+      dispatch(finalizeInitialization());
       return;
     }
 
@@ -39,6 +41,7 @@ export const accountLoginAsync = () => {
       dispatch({
         type: ACCOUNT_METAMASK_NOTREADY
       });
+      dispatch(finalizeInitialization());
       return;
     }
 
@@ -46,6 +49,7 @@ export const accountLoginAsync = () => {
       dispatch({
         type: ACCOUNT_METAMASK_WRONGNETWORK
       });
+      dispatch(finalizeInitialization());
       return;
     }
 
@@ -62,13 +66,23 @@ export const accountLoginAsync = () => {
         type: ACCOUNT_LOGIN,
         payload: { address }
       });
+      dispatch(finalizeInitialization());
     } catch (err) {
       console.log(err);
       dispatch({
         type: ACCOUNT_LOADED
       });
+      dispatch(finalizeInitialization());
       return;
     }
+  };
+};
+
+const finalizeInitialization = () => {
+  return dispatch => {
+    dispatch({
+      type: APP_LOADED
+    });
   };
 };
 

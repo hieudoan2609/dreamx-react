@@ -24,8 +24,7 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         contractAddress: action.payload.contractAddress,
         networkId: action.payload.networkId,
-        networkName: action.payload.networkName,
-        loading: false
+        networkName: action.payload.networkName
       };
     case APP_TOGGLE_THEME:
       return { ...state, theme: action.payload.theme };
