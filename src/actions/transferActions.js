@@ -13,7 +13,7 @@ import {
 import { getOnchainBalanceAsync, truncateNumberInput } from "../helpers";
 import singletons from "../singletons";
 import config from "../config";
-import { updateNewTransfersAsync } from ".";
+import { updateTransfersAsync } from ".";
 
 export const transferShow = payload => {
   return {
@@ -285,7 +285,7 @@ const withdrawAsync = async (dispatch, getState) => {
       payload
     )).data;
 
-    await dispatch(updateNewTransfersAsync(newWithdraw));
+    await dispatch(updateTransfersAsync(newWithdraw));
 
     dispatch({
       type: TRANSFER_COMPLETE

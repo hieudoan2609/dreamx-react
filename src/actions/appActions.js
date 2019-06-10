@@ -33,13 +33,13 @@ export const loadTheme = () => {
 
 export const initializeAppAsync = () => {
   return async dispatch => {
+    initializeAppSingletons();
     const contract = await axios.get(
       `${config.API_HTTP_ROOT}/return_contract_address`
     );
     await dispatch(tokensLoadAsync());
     await dispatch(marketsLoadAsync());
     await dispatch(tickersLoadAsync());
-    initializeAppSingletons();
     dispatch({
       type: APP_INITIALIZE,
       payload: {
