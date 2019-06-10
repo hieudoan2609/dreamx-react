@@ -73,7 +73,7 @@ class Market extends Component {
             />
           </div>
           <div className="col-lg-4">
-            <Trade theme={this.props.app.theme} />
+            <Trade />
           </div>
         </div>
 

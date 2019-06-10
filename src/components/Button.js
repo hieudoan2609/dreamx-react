@@ -11,7 +11,7 @@ class Button extends Component {
       <div
         className={`Button ${this.props.theme} ${
           this.props.pending ? "pending" : ""
-        }`}
+        } ${this.props.fullWidth ? "fullWidth" : ""}`}
       >
         <Loading
           type="button"
@@ -37,7 +37,8 @@ class Button extends Component {
 Button.propTypes = {
   theme: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
-  pending: PropTypes.bool
+  pending: PropTypes.bool,
+  fullWidth: PropTypes.bool
 };
 
 export default Button;

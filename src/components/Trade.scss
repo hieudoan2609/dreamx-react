@@ -9,7 +9,7 @@ $light-secondary-tint: white;
 $light-secondary-shade: #dcdcdc;
 $dark-text: hsla(0,0%,100%,.7);
 $dark-primary: #EA6C2C;
-$dark-primary-gradient: linear-gradient(90deg,#ed8a45,#f6de6c);
+$dark-primary-gradient: linear-gradient(90deg,#EA6C2C,#f6de6c);
 $dark-primary-tint: #ec7a41;
 $dark-primary-shade: #d26127;
 $dark-secondary: #232d44;
@@ -20,10 +20,12 @@ $sell: #f36972;
 $darken: rgba(1, 1, 1, 0.5);
 $overlay: rgba(130,130,130,.1);
 $padding: 20px;
+$light-placeholder-color: #bbbbbb;
 
 .Trade {
   height: 450px;
   .body {
+    position: relative;
     padding: $padding;
     .balance {
       padding: $padding;
@@ -38,11 +40,35 @@ $padding: 20px;
         white-space: nowrap;
       }
     }
+    .amount-and-price {
+      input {
+        margin-top: 20px;
+        border: 0px;
+        background-color: $overlay;
+      }
+    }
+    .fee-and-total {
+      margin-top: 20px;
+      small {
+        margin-top: 10px;
+        display: block;
+      }
+    }
+    .submit {
+      margin-top: 20px;
+      text-transform: uppercase;
+    }
   }
   &.light {
     .body {
       .balance {
         background: $light-primary-gradient;
+      }
+      input {
+        color: $light-text;
+        &::placeholder {
+          color: $light-placeholder-color;
+        }
       }
     }
   }
@@ -50,6 +76,9 @@ $padding: 20px;
     .body {
       .balance {
         background: $dark-primary-gradient;
+      }
+      input {
+        color: $dark-text;
       }
     }
   }

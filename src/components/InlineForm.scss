@@ -20,6 +20,7 @@ $darken: rgba(1, 1, 1, 0.5);
 $shadow: 0px 5px 15px rgba(1, 1, 1, 0.1);
 $overlay: rgba(130,130,130,.1);
 $danger: rgba(220, 53, 69, 0.7);
+$light-placeholder-color: #bbbbbb;
 
 .InlineForm {
   input.form-control {
@@ -56,6 +57,9 @@ $danger: rgba(220, 53, 69, 0.7);
   &.light {
     input {
       color: $light-text;
+      &::placeholder {
+        color: $light-placeholder-color;
+      }
     }
     .input-group-append span {
       background-color: $light-primary;
