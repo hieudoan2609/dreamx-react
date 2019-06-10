@@ -10,18 +10,14 @@ class Boilerplate extends Component {
   }
 }
 
-// const mapStateToProps = ({ chart }) => {
-//  return { chart };
+// const mapStateToProps = (state) => {
+//  return state;
 // };
 
-// const mapActionsToProps = {
-//  getChartData
-// };
+// const mapActionsToProps = {};
 
 // Boilerplate.propTypes = {
-//   logo: PropTypes.string.isRequired,
-//   navItems: PropTypes.array.isRequired, // [ { label, pathname }, ... ]
-//   toggleTheme: PropTypes.func.isRequired
+//   theme: PropTypes.string.isRequired,
 // };
 
 export default Boilerplate;
