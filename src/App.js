@@ -17,19 +17,21 @@ import {
 
 const logo = require("./images/logo.svg");
 
-const navItems = [
-  {
-    label: "market",
-    pathname: "/market",
-    root: true
-  },
-  {
-    label: "account",
-    pathname: "/account"
-  }
-];
-
 class App extends Component {
+  state = {
+    navItems: [
+      {
+        label: "market",
+        pathname: "/market",
+        root: true
+      },
+      {
+        label: "account",
+        pathname: "/account"
+      }
+    ]
+  };
+
   componentWillMount = async () => {
     this.props.loadTheme();
     await this.props.initializeAppAsync();
@@ -43,9 +45,10 @@ class App extends Component {
           <Menu
             brandName="Odin Trade"
             logo={logo}
-            navItems={navItems}
+            navItems={this.state.navItems}
             toggleTheme={this.props.toggleTheme}
             theme={this.props.app.theme}
+            rootPath={`/market/${this.props.market.currentMarket}`}
           />
 
           <div className="container">
@@ -72,8 +75,8 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ app }) => {
-  return { app };
+const mapStateToProps = state => {
+  return state;
 };
 
 const mapActionsToProps = {

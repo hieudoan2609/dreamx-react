@@ -73,9 +73,9 @@ class Menu extends Component {
         this.props.navItems.filter(item => item.pathname === "/")[0] ||
         this.props.navItems.filter(item => item.root === true)[0];
     } else {
-      activeItem = this.props.navItems.filter(
-        item => item.pathname.split("/")[1] === currentTopLevelPath
-      )[0];
+      activeItem = this.props.navItems.filter(item => {
+        return item.pathname.split("/")[1] === currentTopLevelPath;
+      })[0];
     }
 
     const activeItemLabel = activeItem ? activeItem.label : undefined;
@@ -92,7 +92,7 @@ class Menu extends Component {
             <div className="col-12">
               <div className="wrapper">
                 <div className="pull-left">
-                  <Link to="/" className="brand">
+                  <Link to={this.props.rootPath} className="brand">
                     <img width={20} src={this.props.logo} alt="" />
                     <span>{this.props.brandName}</span>
                   </Link>
@@ -174,7 +174,8 @@ Menu.propTypes = {
   toggleTheme: PropTypes.func.isRequired,
   // logo: PropTypes.string.isRequired, // a logo is required but its proptype is disabled because it can be an object when testing with jest
   theme: PropTypes.string.isRequired,
-  brandName: PropTypes.string.isRequired
+  brandName: PropTypes.string.isRequired,
+  rootPath: PropTypes.string.isRequired
 };
 
 export default withRouter(Menu);
