@@ -22,7 +22,6 @@ class App extends Component {
     navItems: [
       {
         label: "market",
-        pathname: "/market",
         root: true
       },
       {

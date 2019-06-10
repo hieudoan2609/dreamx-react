@@ -74,12 +74,50 @@ class Menu extends Component {
         this.props.navItems.filter(item => item.root === true)[0];
     } else {
       activeItem = this.props.navItems.filter(item => {
+        if (item.root) {
+          return this.props.rootPath.split("/")[1] === currentTopLevelPath;
+        }
+
         return item.pathname.split("/")[1] === currentTopLevelPath;
       })[0];
     }
 
     const activeItemLabel = activeItem ? activeItem.label : undefined;
     return activeItemLabel;
+  };
+
+  renderNavItems = () => {
+    return this.props.navItems.map((item, index) => {
+      return (
+        <Link
+          className={`item ${
+            this.getActiveNavItemLabel() === item.label ? "active" : ""
+          }`}
+          key={index}
+          id={item.label}
+          to={item.root ? this.props.rootPath : item.pathname}
+        >
+          {item.label}
+        </Link>
+      );
+    });
+  };
+
+  renderMobileNavItems = () => {
+    this.props.navItems.map((item, index) => {
+      return (
+        <Link
+          className={`item ${
+            this.getActiveNavItemLabel() === item.label ? "active" : ""
+          }`}
+          key={index}
+          id={item.label}
+          to={item.root ? this.props.rootPath : item.pathname}
+        >
+          {item.label}
+        </Link>
+      );
+    });
   };
 
   render() {
@@ -98,20 +136,7 @@ class Menu extends Component {
                   </Link>
 
                   <div className="items d-none d-md-flex">
-                    {this.props.navItems.map((item, index) => (
-                      <Link
-                        className={`item ${
-                          this.getActiveNavItemLabel() === item.label
-                            ? "active"
-                            : ""
-                        }`}
-                        key={index}
-                        id={item.label}
-                        to={item.pathname}
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
+                    {this.renderNavItems()}
 
                     <div
                       className="highlighter"
@@ -137,18 +162,7 @@ class Menu extends Component {
 
         <div className={`mobile ${mobileMenuHiddenClass}`}>
           <div className="items">
-            {this.props.navItems.map((item, index) => (
-              <Link
-                className={`item ${
-                  this.getActiveNavItemLabel() === item.label ? "active" : ""
-                }`}
-                key={index}
-                id={item.label}
-                to={item.pathname}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {this.renderMobileNavItems()}
             <ion-icon
               className="item"
               name="bulb"
@@ -175,7 +189,7 @@ Menu.propTypes = {
   // logo: PropTypes.string.isRequired, // a logo is required but its proptype is disabled because it can be an object when testing with jest
   theme: PropTypes.string.isRequired,
   brandName: PropTypes.string.isRequired,
-  rootPath: PropTypes.string.isRequired
+  rootPath: PropTypes.string.isRequired // will be used for both nav brand and root item
 };
 
 export default withRouter(Menu);
