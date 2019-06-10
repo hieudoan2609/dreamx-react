@@ -157,6 +157,14 @@ class Table extends Component {
   };
 
   renderTable = () => {
+    if (this.props.loginRequired && !this.props.loggedIn) {
+      return this.renderNonLoggedInTable();
+    }
+
+    if (this.props.data.length === 0) {
+      return this.renderEmptyTable();
+    }
+
     const totalPages = this.props.paginated
       ? Math.ceil(this.props.data.length / this.props.perPage)
       : undefined;
@@ -223,12 +231,17 @@ class Table extends Component {
     );
   };
 
+  renderNonLoggedInTable = () => {
+    return (
+      <div className="not-available" style={{ height: this.props.height }}>
+        <div>Please log in to see {this.props.dataName}.</div>
+      </div>
+    );
+  };
+
   render() {
     return (
-      <div className={`Table ${this.props.theme}`}>
-        {this.props.data.length === 0 && this.renderEmptyTable()}
-        {this.props.data.length > 0 && this.renderTable()}
-      </div>
+      <div className={`Table ${this.props.theme}`}>{this.renderTable()}</div>
     );
   }
 }
@@ -256,7 +269,9 @@ Table.propTypes = {
   searchable: PropTypes.bool,
   searchValue: PropTypes.string, // required if table is searchable
   clearSearch: PropTypes.func, // required if table is searchable,
-  clickableHeaders: PropTypes.array // [ { name: string, onClick: func } ], clickable headers are unsortable
+  clickableHeaders: PropTypes.array, // [ { name: string, onClick: func } ], clickable headers are unsortable
+  loginRequired: PropTypes.bool,
+  loggedIn: PropTypes.bool
 };
 
 export default Table;

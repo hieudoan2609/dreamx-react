@@ -144,6 +144,8 @@ class Account extends Component {
   renderTransfersTable = () => {
     return (
       <FixedHeightTable
+        loginRequired={true}
+        loggedIn={this.props.account.address ? true : false}
         theme={this.props.app.theme}
         data={this.extractTransfersData()}
         defaultOrderBy="date"
@@ -162,6 +164,8 @@ class Account extends Component {
   renderAssetsTable = () => {
     return (
       <FixedHeightTable
+        loginRequired={true}
+        loggedIn={this.props.account.address ? true : false}
         theme={this.props.app.theme}
         data={this.extractAssetsData()}
         defaultOrderBy="totalBalance"
@@ -224,6 +228,8 @@ class Account extends Component {
   renderOrdersTable = () => {
     return (
       <FixedHeightTable
+        loginRequired={true}
+        loggedIn={this.props.account.address ? true : false}
         theme={this.props.app.theme}
         data={this.extractAccountOrdersData()}
         defaultOrderBy="date"
@@ -275,6 +281,8 @@ class Account extends Component {
   renderAccountTradesTable = () => {
     return (
       <FixedHeightTable
+        loginRequired={true}
+        loggedIn={this.props.account.address ? true : false}
         theme={this.props.app.theme}
         data={this.extractAccountTradesData()}
         defaultOrderBy="date"
