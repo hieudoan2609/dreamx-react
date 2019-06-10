@@ -16,7 +16,7 @@ import {
 
 class Market extends Component {
   componentDidMount = () => {
-    this.redirectIfNotValidMarket();
+    this.redirectToDefaultMarketIfMarketSymbolInvalid();
     window.scrollTo(0, 0);
     // sync currentMarket on componentDidMount if url param is valid
     const currentMarket = this.props.match.params.marketSymbol;
@@ -26,7 +26,7 @@ class Market extends Component {
   };
 
   componentDidUpdate = prevProps => {
-    this.redirectIfNotValidMarket();
+    this.redirectToDefaultMarketIfMarketSymbolInvalid();
     // sync currentMarket on componentDidUpdate if url param is valid
     const currentMarket = this.props.match.params.marketSymbol;
     const previousMarket = prevProps.match.params.marketSymbol;
@@ -36,12 +36,26 @@ class Market extends Component {
     }
   };
 
-  redirectIfNotValidMarket = () => {
-    const currentMarket = this.props.match.params.marketSymbol;
+  redirectToDefaultMarketIfMarketSymbolInvalid = () => {
     const defaultTicker = this.props.tickers.all[0];
-    if (!currentMarket && defaultTicker) {
-      const defaultMarket = defaultTicker.marketSymbol;
+    const allMarkets = this.props.markets.all;
+
+    if (!defaultTicker || allMarkets.length < 1) {
+      return;
+    }
+
+    const currentMarket = this.props.match.params.marketSymbol;
+    const defaultMarket = defaultTicker.marketSymbol;
+
+    const currentMarketExists = allMarkets.filter(
+      m => m.symbol === currentMarket
+    )[0]
+      ? true
+      : false;
+
+    if (!currentMarket || !currentMarketExists) {
       this.props.history.push(`/market/${defaultMarket}`);
+      return;
     }
   };
 
