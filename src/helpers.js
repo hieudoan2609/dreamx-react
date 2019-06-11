@@ -69,11 +69,12 @@ export const truncateNumberInput = (
   if (!num) {
     return ""
   }
+  const nonNumeric =/\D/g
   const leadingZeroes = /^0*/;
   let [whole, fraction] = num.toString().split(".");
-  whole = whole.replace(leadingZeroes, "");
+  whole = whole.replace(leadingZeroes, '').replace(nonNumeric, '');
   whole = whole ? whole.substring(0, significantFigures) : "0";
-  fraction = fraction !== undefined ? fraction.substring(0, decimalPoints) : undefined;
+  fraction = fraction !== undefined ? fraction.substring(0, decimalPoints).replace(nonNumeric, '') : undefined;
   const result = fraction !== undefined ? `${whole}.${fraction}` : whole;
   if (isNaN(result)) {
     return ""
