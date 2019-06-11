@@ -23,6 +23,13 @@ $padding: 20px;
 $light-placeholder-color: #bbbbbb;
 
 .Trade {
+  .invalid-feedback {
+    display: block;
+    opacity: 0;
+    .visible {
+      opacity: 1;
+    }
+  }
   height: 450px;
   position: relative;
   .not-logged-in {
@@ -63,7 +70,6 @@ $light-placeholder-color: #bbbbbb;
       }
     }
     .fee-and-total {
-      margin-top: 20px;
       small {
         margin-top: 10px;
         display: block;

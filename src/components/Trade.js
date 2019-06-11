@@ -100,6 +100,7 @@ class Trade extends Component {
               value={this.state.price}
               onChange={this.onPriceChange}
             />
+            <div className="invalid-feedback">This is an error.</div>
           </div>
 
           <div className="fee-and-total">
