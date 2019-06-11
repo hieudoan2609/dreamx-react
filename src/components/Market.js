@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
+import Web3 from "web3";
 
 import Chart from "./Chart";
 import Trade from "./Trade";
@@ -13,6 +14,7 @@ import {
   marketUpdateCurrentMarket,
   tickersHandleSearchInput
 } from "../actions";
+import { truncateNumberOutput } from "../helpers";
 
 class Market extends Component {
   componentDidMount = () => {
@@ -59,6 +61,37 @@ class Market extends Component {
     }
   };
 
+  // returns { base: { symbol, balance }, quote: { symbol, balance } }
+  getBaseAndQuoteBalances = () => {
+    const [
+      baseTokenSymbol,
+      quoteTokenSymbol
+    ] = this.props.market.currentMarket.split("_");
+    const allTokens = this.props.tokens.all;
+
+    if (!baseTokenSymbol || !quoteTokenSymbol || allTokens.length < 1) {
+      return { base: undefined, quote: undefined };
+    }
+
+    const baseToken = this.props.tokens.all.filter(
+      t => t.symbol === baseTokenSymbol
+    )[0];
+    const quoteToken = this.props.tokens.all.filter(
+      t => t.symbol === quoteTokenSymbol
+    )[0];
+    const baseSymbol = baseToken.symbol;
+    const quoteSymbol = quoteToken.symbol;
+    const baseBalance = truncateNumberOutput(
+      Web3.utils.fromWei(baseToken.availableBalance)
+    );
+    const quoteBalance = truncateNumberOutput(
+      Web3.utils.fromWei(quoteToken.availableBalance)
+    );
+    const base = { symbol: baseSymbol, balance: baseBalance };
+    const quote = { symbol: quoteSymbol, balance: quoteBalance };
+    return { base, quote };
+  };
+
   render() {
     return (
       <div className="Market">
@@ -73,7 +106,12 @@ class Market extends Component {
             />
           </div>
           <div className="col-lg-4">
-            <Trade />
+            <Trade
+              theme={this.props.app.theme}
+              loggedIn={this.props.account.address ? true : false}
+              base={this.getBaseAndQuoteBalances().base}
+              quote={this.getBaseAndQuoteBalances().quote}
+            />
           </div>
         </div>
 

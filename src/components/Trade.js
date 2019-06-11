@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-// import PropTypes from "prop-types";
+// import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 import "./Trade.scss";
 import TabMenu from "./TabMenu";
@@ -9,7 +9,15 @@ import Button from "./Button";
 class Trade extends Component {
   state = {
     tabs: ["buy", "sell"],
-    currentTab: "buy"
+    currentTab: "buy",
+    price: "",
+    amount: "",
+    fee: 0,
+    total: 0,
+    pending: false,
+    error: "",
+    totalMinusFee: 0,
+    amountMinusFee: 0
   };
 
   handleTabChange = tab => {
@@ -17,26 +25,49 @@ class Trade extends Component {
   };
 
   renderNotLoggedInOverlay = () => {
-    if (!this.props.account.address) {
+    if (!this.props.loggedIn) {
       return <div className="not-logged-in">Please log in to trade.</div>;
     }
   };
 
+  renderBalance = () => {
+    if (!this.props.base || !this.props.quote) {
+      return (
+        <div className="balance">
+          <div className="header">BALANCE</div>
+          <div className="value">Not available.</div>
+        </div>
+      );
+    }
+
+    let balance, symbol;
+    if (this.state.currentTab === "buy") {
+      [balance, symbol] = [this.props.base.balance, this.props.base.symbol];
+    } else {
+      [balance, symbol] = [this.props.quote.balance, this.props.quote.symbol];
+    }
+    return (
+      <div className="balance">
+        <div className="header">BALANCE</div>
+        <div className="value">
+          {balance} {symbol}
+        </div>
+      </div>
+    );
+  };
+
   render() {
     return (
-      <div className={`Trade card ${this.props.app.theme}`}>
+      <div className={`Trade card ${this.props.theme}`}>
         {this.renderNotLoggedInOverlay()}
         <TabMenu
           items={this.state.tabs}
           currentItem={this.state.currentTab}
-          theme={this.props.app.theme}
+          theme={this.props.theme}
           onChange={this.handleTabChange}
         />
         <div className="body">
-          <div className="balance">
-            <div className="header">BALANCE</div>
-            <div className="value">0.12345678 ETH</div>
-          </div>
+          {this.renderBalance()}
 
           <div className="amount-and-price">
             <input
@@ -63,7 +94,7 @@ class Trade extends Component {
           </div>
 
           <div className="submit">
-            <Button theme={this.props.app.theme} fullWidth={true}>
+            <Button theme={this.props.theme} fullWidth={true}>
               {this.state.currentTab}
             </Button>
           </div>
@@ -73,16 +104,19 @@ class Trade extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return state;
-};
+// const mapStateToProps = state => {
+//   return state;
+// };
 
 // const mapActionsToProps = {
 //  getTradeData
 // };
 
-// Trade.propTypes = {
-//   theme: PropTypes.string.isRequired
-// };
+Trade.propTypes = {
+  theme: PropTypes.string.isRequired,
+  loggedIn: PropTypes.bool.isRequired,
+  base: PropTypes.object, // { symbol, balance }
+  quote: PropTypes.object // { symbol, balance }
+};
 
-export default connect(mapStateToProps)(Trade);
+export default Trade;
