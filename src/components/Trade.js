@@ -6,25 +6,29 @@ import PropTypes from "prop-types";
 import "./Trade.scss";
 import TabMenu from "./TabMenu";
 import Button from "./Button";
-import { truncateNumberInput } from "../helpers";
+import { truncateNumberInput, truncateNumberOutput } from "../helpers";
+
+const INITIAL_STATE = {
+  tabs: ["buy", "sell"],
+  currentTab: "buy",
+  price: "",
+  priceWei: "",
+  amount: "",
+  amountWei: "",
+  fee: "0",
+  total: "0",
+  pending: false,
+  error: "",
+  totalMinusFee: "0",
+  amountMinusFee: "0"
+};
 
 class Trade extends Component {
-  state = {
-    tabs: ["buy", "sell"],
-    currentTab: "buy",
-    price: "",
-    amount: "",
-    amountWei: "",
-    fee: 0,
-    total: 0,
-    pending: false,
-    error: "",
-    totalMinusFee: 0,
-    amountMinusFee: 0
-  };
+  state = INITIAL_STATE;
 
   handleTabChange = tab => {
-    this.setState({ currentTab: tab });
+    const { price, priceWei, amount, amountWei, fee, total, error, totalMinusFee, amountMinusFee } = INITIAL_STATE
+    this.setState({ currentTab: tab, price, priceWei, amount, amountWei, fee, total, error, totalMinusFee, amountMinusFee });
   };
 
   renderNotLoggedInOverlay = () => {
@@ -59,15 +63,43 @@ class Trade extends Component {
     );
   };
 
+  calculateFeeAndTotal = (amountWei, priceWei) => {
+    const { currentTab } = this.state;
+    let { makerFee, takerFee } = this.props;
+    const oneEther = Web3.utils.toBN(1000000000000000000);
+
+    let total, fee, totalMinusFee, amountMinusFee;
+    if (amountWei && priceWei) {
+      [ amountWei, priceWei, makerFee, takerFee ] = [ Web3.utils.toBN(amountWei), Web3.utils.toBN(priceWei), Web3.utils.toBN(makerFee), Web3.utils.toBN(takerFee) ];
+      total = priceWei.mul(amountWei).div(oneEther);
+      fee = currentTab === "buy" ? amountWei.mul(makerFee).div(oneEther) : total.mul(takerFee).div(oneEther);
+      totalMinusFee = total.sub(fee);
+      amountMinusFee = amountWei.sub(fee);
+    } else {
+      total = 0;
+      fee = 0;
+      totalMinusFee = 0;
+      amountMinusFee = 0;
+    }
+
+    [ total, fee, totalMinusFee, amountMinusFee ] = [ total.toString(), fee.toString(), totalMinusFee.toString(), amountMinusFee.toString() ]
+    return { total, fee, totalMinusFee, amountMinusFee };
+  };
+
   onAmountChange = e => {
+    const { priceWei } = this.state;
     const amount = e.target.value ? truncateNumberInput(e.target.value) : "";
     const amountWei = amount ? Web3.utils.toWei(amount) : "0";
-    this.setState({ amount, amountWei });
+    const { total, fee, totalMinusFee, amountMinusFee } = this.calculateFeeAndTotal( amountWei, priceWei );
+    this.setState({ amount, amountWei, total, fee, totalMinusFee, amountMinusFee });
   };
 
   onPriceChange = e => {
+    const { amountWei } = this.state;
     const price = e.target.value ? truncateNumberInput(e.target.value) : "";
-    this.setState({ price });
+    const priceWei = price ? Web3.utils.toWei(price) : "0";
+    const { total, fee, totalMinusFee, amountMinusFee } = this.calculateFeeAndTotal( amountWei, priceWei );
+    this.setState({ price, priceWei, total, fee, totalMinusFee, amountMinusFee });
   };
 
   calculateFeePercent = () => {
@@ -79,6 +111,66 @@ class Trade extends Component {
     }
     const feePercent = (parseFloat(Web3.utils.fromWei(feePerToken)) * 100) / 1;
     return feePercent;
+  };
+
+  renderFeeAndTotal = () => {
+    if (!this.props.base || !this.props.quote) {
+      return;
+    }
+
+    if (this.state.currentTab === "buy") {
+      return (
+        <div className="fee-and-total">
+          <small className="fee">
+            Fee ({this.calculateFeePercent()}%):{" "}
+            <b>{truncateNumberOutput(Web3.utils.fromWei(this.state.fee))} {this.props.base.symbol}</b>
+          </small>
+          <small className="total">
+            Total: <b>{truncateNumberOutput(Web3.utils.fromWei(this.state.totalMinusFee))} {this.props.base.symbol}</b>
+          </small>
+        </div>
+      )
+    } else {
+      return (
+        <div className="fee-and-total">
+          <small className="fee">
+            Fee ({this.calculateFeePercent()}%):{" "}
+            <b>{truncateNumberOutput(Web3.utils.fromWei(this.state.fee))} {this.props.quote.symbol}</b>
+          </small>
+          <small className="total">
+            Total: <b>{truncateNumberOutput(Web3.utils.fromWei(this.state.amountMinusFee))} {this.props.quote.symbol}</b>
+          </small>
+        </div>
+      )
+    }
+  }
+
+  renderAmountAndPrice = () => {
+    if (!this.props.base || !this.props.quote) {
+      return;
+    }
+
+    return (
+      <div className="amount-and-price">
+        <input
+          type="number"
+          className={`form-control`}
+          placeholder={`Amount (${this.state.currentTab === 'buy' ? this.props.quote.symbol : this.props.quote.symbol})`}
+          spellCheck="false"
+          value={this.state.amount}
+          onChange={this.onAmountChange}
+        />
+        <input
+          type="number"
+          className={`form-control`}
+          placeholder="Price"
+          spellCheck="false"
+          value={this.state.price}
+          onChange={this.onPriceChange}
+        />
+        <div className="invalid-feedback">This is an error.</div>
+      </div>
+    );
   };
 
   render() {
@@ -94,34 +186,9 @@ class Trade extends Component {
         <div className="body">
           {this.renderBalance()}
 
-          <div className="amount-and-price">
-            <input
-              type="number"
-              className={`form-control`}
-              placeholder="Amount"
-              spellCheck="false"
-              value={this.state.amount}
-              onChange={this.onAmountChange}
-            />
-            <input
-              type="number"
-              className={`form-control`}
-              placeholder="Price"
-              spellCheck="false"
-              value={this.state.price}
-              onChange={this.onPriceChange}
-            />
-            <div className="invalid-feedback">This is an error.</div>
-          </div>
+          {this.renderAmountAndPrice()}
 
-          <div className="fee-and-total">
-            <small className="fee">
-              Fee ({this.calculateFeePercent()}%): <b>0.12345678 ETH</b>
-            </small>
-            <small className="total">
-              Total: <b>0.12345678 ETH</b>
-            </small>
-          </div>
+          {this.renderFeeAndTotal()}
 
           <div className="submit">
             <Button theme={this.props.theme} fullWidth={true}>
