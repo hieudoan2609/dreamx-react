@@ -57,7 +57,7 @@ class Trade extends Component {
       <div className="balance">
         <div className="header">BALANCE</div>
         <div className="value">
-          {balance} {symbol}
+          {truncateNumberOutput(Web3.utils.fromWei(balance))} {symbol}
         </div>
       </div>
     );
@@ -178,20 +178,26 @@ class Trade extends Component {
       this.setState({ error: "Amount cannot be empty." });
       return;
     };
-
     if (!this.state.priceWei) {
       this.setState({ error: "Price cannot be empty." });
       return;
     };
-
     if (this.state.currentTab === 'buy') {
       if (Web3.utils.toBN(this.state.total).lt(Web3.utils.toBN(this.props.makerMinimum))) {
-        this.setState({ error: `Minimum order is ${Web3.utils.fromWei(this.props.makerMinimum)} ${this.props.base.symbol}` });
+        this.setState({ error: `Minimum order is ${Web3.utils.fromWei(this.props.makerMinimum)} ${this.props.base.symbol}.` });
+        return;
+      }
+      if (Web3.utils.toBN(this.state.total).gt(Web3.utils.toBN(this.props.base.balance))) {
+        this.setState({ error: 'Not enough balance.' });
         return;
       }
     } else {
       if (Web3.utils.toBN(this.state.total).lt(Web3.utils.toBN(this.props.takerMinimum))) {
-        this.setState({ error: `Minimum order is ${Web3.utils.fromWei(this.props.takerMinimum)} ${this.props.base.symbol}` });
+        this.setState({ error: `Minimum order is ${Web3.utils.fromWei(this.props.takerMinimum)} ${this.props.base.symbol}.` });
+        return;
+      }
+      if (Web3.utils.toBN(this.state.amountWei).gt(Web3.utils.toBN(this.props.quote.balance))) {
+        this.setState({ error: 'Not enough balance.' });
         return;
       }
     }

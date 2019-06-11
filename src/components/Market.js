@@ -81,12 +81,8 @@ class Market extends Component {
     )[0];
     const baseSymbol = baseToken.symbol;
     const quoteSymbol = quoteToken.symbol;
-    const baseBalance = truncateNumberOutput(
-      Web3.utils.fromWei(baseToken.availableBalance)
-    );
-    const quoteBalance = truncateNumberOutput(
-      Web3.utils.fromWei(quoteToken.availableBalance)
-    );
+    const baseBalance = baseToken.availableBalance
+    const quoteBalance = quoteToken.availableBalance
     const base = { symbol: baseSymbol, balance: baseBalance };
     const quote = { symbol: quoteSymbol, balance: quoteBalance };
     return { base, quote };
