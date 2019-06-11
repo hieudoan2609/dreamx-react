@@ -152,22 +152,31 @@ class Trade extends Component {
 
     return (
       <div className="amount-and-price">
-        <input
-          type="number"
-          className={`form-control`}
-          placeholder={`Amount (${this.state.currentTab === 'buy' ? this.props.quote.symbol : this.props.quote.symbol})`}
-          spellCheck="false"
-          value={this.state.amount}
-          onChange={this.onAmountChange}
-        />
-        <input
-          type="number"
-          className={`form-control`}
-          placeholder="Price"
-          spellCheck="false"
-          value={this.state.price}
-          onChange={this.onPriceChange}
-        />
+        <div className="input-group">
+          <input
+            className={`form-control`}
+            placeholder={`Amount`}
+            spellCheck="false"
+            value={this.state.amount}
+            onChange={this.onAmountChange}
+          />
+          <div className="input-group-append">
+            <div className="input-group-text">{this.props.quote.symbol}</div>
+          </div>
+        </div>
+
+        <div className="input-group">
+          <input
+            className={`form-control`}
+            placeholder="Price"
+            spellCheck="false"
+            value={this.state.price}
+            onChange={this.onPriceChange}
+          />
+          <div className="input-group-append">
+            <div className="input-group-text">{this.props.base.symbol}</div>
+          </div>
+        </div>
         <div className={`invalid-feedback ${this.state.error ? 'visible' : ''}`}>{this.state.error}</div>
       </div>
     );
@@ -201,6 +210,8 @@ class Trade extends Component {
         return;
       }
     }
+
+    console.log('SUBMIT')
   };
 
   render() {

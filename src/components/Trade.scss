@@ -64,10 +64,24 @@ $light-placeholder-color: #bbbbbb;
       }
     }
     .amount-and-price {
-      input {
+      .input-group {
         margin-top: 20px;
-        border: 0px;
         background-color: $overlay;
+        border-radius: .25rem;
+        input {
+          border: 0px;
+          background-color: transparent;
+        }
+        .input-group-append {
+          .input-group-text {
+            border: 0px;
+            background-color: $overlay;
+            width: 60px;
+            display: flex;
+            justify-content: center;
+            font-size: .6rem;
+          }
+        }
       }
     }
     .fee-and-total {
@@ -92,6 +106,11 @@ $light-placeholder-color: #bbbbbb;
           color: $light-placeholder-color;
         }
       }
+      .input-group-append {
+        .input-group-text {
+          color: $light-text;
+        }
+      }
     }
   }
   &.dark {
@@ -101,6 +120,11 @@ $light-placeholder-color: #bbbbbb;
       }
       input {
         color: $dark-text;
+      }
+      .input-group-append {
+        .input-group-text {
+          color: $dark-text;
+        }
       }
     }
   }

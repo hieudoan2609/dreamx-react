@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import Web3 from "web3";
 
 import Chart from "./Chart";
 import Trade from "./Trade";
@@ -14,7 +13,6 @@ import {
   marketUpdateCurrentMarket,
   tickersHandleSearchInput
 } from "../actions";
-import { truncateNumberOutput } from "../helpers";
 
 class Market extends Component {
   componentDidMount = () => {

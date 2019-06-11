@@ -70,8 +70,8 @@ export const truncateNumberInput = (
   let [whole, fraction] = num.toString().split(".");
   whole = whole.replace(leadingZeroes, "");
   whole = whole ? whole.substring(0, significantFigures) : "0";
-  fraction = fraction ? fraction.substring(0, decimalPoints) : "";
-  const result = fraction ? `${whole}.${fraction}` : whole;
+  fraction = fraction !== undefined ? fraction.substring(0, decimalPoints) : undefined;
+  const result = fraction !== undefined ? `${whole}.${fraction}` : whole;
   return result;
 };
 
