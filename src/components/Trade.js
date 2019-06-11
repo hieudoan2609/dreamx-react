@@ -184,9 +184,17 @@ class Trade extends Component {
       return;
     };
 
-    // if (this.state.currentTab === 'buy' && this.state.)
-
-    console.log(this.state.total)
+    if (this.state.currentTab === 'buy') {
+      if (Web3.utils.toBN(this.state.total).lt(Web3.utils.toBN(this.props.makerMinimum))) {
+        this.setState({ error: `Minimum order is ${Web3.utils.fromWei(this.props.makerMinimum)} ${this.props.base.symbol}` });
+        return;
+      }
+    } else {
+      if (Web3.utils.toBN(this.state.total).lt(Web3.utils.toBN(this.props.takerMinimum))) {
+        this.setState({ error: `Minimum order is ${Web3.utils.fromWei(this.props.takerMinimum)} ${this.props.base.symbol}` });
+        return;
+      }
+    }
   };
 
   render() {
