@@ -69,7 +69,7 @@ class Trade extends Component {
     const oneEther = Web3.utils.toBN(1000000000000000000);
 
     let total, fee, totalMinusFee, amountMinusFee;
-    if (amountWei && priceWei) {
+    if (amountWei && amountWei !== "0" && priceWei && priceWei !== "0") {
       [ amountWei, priceWei, makerFee, takerFee ] = [ Web3.utils.toBN(amountWei), Web3.utils.toBN(priceWei), Web3.utils.toBN(makerFee), Web3.utils.toBN(takerFee) ];
       total = priceWei.mul(amountWei).div(oneEther);
       fee = currentTab === "buy" ? amountWei.mul(makerFee).div(oneEther) : total.mul(takerFee).div(oneEther);
@@ -123,10 +123,10 @@ class Trade extends Component {
         <div className="fee-and-total">
           <small className="fee">
             Fee ({this.calculateFeePercent()}%):{" "}
-            <b>{truncateNumberOutput(Web3.utils.fromWei(this.state.fee))} {this.props.base.symbol}</b>
+            <b>{truncateNumberOutput(Web3.utils.fromWei(this.state.fee))} {this.props.quote.symbol}</b>
           </small>
           <small className="total">
-            Total: <b>{truncateNumberOutput(Web3.utils.fromWei(this.state.totalMinusFee))} {this.props.base.symbol}</b>
+            Total: <b>{truncateNumberOutput(Web3.utils.fromWei(this.state.amountMinusFee))} {this.props.quote.symbol}</b>
           </small>
         </div>
       )
@@ -135,10 +135,10 @@ class Trade extends Component {
         <div className="fee-and-total">
           <small className="fee">
             Fee ({this.calculateFeePercent()}%):{" "}
-            <b>{truncateNumberOutput(Web3.utils.fromWei(this.state.fee))} {this.props.quote.symbol}</b>
+            <b>{truncateNumberOutput(Web3.utils.fromWei(this.state.fee))} {this.props.base.symbol}</b>
           </small>
           <small className="total">
-            Total: <b>{truncateNumberOutput(Web3.utils.fromWei(this.state.amountMinusFee))} {this.props.quote.symbol}</b>
+            Total: <b>{truncateNumberOutput(Web3.utils.fromWei(this.state.totalMinusFee))} {this.props.base.symbol}</b>
           </small>
         </div>
       )
@@ -168,9 +168,25 @@ class Trade extends Component {
           value={this.state.price}
           onChange={this.onPriceChange}
         />
-        <div className="invalid-feedback">This is an error.</div>
+        <div className={`invalid-feedback ${this.state.error ? 'visible' : ''}`}>{this.state.error}</div>
       </div>
     );
+  };
+
+  submit = () => {
+    if (!this.state.amountWei) {
+      this.setState({ error: "Amount cannot be empty." });
+      return;
+    };
+
+    if (!this.state.priceWei) {
+      this.setState({ error: "Price cannot be empty." });
+      return;
+    };
+
+    // if (this.state.currentTab === 'buy' && this.state.)
+
+    console.log(this.state.total)
   };
 
   render() {
@@ -191,7 +207,7 @@ class Trade extends Component {
           {this.renderFeeAndTotal()}
 
           <div className="submit">
-            <Button theme={this.props.theme} fullWidth={true}>
+            <Button theme={this.props.theme} fullWidth={true} onClick={this.submit}>
               {this.state.currentTab}
             </Button>
           </div>
