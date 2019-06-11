@@ -10,7 +10,11 @@ const INITIAL_STATE = {
   loading: true,
   contractAddress: "",
   networkId: 0,
-  networkName: ""
+  networkName: "",
+  makerFee: "",
+  makerMinimum: "",
+  takerFee: "",
+  takerMinimum: ""
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -24,7 +28,11 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         contractAddress: action.payload.contractAddress,
         networkId: action.payload.networkId,
-        networkName: action.payload.networkName
+        networkName: action.payload.networkName,
+        makerFee: action.payload.makerFee,
+        makerMinimum: action.payload.makerMinimum,
+        takerFee: action.payload.takerFee,
+        takerMinimum: action.payload.takerMinimum
       };
     case APP_TOGGLE_THEME:
       return { ...state, theme: action.payload.theme };

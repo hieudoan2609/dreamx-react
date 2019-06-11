@@ -37,6 +37,8 @@ export const initializeAppAsync = () => {
     const contract = await axios.get(
       `${config.API_HTTP_ROOT}/return_contract_address`
     );
+    const fees = await axios.get(`${config.API_HTTP_ROOT}/fees`);
+    console.log(fees);
     await dispatch(tokensLoadAsync());
     await dispatch(marketsLoadAsync());
     await dispatch(tickersLoadAsync());
@@ -45,7 +47,11 @@ export const initializeAppAsync = () => {
       payload: {
         contractAddress: contract.data.address,
         networkId: contract.data.network_id,
-        networkName: getNetworkNameFromId(contract.data.network_id)
+        networkName: getNetworkNameFromId(contract.data.network_id),
+        makerFee: fees.data.maker_fee_per_giving_token,
+        makerMinimum: fees.data.maker_order_minimum_eth,
+        takerFee: fees.data.taker_fee_per_giving_token,
+        takerMinimum: fees.data.taker_order_minimum_eth
       }
     });
   };
