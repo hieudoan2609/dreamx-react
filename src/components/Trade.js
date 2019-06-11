@@ -1,10 +1,12 @@
 import React, { Component } from "react";
+import Web3 from "web3";
 // import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import "./Trade.scss";
 import TabMenu from "./TabMenu";
 import Button from "./Button";
+import { truncateNumberInput } from "../helpers";
 
 class Trade extends Component {
   state = {
@@ -12,6 +14,7 @@ class Trade extends Component {
     currentTab: "buy",
     price: "",
     amount: "",
+    amountWei: "",
     fee: 0,
     total: 0,
     pending: false,
@@ -56,6 +59,17 @@ class Trade extends Component {
     );
   };
 
+  onAmountChange = e => {
+    const amount = e.target.value ? truncateNumberInput(e.target.value) : "";
+    const amountWei = amount ? Web3.utils.toWei(amount) : "0";
+    this.setState({ amount, amountWei });
+  };
+
+  onPriceChange = e => {
+    const price = e.target.value ? truncateNumberInput(e.target.value) : "";
+    this.setState({ price });
+  };
+
   render() {
     return (
       <div className={`Trade card ${this.props.theme}`}>
@@ -75,12 +89,16 @@ class Trade extends Component {
               className={`form-control`}
               placeholder="Amount"
               spellCheck="false"
+              value={this.state.amount}
+              onChange={this.onAmountChange}
             />
             <input
               type="number"
               className={`form-control`}
               placeholder="Price"
               spellCheck="false"
+              value={this.state.price}
+              onChange={this.onPriceChange}
             />
           </div>
 
