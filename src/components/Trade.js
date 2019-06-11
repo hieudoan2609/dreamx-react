@@ -88,7 +88,7 @@ class Trade extends Component {
 
   onAmountChange = e => {
     const { priceWei } = this.state;
-    const amount = e.target.value ? truncateNumberInput(e.target.value) : "";
+    const amount = truncateNumberInput(e.target.value);
     const amountWei = amount ? Web3.utils.toWei(amount) : "0";
     const { total, fee, totalMinusFee, amountMinusFee } = this.calculateFeeAndTotal( amountWei, priceWei );
     this.setState({ amount, amountWei, total, fee, totalMinusFee, amountMinusFee });
@@ -96,7 +96,7 @@ class Trade extends Component {
 
   onPriceChange = e => {
     const { amountWei } = this.state;
-    const price = e.target.value ? truncateNumberInput(e.target.value) : "";
+    const price = truncateNumberInput(e.target.value);
     const priceWei = price ? Web3.utils.toWei(price) : "0";
     const { total, fee, totalMinusFee, amountMinusFee } = this.calculateFeeAndTotal( amountWei, priceWei );
     this.setState({ price, priceWei, total, fee, totalMinusFee, amountMinusFee });

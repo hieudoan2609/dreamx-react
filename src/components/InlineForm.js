@@ -16,7 +16,6 @@ class InlineForm extends Component {
         <div className="input-group">
           <input
             onChange={this.props.onAmountChange}
-            type="number"
             className={`form-control ${this.props.error ? "invalid" : ""}`}
             placeholder="Amount"
             spellCheck="false"

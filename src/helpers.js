@@ -66,12 +66,18 @@ export const truncateNumberInput = (
   significantFigures = 8,
   decimalPoints = 8
 ) => {
+  if (!num) {
+    return ""
+  }
   const leadingZeroes = /^0*/;
   let [whole, fraction] = num.toString().split(".");
   whole = whole.replace(leadingZeroes, "");
   whole = whole ? whole.substring(0, significantFigures) : "0";
   fraction = fraction !== undefined ? fraction.substring(0, decimalPoints) : undefined;
   const result = fraction !== undefined ? `${whole}.${fraction}` : whole;
+  if (isNaN(result)) {
+    return ""
+  }
   return result;
 };
 
