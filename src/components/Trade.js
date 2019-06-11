@@ -70,6 +70,17 @@ class Trade extends Component {
     this.setState({ price });
   };
 
+  calculateFeePercent = () => {
+    let feePerToken;
+    if (this.state.currentTab === "buy") {
+      feePerToken = this.props.makerFee;
+    } else {
+      feePerToken = this.props.takerFee;
+    }
+    const feePercent = (parseFloat(Web3.utils.fromWei(feePerToken)) * 100) / 1;
+    return feePercent;
+  };
+
   render() {
     return (
       <div className={`Trade card ${this.props.theme}`}>
@@ -105,7 +116,7 @@ class Trade extends Component {
 
           <div className="fee-and-total">
             <small className="fee">
-              Fee (1%): <b>0.12345678 ETH</b>
+              Fee ({this.calculateFeePercent()}%): <b>0.12345678 ETH</b>
             </small>
             <small className="total">
               Total: <b>0.12345678 ETH</b>
@@ -135,7 +146,11 @@ Trade.propTypes = {
   theme: PropTypes.string.isRequired,
   loggedIn: PropTypes.bool.isRequired,
   base: PropTypes.object, // { symbol, balance }
-  quote: PropTypes.object // { symbol, balance }
+  quote: PropTypes.object, // { symbol, balance }
+  makerFee: PropTypes.string.isRequired,
+  makerMinimum: PropTypes.string.isRequired,
+  takerFee: PropTypes.string.isRequired,
+  takerMinimum: PropTypes.string.isRequired
 };
 
 export default Trade;

@@ -38,7 +38,6 @@ export const initializeAppAsync = () => {
       `${config.API_HTTP_ROOT}/return_contract_address`
     );
     const fees = await axios.get(`${config.API_HTTP_ROOT}/fees`);
-    console.log(fees);
     await dispatch(tokensLoadAsync());
     await dispatch(marketsLoadAsync());
     await dispatch(tickersLoadAsync());

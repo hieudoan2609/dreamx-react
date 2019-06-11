@@ -111,6 +111,10 @@ class Market extends Component {
               loggedIn={this.props.account.address ? true : false}
               base={this.getBaseAndQuoteBalances().base}
               quote={this.getBaseAndQuoteBalances().quote}
+              makerFee={this.props.app.makerFee}
+              makerMinimum={this.props.app.makerMinimum}
+              takerFee={this.props.app.takerFee}
+              takerMinimum={this.props.app.takerMinimum}
             />
           </div>
         </div>
