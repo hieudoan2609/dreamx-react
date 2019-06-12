@@ -104,7 +104,7 @@ class Menu extends Component {
   };
 
   renderMobileNavItems = () => {
-    this.props.navItems.map((item, index) => {
+    return this.props.navItems.map((item, index) => {
       return (
         <Link
           className={`item ${
