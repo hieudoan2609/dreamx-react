@@ -10,6 +10,8 @@ $dark-secondary: #232d44;
 $dark-secondary-tint: #384256;
 $dark-secondary-shade: #1f283d;
 $overlay: rgba(130,130,130,.1);
+$dark-overlay: rgb(63,72,89);
+$light-overlay: rgb(242,242,242);
 $icon-medium: 24px;
 $icon-small: 14px;
 $light-primary-shade: #26327f;
@@ -23,7 +25,6 @@ $darken: rgba(1, 1, 1, 0.5);
 .Table {
   height: 100%;
   width: 100%;
-  overflow-y: scroll;
   .input-group {
     background-color: $overlay;
     .input-group-prepend {
@@ -42,47 +43,51 @@ $darken: rgba(1, 1, 1, 0.5);
       height: 50px;
     }
   }
-  .table-responsive {
-    .table {
-      margin: 0px;
-      thead, tbody {
-        th, td {
-          border: 0px;
-          // min-width: 170px;
-          padding-left: 28px;
-          white-space: nowrap;
+  .table-wrapper {
+    height: 100%;
+    .table-responsive {
+      height: 100%;
+      overflow: auto;
+      .table {
+        margin: 0px;
+        thead, tbody {
+          th, td {
+            border: 0px;
+            padding-left: 28px;
+            white-space: nowrap;
+          }
         }
-      }
-      thead {
-        th {
-          font-size: 14px;
-          cursor: pointer;
-          user-select: none;
-          .body {
-            position: relative;
-            .icon {
-              position: absolute;
-              top: 0px;
-              height: 100%;
-              left: -18px;
-              display: flex;
-              align-items: center;
-              ion-icon {
-                font-size: $icon-small;
-                transition: all 300ms ease;
-              }
-              &.asc {
+        thead {
+          th {
+            font-size: 14px;
+            cursor: pointer;
+            user-select: none;
+            .body {
+              position: relative;
+              .icon {
+                position: absolute;
+                top: 0px;
+                height: 100%;
+                left: -18px;
+                display: flex;
+                align-items: center;
                 ion-icon {
-                  transform: rotate(180deg);
+                  font-size: $icon-small;
+                  transition: all 300ms ease;
+                }
+                &.asc {
+                  ion-icon {
+                    transform: rotate(180deg);
+                  }
                 }
               }
             }
           }
         }
-      }
-      tbody {
-        tr {
-          border-top: 1px solid $overlay;
+        tbody {
+          tr {
+            border-top: 1px solid $overlay;
+          }
         }
       }
     }
@@ -93,7 +98,7 @@ $darken: rgba(1, 1, 1, 0.5);
     height: 3px;
   }
   ::-webkit-scrollbar-track {
-      background: $overlay;
+    background: $overlay;
   }
   &.light {
     .table, .search, .input-group-prepend span {
@@ -111,6 +116,9 @@ $darken: rgba(1, 1, 1, 0.5);
       background-color: $light-primary;
       cursor: pointer;
     }
+    ::-webkit-scrollbar-corner {
+      background: $light-overlay;
+    }
   }
   &.dark {
     .table, .search, .input-group-prepend span {
@@ -127,6 +135,9 @@ $darken: rgba(1, 1, 1, 0.5);
     ::-webkit-scrollbar-thumb {
       background-color: $dark-primary;
       cursor: pointer;
+    }
+    ::-webkit-scrollbar-corner {
+      background: $dark-overlay;
     }
   }
   .not-available {

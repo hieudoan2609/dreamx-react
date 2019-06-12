@@ -4,47 +4,49 @@ import PropTypes from "prop-types";
 
 import "./MyOpenOrders.scss";
 import Table from "./Table";
+import {
+  capitalize
+} from "../helpers";
 
 class MyOpenOrders extends Component {
-  // extractOpenOrdersData = () => {
-  //   if (!this.props.account.address) {
-  //     return [];
-  //   }
+  extractOpenOrdersData = () => {
+    if (!this.props.account.address) {
+      return [];
+    }
 
-  //   const { accountOrders } = this.props;
+    const { accountOrders } = this.props;
 
-  //   const extractedData = accountOrders.filtered.map(accountOrder => {
-  //     const { price, amount, filled } = accountOrder;
-  //     const type = (
-  //       <div className={`pill ${accountOrder.type}`}>
-  //         {capitalize(accountOrder.type)}
-  //       </div>
-  //     );
-  //     const total = `${accountOrder.total} ETH`;
-  //     const status = capitalize(accountOrder.status);
-  //     const market = accountOrder.marketSymbol;
-  //     const date = accountOrder.createdAt;
-  //     const cancelAll = (
-  //       <div className="actions">
-  //         <div className="action">cancel</div>
-  //       </div>
-  //     );
+    const extractedData = accountOrders.all.map(accountOrder => {
+      const { price, amount, filled } = accountOrder;
+      const type = (
+        <div className={`pill ${accountOrder.type}`}>
+          {capitalize(accountOrder.type)}
+        </div>
+      );
+      const total = `${accountOrder.total} ETH`;
+      const date = accountOrder.createdAt;
+      const cancelAll = (
+        <div className="actions">
+          <div className="action">cancel</div>
+        </div>
+      );
 
-  //     return {
-  //       market,
-  //       type,
-  //       price,
-  //       amount,
-  //       total,
-  //       filled,
-  //       status,
-  //       date,
-  //       cancelAll
-  //     };
-  //   });
+      const market = accountOrder.marketSymbol;
 
-  //   return extractedData;
-  // };
+      return {
+        market,
+        type,
+        price,
+        amount,
+        total,
+        filled,
+        date,
+        cancelAll
+      };
+    });
+
+    return extractedData;
+  };
 
   render() {
     return (
@@ -56,7 +58,7 @@ class MyOpenOrders extends Component {
           <Table
             theme={this.props.theme}
             dataName='open orders'
-            data={[]}
+            data={this.extractOpenOrdersData()}
             defaultOrderBy='date'
             loginRequired={true}
             loggedIn={this.props.account.address ? true : false}
