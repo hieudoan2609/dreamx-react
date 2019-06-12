@@ -9,13 +9,18 @@ class Chart extends Component {
   render() {
     return (
       <div className={`Chart card ${this.props.theme}`}>
-        <Ticker
-          theme={this.props.theme}
-          tickers={this.props.tickers}
-          currentMarket={this.props.currentMarket}
-          searchValue={this.props.searchValue}
-          handleSearchInput={this.props.handleSearchInput}
-        />
+        <div className="ticker">
+          <Ticker
+            theme={this.props.theme}
+            tickers={this.props.tickers}
+            currentMarket={this.props.currentMarket}
+            searchValue={this.props.searchValue}
+            handleSearchInput={this.props.handleSearchInput}
+          />
+        </div>
+        <div className="chart">
+          CHART
+        </div>
       </div>
     );
   }

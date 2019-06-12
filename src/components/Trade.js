@@ -222,7 +222,7 @@ class Trade extends Component {
   };
 
   orderAsync = async () => {
-    const { price, priceWei, amount, amountWei, fee, total, feedback, totalMinusFee, amountMinusFee } = INITIAL_STATE
+    const { price, priceWei, amount, amountWei, fee, total, totalMinusFee, amountMinusFee } = INITIAL_STATE
     const { API_HTTP_ROOT } = config;
     const { app, account, base, quote } = this.props
     const orderType = this.state.currentTab
@@ -253,10 +253,12 @@ class Trade extends Component {
         `${API_HTTP_ROOT}/orders`,
         payload
       );
-      this.setState({ pending: false, price, priceWei, amount, amountWei, fee, total, totalMinusFee, amountMinusFee, feedback: { type: 'success', message: 'Your order has been submitted.' } })
+      const feedback = { type: 'success', message: 'Your order has been submitted.' }
+      this.setState({ pending: false, price, priceWei, amount, amountWei, fee, total, totalMinusFee, amountMinusFee, feedback })
     } catch (err) {
+      const feedback = { type: 'error', message: 'Service is unvailable, please try again later.' }
       if (err.toString() === "Error: Request failed with status code 503") {
-        this.setState({ pending: false, feedback: { type: 'error', message: 'Service is unvailable, please try again later.' } })
+        this.setState({ pending: false, feedback })
       }
     }
   }
