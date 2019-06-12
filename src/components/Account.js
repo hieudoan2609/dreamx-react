@@ -197,7 +197,7 @@ class Account extends Component {
       );
       const total = `${accountOrder.total} ETH`;
       const status = capitalize(accountOrder.status);
-      const market = accountOrder.marketSymbol;
+      const market = accountOrder.marketSymbolFormatted;
       const date = accountOrder.createdAt;
       const cancelAll = (
         <div className="actions">
@@ -260,7 +260,7 @@ class Account extends Component {
       const { price, amount } = t;
       const type = <div className={`pill ${t.type}`}>{capitalize(t.type)}</div>;
       const total = `${t.total} ETH`;
-      const market = t.marketSymbol;
+      const market = t.marketSymbolFormatted;
       const date = t.createdAt;
       const fee = `${truncateNumberOutput(t.fee)} ETH`;
 

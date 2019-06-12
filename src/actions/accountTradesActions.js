@@ -327,7 +327,8 @@ export const accountTradesLoadAsync = accountAddress => {
           (m.quoteToken.address === t.giveTokenAddress &&
             m.baseToken.address === t.takeTokenAddress)
       )[0];
-      t.marketSymbol = `${market.quoteToken.symbol}/${market.baseToken.symbol}`;
+      t.marketSymbol = market.symbol;
+      t.marketSymbolFormatted = `${market.quoteToken.symbol}/${market.baseToken.symbol}`;
       t.type = t.giveTokenAddress === market.baseToken.address ? "buy" : "sell";
       t.price =
         t.type === "sell"

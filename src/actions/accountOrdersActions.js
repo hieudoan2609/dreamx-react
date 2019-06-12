@@ -25,9 +25,8 @@ export const accountOrdersLoadAsync = accountAddress => {
           (m.quoteToken.address === accountOrder.giveTokenAddress &&
             m.baseToken.address === accountOrder.takeTokenAddress)
       )[0];
-      accountOrder.marketSymbol = `${market.quoteToken.symbol}/${
-        market.baseToken.symbol
-      }`;
+      accountOrder.marketSymbol = market.symbol;
+      accountOrder.marketSymbolFormatted = `${market.quoteToken.symbol}/${market.baseToken.symbol}`;
       accountOrder.type =
         accountOrder.giveTokenAddress === market.baseToken.address
           ? "buy"

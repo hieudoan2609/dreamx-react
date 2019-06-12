@@ -14,9 +14,14 @@ class MyOpenOrders extends Component {
       return [];
     }
 
-    const { accountOrders } = this.props;
+    const { accountOrders, market } = this.props;
 
-    const extractedData = accountOrders.all.map(accountOrder => {
+    const extractedData = []
+    for (let accountOrder of accountOrders.all) {
+      if (accountOrder.marketSymbol !== market.currentMarket) {
+        continue
+      }
+
       const { price, amount, filled } = accountOrder;
       const type = (
         <div className={`pill ${accountOrder.type}`}>
@@ -31,21 +36,14 @@ class MyOpenOrders extends Component {
         </div>
       );
 
-      const market = accountOrder.marketSymbol;
-
-      return {
-        market,
-        type,
-        price,
-        amount,
-        total,
-        filled,
-        date,
-        cancelAll
-      };
-    });
+      extractedData.push({ type, price, amount, total, filled, date, cancelAll });
+    }
 
     return extractedData;
+  };
+
+  handleCancelAll = () => {
+    console.log("CANCEL ALL");
   };
 
   render() {
@@ -56,12 +54,17 @@ class MyOpenOrders extends Component {
         </div>
         <div className="body">
           <Table
-            theme={this.props.theme}
-            dataName='open orders'
-            data={this.extractOpenOrdersData()}
-            defaultOrderBy='date'
             loginRequired={true}
             loggedIn={this.props.account.address ? true : false}
+            theme={this.props.theme}
+            data={this.extractOpenOrdersData()}
+            defaultOrderBy='date'
+            dateColumn="date"
+            dataName='open orders'
+            excludeFromSorting={["cancelAll"]}
+            clickableHeaders={[
+              { name: "cancelAll", onClick: this.handleCancelAll }
+            ]}
           />
         </div>
       </div>
