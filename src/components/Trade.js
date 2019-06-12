@@ -7,6 +7,7 @@ import "./Trade.scss";
 import TabMenu from "./TabMenu";
 import Button from "./Button";
 import { truncateNumberInput, truncateNumberOutput } from "../helpers";
+import singletons from "../singletons";
 
 const INITIAL_STATE = {
   tabs: ["buy", "sell"],
@@ -159,6 +160,7 @@ class Trade extends Component {
             spellCheck="false"
             value={this.state.amount}
             onChange={this.onAmountChange}
+            disabled={this.state.pending ? true : false}
           />
           <div className="input-group-append">
             <div className="input-group-text">{this.props.quote.symbol}</div>
@@ -172,6 +174,7 @@ class Trade extends Component {
             spellCheck="false"
             value={this.state.price}
             onChange={this.onPriceChange}
+            disabled={this.state.pending ? true : false}
           />
           <div className="input-group-append">
             <div className="input-group-text">{this.props.base.symbol}</div>
@@ -211,8 +214,48 @@ class Trade extends Component {
       }
     }
 
-    console.log('SUBMIT')
+    this.setState({ pending: true })
   };
+
+  generateOrderPayloadAsync = async ({
+    contractAddress,
+    accountAddress,
+    giveTokenAddress,
+    giveAmount,
+    takeTokenAddress,
+    takeAmount,
+    expiryTimestampInMilliseconds
+  }) => {
+    const { web3 } = singletons;
+    const nonce = Date.now();
+    const hash = web3.utils.soliditySha3(
+      contractAddress,
+      accountAddress,
+      giveTokenAddress,
+      giveAmount,
+      takeTokenAddress,
+      takeAmount,
+      nonce,
+      expiryTimestampInMilliseconds
+    );
+    try {
+      const signature = await web3.eth.personal.sign(hash, accountAddress);
+      const payload = {
+        "account_address": accountAddress,
+        "give_token_address": giveTokenAddress,
+        "give_amount": giveAmount,
+        "take_token_address": takeTokenAddress,
+        "take_amount": takeAmount,
+        "nonce": nonce,
+        "expiry_timestamp_in_milliseconds": expiryTimestampInMilliseconds,
+        "order_hash": hash,
+        signature
+      }
+      return payload;
+    } catch {
+      return;
+    }
+  }
 
   render() {
     return (
@@ -232,7 +275,7 @@ class Trade extends Component {
           {this.renderFeeAndTotal()}
 
           <div className="submit">
-            <Button theme={this.props.theme} fullWidth={true} onClick={this.submit}>
+            <Button theme={this.props.theme} fullWidth={true} onClick={this.submit} pending={this.state.pending}>
               {this.state.currentTab}
             </Button>
           </div>

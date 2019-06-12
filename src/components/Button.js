@@ -9,9 +9,7 @@ class Button extends Component {
   render() {
     return (
       <div
-        className={`Button ${this.props.theme} ${
-          this.props.pending ? "pending" : ""
-        } ${this.props.fullWidth ? "fullWidth" : ""}`}
+        className={`Button ${this.props.theme} ${this.props.pending ? "pending" : ""} ${this.props.fullWidth ? "fullWidth" : ""}`}
       >
         <Loading
           type="button"
