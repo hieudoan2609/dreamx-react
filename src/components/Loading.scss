@@ -28,6 +28,7 @@ $danger: rgba(220, 53, 69, 0.7);
   &.fixed {
     position: fixed;
     height: 100vh;
+    z-index: 10002;
     &.dark {
       background-color: $dark-secondary;
       .spinner-border {
