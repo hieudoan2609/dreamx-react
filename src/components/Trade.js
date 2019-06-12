@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Web3 from "web3";
-// import { connect } from "react-redux";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import "./Trade.scss";
@@ -185,37 +185,49 @@ class Trade extends Component {
     );
   };
 
-  submit = () => {
+  submitAsync = async () => {
+    this.setState({ error: "", pending: true })
+
     if (!this.state.amountWei) {
-      this.setState({ error: "Amount cannot be empty." });
+      this.setState({ error: "Amount cannot be empty.", pending: false });
       return;
     };
     if (!this.state.priceWei) {
-      this.setState({ error: "Price cannot be empty." });
+      this.setState({ error: "Price cannot be empty.", pending: false });
       return;
     };
     if (this.state.currentTab === 'buy') {
       if (Web3.utils.toBN(this.state.total).lt(Web3.utils.toBN(this.props.makerMinimum))) {
-        this.setState({ error: `Minimum order is ${Web3.utils.fromWei(this.props.makerMinimum)} ${this.props.base.symbol}.` });
+        this.setState({ error: `Minimum order is ${Web3.utils.fromWei(this.props.makerMinimum)} ${this.props.base.symbol}.`, pending: false });
         return;
       }
       if (Web3.utils.toBN(this.state.total).gt(Web3.utils.toBN(this.props.base.balance))) {
-        this.setState({ error: 'Not enough balance.' });
+        this.setState({ error: 'Not enough balance.', pending: false });
         return;
       }
     } else {
       if (Web3.utils.toBN(this.state.total).lt(Web3.utils.toBN(this.props.takerMinimum))) {
-        this.setState({ error: `Minimum order is ${Web3.utils.fromWei(this.props.takerMinimum)} ${this.props.base.symbol}.` });
+        this.setState({ error: `Minimum order is ${Web3.utils.fromWei(this.props.takerMinimum)} ${this.props.base.symbol}.`, pending: false });
         return;
       }
       if (Web3.utils.toBN(this.state.amountWei).gt(Web3.utils.toBN(this.props.quote.balance))) {
-        this.setState({ error: 'Not enough balance.' });
+        this.setState({ error: 'Not enough balance.', pending: false });
         return;
       }
     }
 
-    this.setState({ pending: true })
+    await this.orderAsync()
   };
+
+  orderAsync = async () => {
+    // contractAddress, accountAddress, giveTokenAddress, giveAmount, takeTokenAddress, takeAmount, expiryTimestampInMilliseconds
+    const { app, account, base, quote } = this.props
+    const contractAddress = app.contractAddress
+    const accountAddress = account.address
+    const giveTokenAddress = this.state.currentTab === 'buy' ? base.address : quote.address
+
+    console.log(giveTokenAddress)
+  }
 
   generateOrderPayloadAsync = async ({
     contractAddress,
@@ -266,6 +278,7 @@ class Trade extends Component {
           currentItem={this.state.currentTab}
           theme={this.props.theme}
           onChange={this.handleTabChange}
+          disabled={this.state.pending}
         />
         <div className="body">
           {this.renderBalance()}
@@ -275,7 +288,7 @@ class Trade extends Component {
           {this.renderFeeAndTotal()}
 
           <div className="submit">
-            <Button theme={this.props.theme} fullWidth={true} onClick={this.submit} pending={this.state.pending}>
+            <Button theme={this.props.theme} fullWidth={true} onClick={this.submitAsync} pending={this.state.pending}>
               {this.state.currentTab}
             </Button>
           </div>
@@ -285,9 +298,9 @@ class Trade extends Component {
   }
 }
 
-// const mapStateToProps = state => {
-//   return state;
-// };
+const mapStateToProps = state => {
+  return state;
+};
 
 // const mapActionsToProps = {
 //  getTradeData
@@ -296,12 +309,12 @@ class Trade extends Component {
 Trade.propTypes = {
   theme: PropTypes.string.isRequired,
   loggedIn: PropTypes.bool.isRequired,
-  base: PropTypes.object, // { symbol, balance }
-  quote: PropTypes.object, // { symbol, balance }
+  base: PropTypes.object, // { symbol, balance, address }
+  quote: PropTypes.object, // { symbol, balance, address }
   makerFee: PropTypes.string.isRequired,
   makerMinimum: PropTypes.string.isRequired,
   takerFee: PropTypes.string.isRequired,
   takerMinimum: PropTypes.string.isRequired
 };
 
-export default Trade;
+export default connect(mapStateToProps)(Trade);

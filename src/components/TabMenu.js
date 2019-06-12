@@ -10,6 +10,10 @@ class TabMenu extends Component {
   };
 
   handleOnClick = e => {
+    if (this.props.disabled) {
+      return
+    }
+
     this.setState({ highlighterOffsetLeft: e.target.offsetLeft });
     this.props.onChange(e.target.id);
   };
@@ -56,7 +60,8 @@ TabMenu.propTypes = {
   theme: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired, // [ { label, pathname }, ... ]
   currentItem: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  disabled: PropTypes.bool
 };
 
 export default TabMenu;
