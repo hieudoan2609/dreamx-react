@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { Component } from "react";
 import Web3 from "web3";
 import { connect } from "react-redux";
@@ -8,6 +9,7 @@ import TabMenu from "./TabMenu";
 import Button from "./Button";
 import { truncateNumberInput, truncateNumberOutput } from "../helpers";
 import singletons from "../singletons";
+import config from "../config";
 
 const INITIAL_STATE = {
   tabs: ["buy", "sell"],
@@ -220,13 +222,49 @@ class Trade extends Component {
   };
 
   orderAsync = async () => {
-    // contractAddress, accountAddress, giveTokenAddress, giveAmount, takeTokenAddress, takeAmount, expiryTimestampInMilliseconds
+    const { API_HTTP_ROOT } = config;
     const { app, account, base, quote } = this.props
+    const orderType = this.state.currentTab
     const contractAddress = app.contractAddress
     const accountAddress = account.address
-    const giveTokenAddress = this.state.currentTab === 'buy' ? base.address : quote.address
+    let giveTokenAddress, giveAmount, takeTokenAddress, takeAmount
+    if (orderType === 'buy') {
+      giveTokenAddress = base.address
+      giveAmount = this.state.total
+      takeTokenAddress = quote.address
+      takeAmount = this.state.amountWei
+    } else {
+      giveTokenAddress = quote.address
+      giveAmount = this.state.amountWei
+      takeTokenAddress = quote.address
+      takeAmount = this.state.total
+    }
+    const expiryTimestampInMilliseconds = 33117212071000;
+    const payload = await this.generateOrderPayloadAsync({ contractAddress, accountAddress, giveTokenAddress, giveAmount, takeTokenAddress, takeAmount, expiryTimestampInMilliseconds })
 
-    console.log(giveTokenAddress)
+    if (!payload) {
+      this.setState({ pending: false })
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${API_HTTP_ROOT}/orders`,
+        payload
+      );
+
+      console.log(response)
+
+      // await dispatch(updateTransfersAsync(newWithdraw));
+
+      // dispatch({
+      //   type: TRANSFER_COMPLETE
+      // });
+    } catch (err) {
+      if (err.toString() === "Error: Request failed with status code 503") {
+        this.setState({ pending: false, error: "Service is unvailable, please try again later." })
+      }
+    }
   }
 
   generateOrderPayloadAsync = async ({
