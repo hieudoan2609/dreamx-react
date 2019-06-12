@@ -23,12 +23,18 @@ $padding: 20px;
 $light-placeholder-color: #bbbbbb;
 
 .Trade {
-  .invalid-feedback {
+  .feedback {
     display: block;
     height: 19px;
     opacity: 0;
-    &.visible {
+    font-size: 80%;
+    &.error {
       opacity: 1;
+      color: $sell;
+    }
+    &.success {
+      opacity: 1;
+      color: $buy;
     }
   }
   height: 450px;

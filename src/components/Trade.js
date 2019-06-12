@@ -21,7 +21,7 @@ const INITIAL_STATE = {
   fee: "0",
   total: "0",
   pending: false,
-  error: "",
+  feedback: {}, // { type, message }
   totalMinusFee: "0",
   amountMinusFee: "0"
 };
@@ -30,8 +30,8 @@ class Trade extends Component {
   state = INITIAL_STATE;
 
   handleTabChange = tab => {
-    const { price, priceWei, amount, amountWei, fee, total, error, totalMinusFee, amountMinusFee } = INITIAL_STATE
-    this.setState({ currentTab: tab, price, priceWei, amount, amountWei, fee, total, error, totalMinusFee, amountMinusFee });
+    const { price, priceWei, amount, amountWei, fee, total, feedback, totalMinusFee, amountMinusFee } = INITIAL_STATE
+    this.setState({ currentTab: tab, price, priceWei, amount, amountWei, fee, total, feedback, totalMinusFee, amountMinusFee });
   };
 
   renderNotLoggedInOverlay = () => {
@@ -182,38 +182,38 @@ class Trade extends Component {
             <div className="input-group-text">{this.props.base.symbol}</div>
           </div>
         </div>
-        <div className={`invalid-feedback ${this.state.error ? 'visible' : ''}`}>{this.state.error}</div>
+        <div className={`feedback ${this.state.feedback.type}`}>{this.state.feedback.message}</div>
       </div>
     );
   };
 
   submitAsync = async () => {
-    this.setState({ error: "", pending: true })
+    this.setState({ feedback: {}, pending: true })
 
     if (!this.state.amountWei) {
-      this.setState({ error: "Amount cannot be empty.", pending: false });
+      this.setState({ feedback: { type: 'error', message: 'Amount cannot be empty.' }, pending: false });
       return;
     };
     if (!this.state.priceWei) {
-      this.setState({ error: "Price cannot be empty.", pending: false });
+      this.setState({ feedback: { type: 'error', message: 'Price cannot be empty.' }, pending: false });
       return;
     };
     if (this.state.currentTab === 'buy') {
       if (Web3.utils.toBN(this.state.total).lt(Web3.utils.toBN(this.props.makerMinimum))) {
-        this.setState({ error: `Minimum order is ${Web3.utils.fromWei(this.props.makerMinimum)} ${this.props.base.symbol}.`, pending: false });
+        this.setState({ feedback: { type: 'error', message: `Minimum order is ${Web3.utils.fromWei(this.props.makerMinimum)} ${this.props.base.symbol}.` }, pending: false });
         return;
       }
       if (Web3.utils.toBN(this.state.total).gt(Web3.utils.toBN(this.props.base.balance))) {
-        this.setState({ error: 'Not enough balance.', pending: false });
+        this.setState({ feedback: { type: 'error', message: 'Not enough balance.' }, pending: false });
         return;
       }
     } else {
       if (Web3.utils.toBN(this.state.total).lt(Web3.utils.toBN(this.props.takerMinimum))) {
-        this.setState({ error: `Minimum order is ${Web3.utils.fromWei(this.props.takerMinimum)} ${this.props.base.symbol}.`, pending: false });
+        this.setState({ feedback: { type: 'error', message: `Minimum order is ${Web3.utils.fromWei(this.props.takerMinimum)} ${this.props.base.symbol}.` }, pending: false });
         return;
       }
       if (Web3.utils.toBN(this.state.amountWei).gt(Web3.utils.toBN(this.props.quote.balance))) {
-        this.setState({ error: 'Not enough balance.', pending: false });
+        this.setState({ feedback: { type: 'error', message: 'Not enough balance.' }, pending: false });
         return;
       }
     }
@@ -222,7 +222,7 @@ class Trade extends Component {
   };
 
   orderAsync = async () => {
-    const { price, priceWei, amount, amountWei, fee, total, error, totalMinusFee, amountMinusFee } = INITIAL_STATE
+    const { price, priceWei, amount, amountWei, fee, total, feedback, totalMinusFee, amountMinusFee } = INITIAL_STATE
     const { API_HTTP_ROOT } = config;
     const { app, account, base, quote } = this.props
     const orderType = this.state.currentTab
@@ -253,10 +253,10 @@ class Trade extends Component {
         `${API_HTTP_ROOT}/orders`,
         payload
       );
-      this.setState({ pending: false, price, priceWei, amount, amountWei, fee, total, error, totalMinusFee, amountMinusFee })
+      this.setState({ pending: false, price, priceWei, amount, amountWei, fee, total, totalMinusFee, amountMinusFee, feedback: { type: 'success', message: 'Your order has been submitted.' } })
     } catch (err) {
       if (err.toString() === "Error: Request failed with status code 503") {
-        this.setState({ pending: false, error: "Service is unvailable, please try again later." })
+        this.setState({ pending: false, feedback: { type: 'error', message: 'Service is unvailable, please try again later.' } })
       }
     }
   }
