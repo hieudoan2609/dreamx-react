@@ -22,6 +22,8 @@ $darken: rgba(1, 1, 1, 0.5);
 
 .Table {
   height: 100%;
+  width: 100%;
+  overflow-y: scroll;
   .input-group {
     background-color: $overlay;
     .input-group-prepend {

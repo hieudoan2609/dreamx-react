@@ -18,6 +18,19 @@ $sell: #f36972;
 $darken: rgba(1, 1, 1, 0.5);
 $overlay: rgba(130,130,130,.1);
 
-.MarketOrders {
+.MyOpenOrders {
   height: 250px;
+  padding: 10px;
+  .header {
+    text-transform: uppercase;
+    font-size: .8rem;
+    font-weight: bold;
+  }
+  .body {
+    display: flex;
+    flex-grow: 1;
+    .not-available, .not-available > div {
+      height: 100%;
+    }
+  }
 }

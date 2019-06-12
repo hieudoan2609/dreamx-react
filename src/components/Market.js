@@ -4,7 +4,7 @@ import { withRouter } from "react-router";
 
 import Chart from "./Chart";
 import Trade from "./Trade";
-import MarketOrders from "./MarketOrders";
+import MyOpenOrders from "./MyOpenOrders";
 import BuyBook from "./BuyBook";
 import SellBook from "./SellBook";
 import TradeHistory from "./TradeHistory";
@@ -111,7 +111,7 @@ class Market extends Component {
 
         <div className="row">
           <div className="col-lg-12">
-            <MarketOrders theme={this.props.app.theme} />
+            <MyOpenOrders theme={this.props.app.theme} />
           </div>
         </div>
 
