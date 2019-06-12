@@ -222,6 +222,7 @@ class Trade extends Component {
   };
 
   orderAsync = async () => {
+    const { price, priceWei, amount, amountWei, fee, total, error, totalMinusFee, amountMinusFee } = INITIAL_STATE
     const { API_HTTP_ROOT } = config;
     const { app, account, base, quote } = this.props
     const orderType = this.state.currentTab
@@ -236,7 +237,7 @@ class Trade extends Component {
     } else {
       giveTokenAddress = quote.address
       giveAmount = this.state.amountWei
-      takeTokenAddress = quote.address
+      takeTokenAddress = base.address
       takeAmount = this.state.total
     }
     const expiryTimestampInMilliseconds = 33117212071000;
@@ -248,18 +249,11 @@ class Trade extends Component {
     }
 
     try {
-      const response = await axios.post(
+      await axios.post(
         `${API_HTTP_ROOT}/orders`,
         payload
       );
-
-      console.log(response)
-
-      // await dispatch(updateTransfersAsync(newWithdraw));
-
-      // dispatch({
-      //   type: TRANSFER_COMPLETE
-      // });
+      this.setState({ pending: false, price, priceWei, amount, amountWei, fee, total, error, totalMinusFee, amountMinusFee })
     } catch (err) {
       if (err.toString() === "Error: Request failed with status code 503") {
         this.setState({ pending: false, error: "Service is unvailable, please try again later." })
