@@ -99,6 +99,7 @@ $darken: rgba(1, 1, 1, 0.5);
   }
   ::-webkit-scrollbar-track {
     background: $overlay;
+    border-radius: 5px;
   }
   &.light {
     .table, .search, .input-group-prepend span {
@@ -115,6 +116,7 @@ $darken: rgba(1, 1, 1, 0.5);
     ::-webkit-scrollbar-thumb {
       background-color: $light-primary;
       cursor: pointer;
+      border-radius: 5px;
     }
     ::-webkit-scrollbar-corner {
       background: $light-overlay;
@@ -135,6 +137,7 @@ $darken: rgba(1, 1, 1, 0.5);
     ::-webkit-scrollbar-thumb {
       background-color: $dark-primary;
       cursor: pointer;
+      border-radius: 5px;
     }
     ::-webkit-scrollbar-corner {
       background: $dark-overlay;
