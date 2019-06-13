@@ -1,6 +1,5 @@
 import {
-  ORDER_BOOK_LOAD,
-  ORDER_BOOK_LOADING
+  ORDER_BOOK_LOAD
 } from "../actions/types";
 
 const INITIAL_STATE = {

@@ -7,6 +7,7 @@ import Table from "./Table";
 import {
   capitalize
 } from "../helpers";
+import Loading from './Loading'
 
 class MyOpenOrders extends Component {
   extractOpenOrdersData = () => {
@@ -49,6 +50,11 @@ class MyOpenOrders extends Component {
   render() {
     return (
       <div className={`MyOpenOrders card ${this.props.theme}`}>
+        <Loading
+          active={this.props.loading}
+          type="absolute"
+          theme={this.props.theme}
+        />
         <div className="header">
           My Open Orders
         </div>

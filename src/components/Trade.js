@@ -10,6 +10,7 @@ import Button from "./Button";
 import { truncateNumberInput, truncateNumberOutput } from "../helpers";
 import singletons from "../singletons";
 import config from "../config";
+import Loading from './Loading'
 
 const INITIAL_STATE = {
   tabs: ["buy", "sell"],
@@ -306,6 +307,12 @@ class Trade extends Component {
   render() {
     return (
       <div className={`Trade card ${this.props.theme}`}>
+        <Loading
+          active={this.props.loading}
+          type="absolute"
+          theme={this.props.theme}
+        />
+        
         {this.renderNotLoggedInOverlay()}
         <TabMenu
           items={this.state.tabs}

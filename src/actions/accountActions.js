@@ -68,7 +68,6 @@ export const accountLoginAsync = () => {
       });
       dispatch(appLoaded());
     } catch (err) {
-      console.log(err);
       dispatch({
         type: ACCOUNT_LOADED
       });

@@ -1,4 +1,3 @@
-import Web3 from 'web3'
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -6,11 +5,17 @@ import PropTypes from "prop-types";
 import "./OrderBook.scss";
 import Table from './Table'
 import { extractBookData } from '../helpers'
+import Loading from './Loading'
 
 class BuyBook extends Component {
   render() {
     return (
       <div className={`OrderBook card ${this.props.theme}`}>
+        <Loading
+          active={this.props.loading}
+          type="absolute"
+          theme={this.props.theme}
+        />
         <div className="header">
           <div className="left">
             Buy Orders

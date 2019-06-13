@@ -1,4 +1,4 @@
-import { MARKET_CHANGE, MARKET_LOADING, MARKET_LOADED } from "../actions/types";
+import { MARKET_LOAD, MARKET_LOADING, MARKET_LOADED } from "../actions/types";
 
 const INITIAL_STATE = {
   currentMarket: "",
@@ -11,8 +11,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loading: true }
     case MARKET_LOADED:
       return { ...state, loading: false }
-    case MARKET_CHANGE:
-      return { ...state, currentMarket: action.payload.currentMarket };
+    case MARKET_LOAD:
+      return { ...state, currentMarket: action.payload.currentMarket, loading: false };
     default:
       return state;
   }

@@ -10,7 +10,7 @@ import SellBook from "./SellBook";
 import TradeHistory from "./TradeHistory";
 import "./Market.scss";
 import {
-  marketUpdateCurrentMarket,
+  marketLoad,
   tickersHandleSearchInput
 } from "../actions";
 
@@ -21,7 +21,7 @@ class Market extends Component {
     // sync currentMarket on componentDidMount if url param is valid
     const currentMarket = this.props.match.params.marketSymbol;
     if (currentMarket) {
-      this.props.marketUpdateCurrentMarket(currentMarket);
+      this.props.marketLoad(currentMarket);
     }
   };
 
@@ -32,7 +32,7 @@ class Market extends Component {
     const previousMarket = prevProps.match.params.marketSymbol;
     const marketChanged = currentMarket !== previousMarket;
     if (marketChanged && currentMarket) {
-      this.props.marketUpdateCurrentMarket(currentMarket);
+      this.props.marketLoad(currentMarket);
     }
   };
 
@@ -94,6 +94,7 @@ class Market extends Component {
           <div className="col-lg-8">
             <Chart
               theme={this.props.app.theme}
+              loading={this.props.market.loading}
               tickers={this.props.tickers.filtered}
               currentMarket={this.props.market.currentMarket}
               searchValue={this.props.tickers.searchValue}
@@ -103,6 +104,7 @@ class Market extends Component {
           <div className="col-lg-4">
             <Trade
               theme={this.props.app.theme}
+              loading={this.props.market.loading}
               loggedIn={this.props.account.address ? true : false}
               base={this.getBaseAndQuoteBalances().base}
               quote={this.getBaseAndQuoteBalances().quote}
@@ -116,19 +118,31 @@ class Market extends Component {
 
         <div className="row">
           <div className="col-lg-12">
-            <MyOpenOrders theme={this.props.app.theme} />
+            <MyOpenOrders 
+              theme={this.props.app.theme} 
+              loading={this.props.market.loading}
+            />
           </div>
         </div>
 
         <div className="row">
           <div className="col-lg-4">
-            <BuyBook theme={this.props.app.theme} />
+            <BuyBook 
+              theme={this.props.app.theme} 
+              loading={this.props.market.loading}
+            />
           </div>
           <div className="col-lg-4">
-            <SellBook theme={this.props.app.theme} />
+            <SellBook 
+              theme={this.props.app.theme} 
+              loading={this.props.market.loading}
+            />
           </div>
           <div className="col-lg-4">
-            <TradeHistory theme={this.props.app.theme} />
+            <TradeHistory 
+              theme={this.props.app.theme} 
+              loading={this.props.market.loading}
+            />
           </div>
         </div>
       </div>
@@ -141,7 +155,7 @@ const mapStateToProps = state => {
 };
 
 const mapActionsToProps = {
-  marketUpdateCurrentMarket,
+  marketLoad,
   tickersHandleSearchInput
 };
 

@@ -3,12 +3,20 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import "./Chart.scss";
-import Ticker from "./Ticker.js";
+import Ticker from "./Ticker";
+import Loading from './Loading'
 
 class Chart extends Component {
   render() {
     return (
-      <div className={`Chart card ${this.props.theme}`}>
+      <div className={`Chart card 
+        ${this.props.theme}
+      }`}>
+        <Loading
+          active={this.props.loading}
+          type="absolute"
+          theme={this.props.theme}
+        />
         <div className="ticker">
           <Ticker
             theme={this.props.theme}

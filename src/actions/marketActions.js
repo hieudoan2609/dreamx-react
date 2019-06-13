@@ -1,14 +1,19 @@
-import { MARKET_CHANGE, APP_LOADING } from "../actions/types";
+import { MARKET_LOAD, MARKET_LOADING } from "../actions/types";
 import { orderBookLoadAsync } from "."
 
-export const marketUpdateCurrentMarket = newMarket => {
+export const marketLoad = newMarket => {
   return async dispatch => {
-    // await dispatch(orderBookLoadAsync(newMarket))
     dispatch({
-      type: MARKET_CHANGE,
-      payload: {
-        currentMarket: newMarket
-      }
-    });
+      type: MARKET_LOADING
+    })
+
+    // await dispatch(orderBookLoadAsync(newMarket))
+    
+    // dispatch({
+    //   type: MARKET_LOAD,
+    //   payload: {
+    //     currentMarket: newMarket
+    //   }
+    // });
   };
 };
