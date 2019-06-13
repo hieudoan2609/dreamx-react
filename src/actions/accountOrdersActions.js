@@ -1,3 +1,4 @@
+import Web3 from 'web3'
 import axios from 'axios'
 
 import {
@@ -5,14 +6,12 @@ import {
   ACCOUNT_ORDERS_LOAD,
   ACCOUNT_ORDERS_CLEAR_FILTER
 } from "../actions/types";
-import singletons from "../singletons";
 import config from '../config'
-import { getOrderAmount, getOrderTotal, getOrderPrice, convertKeysToCamelCase } from "../helpers";
+import { getOrderPriceAmountTotal, convertKeysToCamelCase } from "../helpers";
 
 export const accountOrdersLoadAsync = accountAddress => {
   return async (dispatch, getState) => {
     const { markets } = getState();
-    const { web3 } = singletons;
     const { API_HTTP_ROOT } = config;
 
     const ordersResponse = await axios.get(`${API_HTTP_ROOT}/orders?account_address=${accountAddress}&per_page=1000`)
@@ -31,10 +30,10 @@ export const accountOrdersLoadAsync = accountAddress => {
         accountOrder.giveTokenAddress === market.baseToken.address
           ? "buy"
           : "sell";
-      accountOrder.price = getOrderPrice(accountOrder);
-      accountOrder.amount = getOrderAmount(accountOrder);
-      accountOrder.total = getOrderTotal(accountOrder);
-      accountOrder.filled = web3.utils.fromWei(accountOrder.filled);
+      accountOrder.price = getOrderPriceAmountTotal(accountOrder).price;
+      accountOrder.amount = Web3.utils.fromWei(getOrderPriceAmountTotal(accountOrder).amount);
+      accountOrder.total = Web3.utils.fromWei(getOrderPriceAmountTotal(accountOrder).total);
+      accountOrder.filled = Web3.utils.fromWei(accountOrder.filled);
       return accountOrder;
     });
 

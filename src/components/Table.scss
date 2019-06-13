@@ -17,6 +17,7 @@ $icon-small: 14px;
 $light-primary-shade: #26327f;
 $dark-primary-shade: #d26127;
 $darken: rgba(1, 1, 1, 0.5);
+$faded-text: #9c9fa3;
 
 *:focus {
   box-shadow: none !important;
@@ -104,6 +105,7 @@ $darken: rgba(1, 1, 1, 0.5);
   &.light {
     .table, .search, .input-group-prepend span {
       th {
+        color: $light-text;
         &.clickable {
           color: $light-primary;
           &:hover {
@@ -111,7 +113,7 @@ $darken: rgba(1, 1, 1, 0.5);
           }
         }
       }
-      color: $light-text;
+      color: $faded-text;
     }
     ::-webkit-scrollbar-thumb {
       background-color: $light-primary;
@@ -125,6 +127,7 @@ $darken: rgba(1, 1, 1, 0.5);
   &.dark {
     .table, .search, .input-group-prepend span {
       th {
+        color: $dark-text;
         &.clickable {
           color: $dark-primary;
           &:hover {
@@ -132,7 +135,7 @@ $darken: rgba(1, 1, 1, 0.5);
           }
         }
       }
-      color: $dark-text;
+      color: $faded-text;
     }
     ::-webkit-scrollbar-thumb {
       background-color: $dark-primary;

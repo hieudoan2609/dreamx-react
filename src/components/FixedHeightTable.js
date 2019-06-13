@@ -24,6 +24,7 @@ class FixedHeightTable extends Component {
         clickableHeaders={this.props.clickableHeaders}
         loggedIn={this.props.loggedIn}
         loginRequired={this.props.loginRequired}
+        manuallySortable={this.props.manuallySortable}
       />
     );
   }
@@ -54,7 +55,8 @@ FixedHeightTable.propTypes = {
   clearSearch: PropTypes.func, // required if table is searchable
   clickableHeaders: PropTypes.array, // [ { name: string, onClick: func } ]
   loginRequired: PropTypes.bool,
-  loggedIn: PropTypes.bool
+  loggedIn: PropTypes.bool,
+  manuallySortable: PropTypes.bool
 };
 
 export default FixedHeightTable;

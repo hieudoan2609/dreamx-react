@@ -133,22 +133,39 @@ export function getSorting(order, orderBy) {
     : (a, b) => -desc(a, b, orderBy);
 }
 
-export const getOrderPrice = (order) => {
+export const getOrderPriceAmountTotal = (order) => {
   const takeAmount = Web3.utils.toBN(order.takeAmount)
   const giveAmount = Web3.utils.toBN(order.giveAmount)
-  return order.type === "sell"
+  const price = order.type === "sell"
     ? (takeAmount.div(giveAmount)).toString()
     : (giveAmount.div(takeAmount)).toString();
+  const amount = order.type === "sell"
+    ? order.giveAmount
+    : order.takeAmount;
+  const total = order.type === "sell"
+    ? order.takeAmount
+    : order.giveAmount;
+  return { price, amount, total }
 }
 
-export const getOrderAmount = (order) => {
-  return order.type === "sell"
-    ? Web3.utils.fromWei(order.giveAmount)
-    : Web3.utils.fromWei(order.takeAmount);
-}
+export const extractBookData = (bookOrders) => {
+  const prices = {}
+  for (let order of bookOrders) {
+    const { price, amount, total } = getOrderPriceAmountTotal(order)
+    if (!prices[price]) {
+      prices[price] = { amount, total }
+    } else {
+      prices[price].amount = (Web3.utils.toBN(prices[price].amount).add(Web3.utils.toBN(amount))).toString()
+      prices[price].total = (Web3.utils.toBN(prices[price].total).add(Web3.utils.toBN(total))).toString()
+    }
+  }
 
-export const getOrderTotal = (order) => {
-  return order.type === "sell"
-    ? Web3.utils.fromWei(order.takeAmount)
-    : Web3.utils.fromWei(order.giveAmount);
+  const extractedData = []
+  for (let price of Object.keys(prices)) {
+    let { amount, total } = prices[price]
+    amount = Web3.utils.fromWei(amount)
+    total = Web3.utils.fromWei(total)
+    extractedData.push({ price, amount, total })
+  }
+  return extractedData
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { APP_TOGGLE_THEME, APP_INITIALIZE } from "../actions/types";
+import { APP_LOADED, APP_TOGGLE_THEME, APP_INITIALIZE } from "../actions/types";
 import { tokensLoadAsync, marketsLoadAsync, tickersLoadAsync } from ".";
 import { getNetworkNameFromId } from "../helpers";
 import config from "../config";
@@ -60,3 +60,11 @@ const initializeAppSingletons = () => {
   const cable = ActionCable.createConsumer(config.API_WS_ROOT);
   setSingleton("cable", cable);
 };
+
+export const appLoaded = () => {
+  return dispatch => {
+    dispatch({
+      type: APP_LOADED
+    });
+  };
+}

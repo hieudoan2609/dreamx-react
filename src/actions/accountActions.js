@@ -7,14 +7,14 @@ import {
   ACCOUNT_METAMASK_WRONGNETWORK,
   ACCOUNT_LOADING,
   ACCOUNT_LOADED,
-  ACCOUNT_METAMASK_NOTREADY,
-  APP_LOADED
+  ACCOUNT_METAMASK_NOTREADY
 } from "../actions/types";
 import {
   tokensLoadAccountAsync,
   transfersLoadAccountAsync,
   accountOrdersLoadAsync,
-  accountTradesLoadAsync
+  accountTradesLoadAsync,
+  appLoaded
 } from ".";
 import { transferHide } from "./";
 import { setSingleton } from "../singletons";
@@ -33,7 +33,7 @@ export const accountLoginAsync = () => {
       dispatch({
         type: ACCOUNT_METAMASK_UNAVAILABLE
       });
-      dispatch(finalizeInitialization());
+      dispatch(appLoaded());
       return;
     }
 
@@ -41,7 +41,7 @@ export const accountLoginAsync = () => {
       dispatch({
         type: ACCOUNT_METAMASK_NOTREADY
       });
-      dispatch(finalizeInitialization());
+      dispatch(appLoaded());
       return;
     }
 
@@ -49,7 +49,7 @@ export const accountLoginAsync = () => {
       dispatch({
         type: ACCOUNT_METAMASK_WRONGNETWORK
       });
-      dispatch(finalizeInitialization());
+      dispatch(appLoaded());
       return;
     }
 
@@ -66,23 +66,15 @@ export const accountLoginAsync = () => {
         type: ACCOUNT_LOGIN,
         payload: { address }
       });
-      dispatch(finalizeInitialization());
+      dispatch(appLoaded());
     } catch (err) {
       console.log(err);
       dispatch({
         type: ACCOUNT_LOADED
       });
-      dispatch(finalizeInitialization());
+      dispatch(appLoaded());
       return;
     }
-  };
-};
-
-const finalizeInitialization = () => {
-  return dispatch => {
-    dispatch({
-      type: APP_LOADED
-    });
   };
 };
 

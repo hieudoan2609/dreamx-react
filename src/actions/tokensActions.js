@@ -98,9 +98,9 @@ const initializeCableSubscriptions = accountAddress => {
 const loadTokenBalances = (newBalances, reInitialize = false) => {
   return (dispatch, getState) => {
     const { tokens } = getState();
-    let loadedBalances = tokens.all;
-    for (let index in loadedBalances) {
-      const token = loadedBalances[index];
+    let loadedBalances = [];
+    for (let index in tokens.all) {
+      const token = { ...tokens.all[index] };
       if (reInitialize) {
         token.availableBalance = "0";
         token.inOrders = "0";
@@ -115,6 +115,7 @@ const loadTokenBalances = (newBalances, reInitialize = false) => {
           ).toString();
         }
       }
+      loadedBalances.push(token)
     }
     dispatch({
       type: TOKENS_LOAD,

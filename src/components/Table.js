@@ -63,8 +63,8 @@ class Table extends Component {
 
   handleSort = property => {
     if (
-      this.props.excludeFromSorting &&
-      this.props.excludeFromSorting.includes(property)
+      this.props.manuallySortable === false ||
+      (this.props.excludeFromSorting && this.props.excludeFromSorting.includes(property))
     ) {
       return;
     }
@@ -110,6 +110,20 @@ class Table extends Component {
     window.scrollTo(0, tableTop);
   };
 
+  renderSortArrow = (col) => {
+    if (this.props.manuallySortable === false) {
+      return
+    }
+
+    if (this.state.orderBy === col) {
+      return (
+        <div className={`icon ${this.state.order}`}>
+          <ion-icon name="arrow-dropdown" />
+        </div>
+      )
+    }
+  }
+
   renderTableHeaders = () => {
     return Object.keys(this.props.data[0]).map(col => {
       if (this.props.clickableHeaders) {
@@ -124,11 +138,7 @@ class Table extends Component {
                 className="clickable"
               >
                 <div className="body">
-                  {this.state.orderBy === col && (
-                    <div className={`icon ${this.state.order}`}>
-                      <ion-icon name="arrow-dropdown" />
-                    </div>
-                  )}
+                  {this.renderSortArrow(col)}
 
                   <div className="text">
                     {this.formatNameToUserFriendly(col)}
@@ -143,11 +153,7 @@ class Table extends Component {
       return (
         <th scope="col" key={col} onClick={() => this.handleSort(col)}>
           <div className="body">
-            {this.state.orderBy === col && (
-              <div className={`icon ${this.state.order}`}>
-                <ion-icon name="arrow-dropdown" />
-              </div>
-            )}
+            {this.renderSortArrow(col)}
 
             <div className="text">{this.formatNameToUserFriendly(col)}</div>
           </div>
@@ -271,7 +277,8 @@ Table.propTypes = {
   clearSearch: PropTypes.func, // required if table is searchable,
   clickableHeaders: PropTypes.array, // [ { name: string, onClick: func } ], clickable headers are unsortable
   loginRequired: PropTypes.bool,
-  loggedIn: PropTypes.bool
+  loggedIn: PropTypes.bool,
+  manuallySortable: PropTypes.bool
 };
 
 export default Table;

@@ -1,24 +1,13 @@
+import Web3 from 'web3'
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import "./OrderBook.scss";
 import Table from './Table'
+import { extractBookData } from '../helpers'
 
 class BuyBook extends Component {
-  extractBookData = () => {
-    const extractedData = []
-    const book = this.props.orderBook.buyBook
-    const prices = {}
-
-    for (let order of book) {
-      console.log(order)
-      // extractedData.push({ price, amount, total })
-    }
-
-    return extractedData
-  }
-
   render() {
     return (
       <div className={`OrderBook card ${this.props.theme}`}>
@@ -33,9 +22,10 @@ class BuyBook extends Component {
         <div className="body">
           <Table
             theme={this.props.theme}
-            data={this.extractBookData()}
+            data={extractBookData(this.props.orderBook.buyBook)}
             dataName='buy orders'
             defaultOrderBy='price'
+            manuallySortable={false}
           />
         </div>
       </div>
