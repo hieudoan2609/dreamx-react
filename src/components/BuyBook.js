@@ -6,6 +6,19 @@ import "./OrderBook.scss";
 import Table from './Table'
 
 class BuyBook extends Component {
+  extractBookData = () => {
+    const extractedData = []
+    const book = this.props.orderBook.buyBook
+    const prices = {}
+
+    for (let order of book) {
+      console.log(order)
+      // extractedData.push({ price, amount, total })
+    }
+
+    return extractedData
+  }
+
   render() {
     return (
       <div className={`OrderBook card ${this.props.theme}`}>
@@ -20,7 +33,7 @@ class BuyBook extends Component {
         <div className="body">
           <Table
             theme={this.props.theme}
-            data={[]}
+            data={this.extractBookData()}
             dataName='buy orders'
             defaultOrderBy='price'
           />

@@ -11,8 +11,12 @@ export const orderBookLoadAsync = (marketSymbol) => {
     const { API_HTTP_ROOT } = config;
 
     const orderBooksResponse = await axios.get(`${API_HTTP_ROOT}/order_books/${marketSymbol}?per_page=1000`)
-    const buyBook = orderBooksResponse.data.bid.records.map(order => convertKeysToCamelCase(order))
-    const sellBook = orderBooksResponse.data.ask.records.map(order => convertKeysToCamelCase(order))
+    const buyBook = orderBooksResponse.data.bid.records.map(order => {
+      return convertKeysToCamelCase(order)
+    })
+    const sellBook = orderBooksResponse.data.ask.records.map(order => {
+      return convertKeysToCamelCase(order)
+    })
     
     dispatch({
       type: ORDER_BOOK_LOAD,

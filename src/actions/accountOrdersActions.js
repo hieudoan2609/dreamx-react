@@ -16,8 +16,8 @@ export const accountOrdersLoadAsync = accountAddress => {
     const { API_HTTP_ROOT } = config;
 
     const ordersResponse = await axios.get(`${API_HTTP_ROOT}/orders?account_address=${accountAddress}&per_page=1000`)
-    const accountOrdersData = ordersResponse.data.records.map(o => convertKeysToCamelCase(o))
-    const accountOrders = accountOrdersData.map(accountOrder => {
+    const accountOrders = ordersResponse.data.records.map(accountOrder => {
+      accountOrder = convertKeysToCamelCase(accountOrder)
       const market = markets.all.filter(
         m =>
           (m.baseToken.address === accountOrder.giveTokenAddress &&
