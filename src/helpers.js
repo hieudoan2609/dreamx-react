@@ -1,4 +1,6 @@
 import _ from "lodash";
+import Web3 from 'web3'
+
 import singletons from "./singletons";
 
 export const getNetworkNameFromId = networkId => {
@@ -129,4 +131,24 @@ export function getSorting(order, orderBy) {
   return order === "desc"
     ? (a, b) => desc(a, b, orderBy)
     : (a, b) => -desc(a, b, orderBy);
+}
+
+export const getOrderPrice = (order) => {
+  const takeAmount = Web3.utils.toBN(order.takeAmount)
+  const giveAmount = Web3.utils.toBN(order.giveAmount)
+  return order.type === "sell"
+    ? (takeAmount.div(giveAmount)).toString()
+    : (giveAmount.div(takeAmount)).toString();
+}
+
+export const getOrderAmount = (order) => {
+  return order.type === "sell"
+    ? Web3.utils.fromWei(order.giveAmount)
+    : Web3.utils.fromWei(order.takeAmount);
+}
+
+export const getOrderTotal = (order) => {
+  return order.type === "sell"
+    ? Web3.utils.fromWei(order.takeAmount)
+    : Web3.utils.fromWei(order.giveAmount);
 }

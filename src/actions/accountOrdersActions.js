@@ -7,7 +7,7 @@ import {
 } from "../actions/types";
 import singletons from "../singletons";
 import config from '../config'
-import { convertKeysToCamelCase } from "../helpers";
+import { getOrderAmount, getOrderTotal, getOrderPrice, convertKeysToCamelCase } from "../helpers";
 
 export const accountOrdersLoadAsync = accountAddress => {
   return async (dispatch, getState) => {
@@ -31,20 +31,9 @@ export const accountOrdersLoadAsync = accountAddress => {
         accountOrder.giveTokenAddress === market.baseToken.address
           ? "buy"
           : "sell";
-      accountOrder.price =
-        accountOrder.type === "sell"
-          ? parseFloat(accountOrder.takeAmount) /
-            parseFloat(accountOrder.giveAmount)
-          : parseFloat(accountOrder.giveAmount) /
-            parseFloat(accountOrder.takeAmount);
-      accountOrder.amount =
-        accountOrder.type === "sell"
-          ? web3.utils.fromWei(accountOrder.giveAmount)
-          : web3.utils.fromWei(accountOrder.takeAmount);
-      accountOrder.total =
-        accountOrder.type === "sell"
-          ? web3.utils.fromWei(accountOrder.takeAmount)
-          : web3.utils.fromWei(accountOrder.giveAmount);
+      accountOrder.price = getOrderPrice(accountOrder);
+      accountOrder.amount = getOrderAmount(accountOrder);
+      accountOrder.total = getOrderTotal(accountOrder);
       accountOrder.filled = web3.utils.fromWei(accountOrder.filled);
       return accountOrder;
     });
