@@ -77,6 +77,11 @@ class Market extends Component {
     const quoteToken = this.props.tokens.all.filter(
       t => t.symbol === quoteTokenSymbol
     )[0];
+    
+    if (!baseToken || !quoteToken) {
+      return { base: undefined, quote: undefined };
+    }
+
     const base = { symbol: baseToken.symbol, balance: baseToken.availableBalance, address: baseToken.address };
     const quote = { symbol: quoteToken.symbol, balance: quoteToken.availableBalance, address: quoteToken.address };
     return { base, quote };

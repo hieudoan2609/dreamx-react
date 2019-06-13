@@ -9,3 +9,4 @@ export * from "./marketsActions";
 export * from "./tickersActions";
 export * from "./marketActions";
 export * from "./tradeActions";
+export * from "./orderBookActions";
