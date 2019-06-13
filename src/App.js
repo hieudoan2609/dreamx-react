@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 
 import Market from "./components/Market";
 import Account from "./components/Account";
-import NotFound from "./components/NotFound";
 import Menu from "./components/Menu";
 import Loading from "./components/Loading";
 import {
