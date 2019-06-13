@@ -4,18 +4,19 @@ import {
   ORDER_BOOK_LOAD
 } from "../actions/types";
 import config from '../config'
+import { convertKeysToCamelCase } from "../helpers";
 
-export const orderBookLoadAsync = () => {
-  return async (dispatch, getState) => {
-    const { market } = getState()
+export const orderBookLoadAsync = (marketSymbol) => {
+  return async (dispatch) => {
     const { API_HTTP_ROOT } = config;
 
-    if (!market.currentMarket) {
-      return
-    }
-
-    const orderBooksResponse = await axios.get(`${API_HTTP_ROOT}/order_books/${market.currentMarket}?per_page=1000`)
+    const orderBooksResponse = await axios.get(`${API_HTTP_ROOT}/order_books/${marketSymbol}?per_page=1000`)
+    const buyBook = orderBooksResponse.data.bid.records.map(order => convertKeysToCamelCase(order))
+    const sellBook = orderBooksResponse.data.ask.records.map(order => convertKeysToCamelCase(order))
     
-    // console.log(orderBooksResponse)
+    dispatch({
+      type: ORDER_BOOK_LOAD,
+      payload: { buyBook, sellBook }
+    })
   };
 };
