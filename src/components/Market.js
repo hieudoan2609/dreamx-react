@@ -10,18 +10,19 @@ import SellBook from "./SellBook";
 import TradeHistory from "./TradeHistory";
 import "./Market.scss";
 import {
-  marketLoad,
+  marketLoadAsync,
   tickersHandleSearchInput
 } from "../actions";
 
 class Market extends Component {
   componentDidMount = () => {
+    console.log(this.props)
     this.redirectToDefaultMarketIfMarketSymbolInvalid();
     window.scrollTo(0, 0);
     // sync currentMarket on componentDidMount if url param is valid
     const currentMarket = this.props.match.params.marketSymbol;
     if (currentMarket) {
-      this.props.marketLoad(currentMarket);
+      this.props.marketLoadAsync(currentMarket);
     }
   };
 
@@ -32,7 +33,7 @@ class Market extends Component {
     const previousMarket = prevProps.match.params.marketSymbol;
     const marketChanged = currentMarket !== previousMarket;
     if (marketChanged && currentMarket) {
-      this.props.marketLoad(currentMarket);
+      this.props.marketLoadAsync(currentMarket);
     }
   };
 
@@ -155,7 +156,7 @@ const mapStateToProps = state => {
 };
 
 const mapActionsToProps = {
-  marketLoad,
+  marketLoadAsync,
   tickersHandleSearchInput
 };
 

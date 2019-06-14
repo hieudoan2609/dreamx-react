@@ -11,7 +11,8 @@ import {
   toggleTheme,
   loadTheme,
   initializeAppAsync,
-  accountLoginAsync
+  accountLoginAsync,
+  appLoaded
 } from "./actions";
 
 const logo = require("./images/logo.svg");
@@ -30,10 +31,11 @@ class App extends Component {
     ]
   };
 
-  componentWillMount = async () => {
+  componentDidMount = async () => {
     this.props.loadTheme();
     await this.props.initializeAppAsync();
     await this.props.accountLoginAsync();
+    this.props.appLoaded()
   };
 
   render() {
@@ -81,7 +83,8 @@ const mapActionsToProps = {
   toggleTheme,
   loadTheme,
   initializeAppAsync,
-  accountLoginAsync
+  accountLoginAsync,
+  appLoaded
 };
 
 export default connect(

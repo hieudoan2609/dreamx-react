@@ -13,8 +13,7 @@ import {
   tokensLoadAccountAsync,
   transfersLoadAccountAsync,
   accountOrdersLoadAsync,
-  accountTradesLoadAsync,
-  appLoaded
+  accountTradesLoadAsync
 } from ".";
 import { transferHide } from "./";
 import { setSingleton } from "../singletons";
@@ -33,7 +32,6 @@ export const accountLoginAsync = () => {
       dispatch({
         type: ACCOUNT_METAMASK_UNAVAILABLE
       });
-      dispatch(appLoaded());
       return;
     }
 
@@ -41,7 +39,6 @@ export const accountLoginAsync = () => {
       dispatch({
         type: ACCOUNT_METAMASK_NOTREADY
       });
-      dispatch(appLoaded());
       return;
     }
 
@@ -49,7 +46,6 @@ export const accountLoginAsync = () => {
       dispatch({
         type: ACCOUNT_METAMASK_WRONGNETWORK
       });
-      dispatch(appLoaded());
       return;
     }
 
@@ -66,12 +62,10 @@ export const accountLoginAsync = () => {
         type: ACCOUNT_LOGIN,
         payload: { address }
       });
-      dispatch(appLoaded());
     } catch (err) {
       dispatch({
         type: ACCOUNT_LOADED
       });
-      dispatch(appLoaded());
       return;
     }
   };
