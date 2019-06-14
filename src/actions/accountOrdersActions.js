@@ -30,7 +30,7 @@ export const accountOrdersLoadAsync = accountAddress => {
         accountOrder.giveTokenAddress === market.baseToken.address
           ? "buy"
           : "sell";
-      accountOrder.price = getOrderPriceAmountTotal(accountOrder).price;
+      accountOrder.price = Web3.utils.fromWei(getOrderPriceAmountTotal(accountOrder).price);
       accountOrder.amount = Web3.utils.fromWei(getOrderPriceAmountTotal(accountOrder).amount);
       accountOrder.total = Web3.utils.fromWei(getOrderPriceAmountTotal(accountOrder).total);
       accountOrder.filled = Web3.utils.fromWei(accountOrder.filled);

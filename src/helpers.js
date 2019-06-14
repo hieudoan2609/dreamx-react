@@ -134,11 +134,13 @@ export function getSorting(order, orderBy) {
 }
 
 export const getOrderPriceAmountTotal = (order) => {
+  const oneEther = Web3.utils.toBN(Web3.utils.toWei('1'))
   const takeAmount = Web3.utils.toBN(order.takeAmount)
   const giveAmount = Web3.utils.toBN(order.giveAmount)
   const price = order.type === "sell"
-    ? (takeAmount.div(giveAmount)).toString()
-    : (giveAmount.div(takeAmount)).toString();
+    ? (takeAmount.mul(oneEther).div(giveAmount)).toString()
+    : (giveAmount.mul(oneEther).div(takeAmount)).toString();
+
   const amount = order.type === "sell"
     ? order.giveAmount
     : order.takeAmount;
