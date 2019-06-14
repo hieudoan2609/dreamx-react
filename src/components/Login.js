@@ -13,16 +13,6 @@ class Login extends Component {
   };
 
   renderBody = () => {
-    if (this.props.account.loading) {
-      return (
-        <Loading
-          active={this.props.account.loading}
-          type="absolute"
-          theme={this.props.app.theme}
-        />
-      );
-    }
-
     if (this.props.account.address) {
       const address_first_four_digits = this.props.account.address.substring(
         2,
@@ -107,6 +97,12 @@ class Login extends Component {
   render() {
     return (
       <div className={`Login card text-center ${this.props.app.theme}`}>
+        <Loading
+          active={this.props.loading}
+          type="absolute"
+          theme={this.props.app.theme}
+        />
+
         {this.renderBody()}
       </div>
     );

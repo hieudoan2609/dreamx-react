@@ -15,17 +15,17 @@ import {
 } from "../actions";
 
 class Market extends Component {
-  componentDidMount = async () => {
+  componentDidMount = () => {
     this.redirectToDefaultMarketIfMarketSymbolInvalid();
     const currentMarket = this.props.match.params.marketSymbol;
     const isLoaded = this.props.market.currentMarket
     if (!isLoaded && currentMarket) {
-      await this.props.marketLoadAsync(currentMarket);
+      this.props.marketLoadAsync(currentMarket);
     }
     window.scrollTo(0, 0);
   };
 
-  componentDidUpdate = async prevProps => {
+  componentDidUpdate = prevProps => {
     this.redirectToDefaultMarketIfMarketSymbolInvalid();
     const currentMarket = this.props.match.params.marketSymbol;
     const previousMarket = prevProps.match.params.marketSymbol;
@@ -88,13 +88,15 @@ class Market extends Component {
   };
 
   render() {
+    const isLoading = this.props.market.loading || this.props.app.loading || this.props.account.loading
+
     return (
       <div className="Market">
         <div className="row">
           <div className="col-lg-8">
             <Chart
               theme={this.props.app.theme}
-              loading={this.props.market.loading}
+              loading={isLoading}
               tickers={this.props.tickers.filtered}
               currentMarket={this.props.market.currentMarket}
               searchValue={this.props.tickers.searchValue}
@@ -104,7 +106,7 @@ class Market extends Component {
           <div className="col-lg-4">
             <Trade
               theme={this.props.app.theme}
-              loading={this.props.market.loading}
+              loading={isLoading}
               loggedIn={this.props.account.address ? true : false}
               base={this.getBaseAndQuoteBalances().base}
               quote={this.getBaseAndQuoteBalances().quote}
@@ -120,7 +122,7 @@ class Market extends Component {
           <div className="col-lg-12">
             <MyOpenOrders 
               theme={this.props.app.theme} 
-              loading={this.props.market.loading}
+              loading={isLoading}
             />
           </div>
         </div>
@@ -129,19 +131,19 @@ class Market extends Component {
           <div className="col-lg-4">
             <BuyBook 
               theme={this.props.app.theme} 
-              loading={this.props.market.loading}
+              loading={isLoading}
             />
           </div>
           <div className="col-lg-4">
             <SellBook 
               theme={this.props.app.theme} 
-              loading={this.props.market.loading}
+              loading={isLoading}
             />
           </div>
           <div className="col-lg-4">
             <TradeHistory 
               theme={this.props.app.theme} 
-              loading={this.props.market.loading}
+              loading={isLoading}
             />
           </div>
         </div>

@@ -28,6 +28,7 @@ import {
   getEtherscanTransaction
 } from "../helpers";
 import ModalWrapper from "./ModalWrapper";
+import Loading from "./Loading";
 import TransferModal from "./TransferModal";
 import TransferCompleteModal from "./TransferCompleteModal";
 import FixedHeightTable from "./FixedHeightTable";
@@ -385,6 +386,8 @@ class Account extends Component {
   };
 
   render() {
+    const isLoading = this.props.account.loading || this.props.app.loading
+
     return (
       <div className={`Account ${this.props.app.theme}`}>
         <ModalWrapper
@@ -397,9 +400,17 @@ class Account extends Component {
           renderBackModal={this.renderBackModal}
         />
 
-        <Login />
+        <Login 
+          loading={isLoading}
+        />
 
         <div className={`card ${this.props.app.theme}`}>
+          <Loading
+            active={isLoading}
+            type="absolute"
+            theme={this.props.app.theme}
+          />
+
           <TabMenu
             items={this.state.tabs}
             currentItem={this.state.currentTab}

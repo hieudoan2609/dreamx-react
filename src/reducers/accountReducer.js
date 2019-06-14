@@ -11,7 +11,7 @@ import {
 const INITIAL_STATE = {
   address: "",
   metamask: "running",
-  loading: false,
+  loading: true,
   balances: [],
   transfers: [],
   trades: [],

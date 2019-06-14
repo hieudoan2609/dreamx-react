@@ -6,7 +6,6 @@ import { connect } from "react-redux";
 import Market from "./components/Market";
 import Account from "./components/Account";
 import Menu from "./components/Menu";
-import Loading from "./components/Loading";
 import {
   toggleTheme,
   loadTheme,
@@ -39,8 +38,6 @@ class App extends Component {
   };
 
   render() {
-    const isLoading = this.props.app.loading
-
     return (
       <BrowserRouter>
         <div className={`App ${this.props.app.theme}`}>
@@ -56,12 +53,6 @@ class App extends Component {
           <div className="container">
             <div className="row">
               <div className="col-12">
-                <Loading
-                  active={isLoading}
-                  type="fixed"
-                  theme={this.props.app.theme}
-                />
-
                 <Switch>
                   <Route exact path="/" component={Market} />
                   <Route path="/market/:marketSymbol?" component={Market} />
