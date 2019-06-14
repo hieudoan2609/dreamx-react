@@ -39,6 +39,8 @@ class App extends Component {
   };
 
   render() {
+    const isLoading = this.props.app.loading || this.props.market.loading
+
     return (
       <BrowserRouter>
         <div className={`App ${this.props.app.theme}`}>
@@ -55,7 +57,7 @@ class App extends Component {
             <div className="row">
               <div className="col-12">
                 <Loading
-                  active={this.props.app.loading}
+                  active={isLoading}
                   type="fixed"
                   theme={this.props.app.theme}
                 />
