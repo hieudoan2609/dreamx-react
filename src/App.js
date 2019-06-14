@@ -39,7 +39,7 @@ class App extends Component {
   };
 
   render() {
-    const isLoading = this.props.app.loading || this.props.market.loading
+    const isLoading = this.props.app.loading
 
     return (
       <BrowserRouter>

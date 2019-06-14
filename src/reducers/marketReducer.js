@@ -2,7 +2,7 @@ import { MARKET_LOAD, MARKET_LOADING, MARKET_LOADED } from "../actions/types";
 
 const INITIAL_STATE = {
   currentMarket: "",
-  loading: false
+  loading: true
 };
 
 export default (state = INITIAL_STATE, action) => {
