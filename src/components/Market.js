@@ -15,23 +15,24 @@ import {
 } from "../actions";
 
 class Market extends Component {
-  componentDidMount = () => {
+  componentDidMount = async () => {
     this.redirectToDefaultMarketIfMarketSymbolInvalid();
-    window.scrollTo(0, 0);
     const currentMarket = this.props.match.params.marketSymbol;
     const isLoaded = this.props.market.currentMarket
     if (!isLoaded && currentMarket) {
-      this.props.marketLoadAsync(currentMarket);
+      await this.props.marketLoadAsync(currentMarket);
     }
+    window.scrollTo(0, 0);
   };
 
-  componentDidUpdate = prevProps => {
+  componentDidUpdate = async prevProps => {
     this.redirectToDefaultMarketIfMarketSymbolInvalid();
     const currentMarket = this.props.match.params.marketSymbol;
     const previousMarket = prevProps.match.params.marketSymbol;
     const marketChanged = currentMarket !== previousMarket;
     if (marketChanged && currentMarket) {
       this.props.marketLoadAsync(currentMarket);
+      window.scrollTo(0, 0);
     }
   };
 
