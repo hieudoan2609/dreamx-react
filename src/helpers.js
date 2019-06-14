@@ -163,8 +163,9 @@ export const extractBookData = (bookOrders) => {
   }
 
   const extractedData = []
-  for (let price of Object.keys(prices)) {
-    let { amount, total } = prices[price]
+  for (let priceWei of Object.keys(prices)) {
+    const price = Web3.utils.fromWei(priceWei)
+    let { amount, total } = prices[priceWei]
     amount = Web3.utils.fromWei(amount)
     total = Web3.utils.fromWei(total)
     extractedData.push({ price, amount, total })
