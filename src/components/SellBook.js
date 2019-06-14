@@ -1,12 +1,24 @@
+import Web3 from 'web3'
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import "./OrderBook.scss";
 import Table from './Table'
+import { extractBookData, truncateNumberOutput } from '../helpers'
 import Loading from './Loading'
 
 class SellBook extends Component {
+  renderTotal = () => {
+    const decimalPoints = 2
+    const total = truncateNumberOutput(Web3.utils.fromWei(this.props.orderBook.totalSell), decimalPoints)
+    return (
+      <div className="right">
+        Total: {total} {this.props.market.quoteSymbol}
+      </div>
+    )
+  }
+
   render() {
     return (
       <div className={`OrderBook card ${this.props.theme}`}>
@@ -19,16 +31,15 @@ class SellBook extends Component {
           <div className="left">
             Sell Orders
           </div>
-          <div className="right">
-            Total: 1000000.00 QUOTE
-          </div>
+          {this.renderTotal()}
         </div>
         <div className="body">
           <Table
             theme={this.props.theme}
-            data={[]}
+            data={extractBookData(this.props.orderBook.sellBook)}
             dataName='sell orders'
             defaultOrderBy='price'
+            manuallySortable={false}
           />
         </div>
       </div>

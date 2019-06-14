@@ -2,7 +2,9 @@ import { MARKET_LOAD, MARKET_LOADING, MARKET_LOADED } from "../actions/types";
 
 const INITIAL_STATE = {
   currentMarket: "",
-  loading: true
+  loading: true,
+  baseSymbol: "",
+  quoteSymbol: "",
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -12,7 +14,7 @@ export default (state = INITIAL_STATE, action) => {
     case MARKET_LOADED:
       return { ...state, loading: false }
     case MARKET_LOAD:
-      return { ...state, currentMarket: action.payload.currentMarket, loading: false };
+      return { ...state, currentMarket: action.payload.currentMarket, loading: false, baseSymbol: action.payload.baseSymbol, quoteSymbol: action.payload.quoteSymbol };
     default:
       return state;
   }
