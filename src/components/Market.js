@@ -16,19 +16,17 @@ import {
 
 class Market extends Component {
   componentDidMount = () => {
-    console.log(this.props)
     this.redirectToDefaultMarketIfMarketSymbolInvalid();
     window.scrollTo(0, 0);
-    // sync currentMarket on componentDidMount if url param is valid
     const currentMarket = this.props.match.params.marketSymbol;
-    if (currentMarket) {
+    const isLoaded = this.props.market.currentMarket
+    if (!isLoaded && currentMarket) {
       this.props.marketLoadAsync(currentMarket);
     }
   };
 
   componentDidUpdate = prevProps => {
     this.redirectToDefaultMarketIfMarketSymbolInvalid();
-    // sync currentMarket on componentDidUpdate if url param is valid
     const currentMarket = this.props.match.params.marketSymbol;
     const previousMarket = prevProps.match.params.marketSymbol;
     const marketChanged = currentMarket !== previousMarket;
