@@ -172,3 +172,25 @@ export const extractBookData = (bookOrders) => {
   }
   return extractedData
 }
+
+export const processOrder = (getState, order) => {
+  const { markets } = getState()
+  order = convertKeysToCamelCase(order)
+  const market = markets.all.filter(
+    m =>
+      (m.baseToken.address === order.giveTokenAddress &&
+        m.quoteToken.address === order.takeTokenAddress) ||
+      (m.quoteToken.address === order.giveTokenAddress &&
+        m.baseToken.address === order.takeTokenAddress)
+  )[0];
+  order.marketSymbol = market.symbol;
+  order.marketSymbolFormatted = `${market.quoteToken.symbol}/${market.baseToken.symbol}`;
+  order.type =
+    order.giveTokenAddress === market.baseToken.address
+      ? "buy"
+      : "sell";
+  order.price = Web3.utils.fromWei(getOrderPriceAmountTotal(order).price);
+  order.amount = Web3.utils.fromWei(getOrderPriceAmountTotal(order).amount);
+  order.total = Web3.utils.fromWei(getOrderPriceAmountTotal(order).total);
+  return order;
+}

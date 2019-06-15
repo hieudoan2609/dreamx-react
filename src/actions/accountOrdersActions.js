@@ -1,4 +1,3 @@
-import Web3 from 'web3'
 import axios from 'axios'
 
 import {
@@ -7,40 +6,68 @@ import {
   ACCOUNT_ORDERS_CLEAR_FILTER
 } from "../actions/types";
 import config from '../config'
-import { getOrderPriceAmountTotal, convertKeysToCamelCase } from "../helpers";
+import { processOrder } from "../helpers";
+import singletons, { setSingleton } from "../singletons";
 
 export const accountOrdersLoadAsync = accountAddress => {
   return async (dispatch, getState) => {
-    const { markets } = getState();
     const { API_HTTP_ROOT } = config;
 
     const ordersResponse = await axios.get(`${API_HTTP_ROOT}/orders?account_address=${accountAddress}&per_page=1000`)
-    const accountOrders = ordersResponse.data.records.map(accountOrder => {
-      accountOrder = convertKeysToCamelCase(accountOrder)
-      const market = markets.all.filter(
-        m =>
-          (m.baseToken.address === accountOrder.giveTokenAddress &&
-            m.quoteToken.address === accountOrder.takeTokenAddress) ||
-          (m.quoteToken.address === accountOrder.giveTokenAddress &&
-            m.baseToken.address === accountOrder.takeTokenAddress)
-      )[0];
-      accountOrder.marketSymbol = market.symbol;
-      accountOrder.marketSymbolFormatted = `${market.quoteToken.symbol}/${market.baseToken.symbol}`;
-      accountOrder.type =
-        accountOrder.giveTokenAddress === market.baseToken.address
-          ? "buy"
-          : "sell";
-      accountOrder.price = Web3.utils.fromWei(getOrderPriceAmountTotal(accountOrder).price);
-      accountOrder.amount = Web3.utils.fromWei(getOrderPriceAmountTotal(accountOrder).amount);
-      accountOrder.total = Web3.utils.fromWei(getOrderPriceAmountTotal(accountOrder).total);
-      accountOrder.filled = Web3.utils.fromWei(accountOrder.filled);
-      return accountOrder;
-    });
+    const accountOrders = ordersResponse.data.records.map(accountOrder => processOrder(getState, accountOrder));
+
+    dispatch(initializeCableSubscriptions(accountAddress))
 
     dispatch({
       type: ACCOUNT_ORDERS_LOAD,
       payload: { data: accountOrders }
     });
+  };
+};
+
+const initializeCableSubscriptions = accountAddress => {
+  return dispatch => {
+    const { cable } = singletons;
+
+    const accountOrdersSubscription = cable.subscriptions.create(
+      { channel: "AccountOrdersChannel", account_address: accountAddress },
+      {
+        connected: () => {},
+        received: data => {
+          dispatch(updateOrdersAsync(data.payload));
+        }
+      }
+    );
+
+    setSingleton("AccountOrdersChannel", accountOrdersSubscription);
+  };
+};
+
+const updateOrdersAsync = newOrders => {
+  if (!Array.isArray(newOrders)) {
+    newOrders = [newOrders];
+  }
+
+  return async (dispatch, getState) => {
+    const { accountOrders } = getState();
+
+    const updatedOrders = [];
+    for (let newOrder of newOrders) {
+      updatedOrders.push(processOrder(getState, newOrder))
+    }
+    for (let order of accountOrders.all) {
+      const newOrder = updatedOrders.filter(o => o.orderHash === order.orderHash)[0]
+      if (!newOrder) {
+        updatedOrders.push(order)
+      }
+    }
+
+    dispatch({
+      type: ACCOUNT_ORDERS_LOAD,
+      payload: { data: updatedOrders }
+    });
+
+    dispatch(filterAccountOrders(accountOrders.searchValue));
   };
 };
 
