@@ -40,6 +40,7 @@ class BuyBook extends Component {
             dataName='buy orders'
             defaultOrderBy='price'
             manuallySortable={false}
+            height={500}
           />
         </div>
       </div>

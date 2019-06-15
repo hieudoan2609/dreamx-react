@@ -40,6 +40,7 @@ class SellBook extends Component {
             dataName='sell orders'
             defaultOrderBy='price'
             manuallySortable={false}
+            height={500}
           />
         </div>
       </div>

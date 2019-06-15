@@ -71,6 +71,7 @@ class MyOpenOrders extends Component {
             clickableHeaders={[
               { name: "cancelAll", onClick: this.handleCancelAll }
             ]}
+            height={200}
           />
         </div>
       </div>

@@ -26,6 +26,7 @@ class TradeHistory extends Component {
             data={[]}
             dataName='trades'
             defaultOrderBy='date'
+            height={500}
           />
         </div>
       </div>
