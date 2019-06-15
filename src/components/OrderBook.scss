@@ -41,6 +41,7 @@ $overlay: rgba(130,130,130,.1);
   .body {
     display: flex;
     flex-grow: 1;
+    min-height: 0;
     .Table {
       .table-wrapper {
         .table-responsive {

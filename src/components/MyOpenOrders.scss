@@ -27,13 +27,10 @@ $overlay: rgba(130,130,130,.1);
     font-weight: bold;
     margin-bottom: 10px;
   }
-  .Table {
-    min-height: 100%;
-    height: auto;
-  }
   .body {
     display: flex;
     flex-grow: 1;
+    min-height: 0;
     .not-available, .not-available > div {
       height: 100%;
     }
