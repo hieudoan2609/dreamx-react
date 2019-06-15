@@ -39,6 +39,7 @@ $overlay: rgba(130,130,130,.1);
     }
   }
   .body {
+    display: flex;
     flex-grow: 1;
     .Table {
       .table-wrapper {
@@ -49,14 +50,16 @@ $overlay: rgba(130,130,130,.1);
                 font-size: 0.8rem;
               }
               th, td {
+                > .body {
+                  display: inline-block;
+                }
                 padding: 12px 0px;
-                padding-right: 12px;
+                padding-right: 8px;
                 text-align: center;
                 &:first-child {
                   text-align: left;
                 }
                 &:last-child {
-                  padding-right: 0px;
                   text-align: right;
                 }
               }
