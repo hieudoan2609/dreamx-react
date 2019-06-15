@@ -39,7 +39,7 @@ class Table extends Component {
   }
 
   state = {
-    order: "desc",
+    order: this.props.defaultOrder || 'desc',
     orderBy: this.props.defaultOrderBy,
     currentPage: 1,
     perPage: this.props.perPage || 10
@@ -266,6 +266,7 @@ Table.propTypes = {
   data: PropTypes.array.isRequired, // [ { column: value, ... }, ... ]
   defaultOrderBy: PropTypes.string.isRequired,
   // non-required props
+  defaultOrder: PropTypes.string, // 'desc', 'asc'
   excludeFromSorting: PropTypes.array,
   dateColumn: PropTypes.string, // the data of this column should be raw timestamps and should pass moment(timestamp).isValid(), for example: 2019-05-13T14:03:28.738Z or 1557825217091
   dateFormat: PropTypes.string, // the format to which dateColumn's timestamps should be converted, for example: "MMMM Do YYYY, h:mm:ss A"

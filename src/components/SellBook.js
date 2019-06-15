@@ -39,6 +39,7 @@ class SellBook extends Component {
             data={extractBookData(this.props.orderBook.sellBook)}
             dataName='sell orders'
             defaultOrderBy='price'
+            defaultOrder='asc'
             manuallySortable={false}
           />
         </div>
