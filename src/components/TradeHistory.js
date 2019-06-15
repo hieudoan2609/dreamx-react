@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import "./OrderBook.scss";
-import Table from './Table'
+import ScrollableTable from './ScrollableTable'
 import Loading from './Loading'
 
 class TradeHistory extends Component {
@@ -21,7 +21,7 @@ class TradeHistory extends Component {
           </div>
         </div>
         <div className="body">
-          <Table
+          <ScrollableTable
             theme={this.props.theme}
             data={[]}
             dataName='trades'

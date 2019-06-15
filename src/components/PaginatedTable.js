@@ -2,10 +2,10 @@ import React, { Component } from "react";
 // import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-// import "./FixedHeightTable.scss";
+// import "./PaginatedTable.scss";
 import Table from "./Table";
 
-class FixedHeightTable extends Component {
+class PaginatedTable extends Component {
   render() {
     return (
       <Table
@@ -38,7 +38,7 @@ class FixedHeightTable extends Component {
 //  getChartData
 // };
 
-FixedHeightTable.propTypes = {
+PaginatedTable.propTypes = {
   theme: PropTypes.string.isRequired,
   dataName: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired, // [ { column: value, ... }, ... ]
@@ -59,4 +59,4 @@ FixedHeightTable.propTypes = {
   manuallySortable: PropTypes.bool
 };
 
-export default FixedHeightTable;
+export default PaginatedTable;

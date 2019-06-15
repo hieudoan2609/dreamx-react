@@ -31,7 +31,7 @@ import ModalWrapper from "./ModalWrapper";
 import Loading from "./Loading";
 import TransferModal from "./TransferModal";
 import TransferCompleteModal from "./TransferCompleteModal";
-import FixedHeightTable from "./FixedHeightTable";
+import PaginatedTable from "./PaginatedTable";
 import singletons from "../singletons";
 
 class Account extends Component {
@@ -144,7 +144,7 @@ class Account extends Component {
 
   renderTransfersTable = () => {
     return (
-      <FixedHeightTable
+      <PaginatedTable
         loginRequired={true}
         loggedIn={this.props.account.address ? true : false}
         theme={this.props.app.theme}
@@ -164,7 +164,7 @@ class Account extends Component {
 
   renderAssetsTable = () => {
     return (
-      <FixedHeightTable
+      <PaginatedTable
         loginRequired={true}
         loggedIn={this.props.account.address ? true : false}
         theme={this.props.app.theme}
@@ -228,7 +228,7 @@ class Account extends Component {
 
   renderOrdersTable = () => {
     return (
-      <FixedHeightTable
+      <PaginatedTable
         loginRequired={true}
         loggedIn={this.props.account.address ? true : false}
         theme={this.props.app.theme}
@@ -281,7 +281,7 @@ class Account extends Component {
 
   renderAccountTradesTable = () => {
     return (
-      <FixedHeightTable
+      <PaginatedTable
         loginRequired={true}
         loggedIn={this.props.account.address ? true : false}
         theme={this.props.app.theme}

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import "./MyOpenOrders.scss";
-import Table from "./Table";
+import ScrollableTable from "./ScrollableTable";
 import {
   capitalize
 } from "../helpers";
@@ -59,7 +59,7 @@ class MyOpenOrders extends Component {
           My Open Orders
         </div>
         <div className="body">
-          <Table
+          <ScrollableTable
             loginRequired={true}
             loggedIn={this.props.account.address ? true : false}
             theme={this.props.theme}
