@@ -34,7 +34,7 @@ const initializeCableSubscriptions = accountAddress => {
       {
         connected: () => {},
         received: data => {
-          dispatch(updateOrdersAsync(data.payload));
+          dispatch(updateAccountOrdersAsync(data.payload));
         }
       }
     );
@@ -43,7 +43,7 @@ const initializeCableSubscriptions = accountAddress => {
   };
 };
 
-const updateOrdersAsync = newOrders => {
+const updateAccountOrdersAsync = newOrders => {
   if (!Array.isArray(newOrders)) {
     newOrders = [newOrders];
   }

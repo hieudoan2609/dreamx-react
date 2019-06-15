@@ -6,6 +6,7 @@ import {
 } from "../actions/types";
 import config from '../config'
 import { processOrder } from "../helpers";
+import singletons, { setSingleton } from "../singletons";
 
 export const orderBookLoadAsync = (marketSymbol) => {
   return async (dispatch, getState) => {
@@ -25,9 +26,73 @@ export const orderBookLoadAsync = (marketSymbol) => {
     }
     totalBuy = totalBuy.toString()
     totalSell = totalSell.toString()
+    dispatch(initializeCableSubscriptions(marketSymbol))
     dispatch({
       type: ORDER_BOOK_LOAD,
       payload: { buyBook, sellBook, totalBuy, totalSell }
     })
   };
 };
+
+const initializeCableSubscriptions = marketSymbol => {
+  return dispatch => {
+    const { cable } = singletons;
+
+    const marketOrdersSubscription = cable.subscriptions.create(
+      { channel: "MarketOrdersChannel", market_symbol: marketSymbol },
+      {
+        connected: () => {},
+        received: data => {
+          dispatch(updateOrderBookOrdersAsync(data.payload));
+        }
+      }
+    );
+
+    setSingleton("MarketOrdersChannel", marketOrdersSubscription);
+  };
+};
+
+const updateOrderBookOrdersAsync = (newOrders) => {
+  if (!Array.isArray(newOrders)) {
+    newOrders = [newOrders];
+  }
+
+  return async (dispatch, getState) => {
+    const { orderBook } = getState()
+
+    const updatedBuyBook = []
+    const updatedSellBook = []
+    let updatedTotalBuy = Web3.utils.toBN(0)
+    let updatedTotalSell = Web3.utils.toBN(0)
+    for (let newOrder of newOrders) {
+      newOrder = processOrder(getState, newOrder)
+      if (newOrder.type === 'buy') {
+        updatedBuyBook.push(newOrder)
+        updatedTotalBuy = updatedTotalBuy.add(Web3.utils.toBN(newOrder.takeAmount))
+      } else {
+        updatedSellBook.push(newOrder)
+        updatedTotalSell = updatedTotalSell.add(Web3.utils.toBN(newOrder.giveAmount))
+      }
+    }
+    for (let order of orderBook.buyBook) {
+      const newOrder = updatedBuyBook.filter(o => o.orderHash === order.orderHash)[0]
+      if (!newOrder) {
+        updatedBuyBook.push(order)
+        updatedTotalBuy = updatedTotalBuy.add(Web3.utils.toBN(order.takeAmount))
+      }
+    }
+    for (let order of orderBook.sellBook) {
+      const newOrder = updatedSellBook.filter(o => o.orderHash === order.orderHash)[0]
+      if (!newOrder) {
+        updatedSellBook.push(order)
+        updatedTotalSell = updatedTotalSell.add(Web3.utils.toBN(order.giveAmount))
+      }
+    }
+    updatedTotalBuy = updatedTotalBuy.toString()
+    updatedTotalSell = updatedTotalSell.toString()
+    dispatch({
+      type: ORDER_BOOK_LOAD,
+      payload: { buyBook: updatedBuyBook, sellBook: updatedSellBook, totalBuy: updatedTotalBuy, totalSell: updatedTotalSell }
+    })
+  }
+}
