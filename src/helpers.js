@@ -53,13 +53,15 @@ export const roundFixed = (num, decimalPoints) => {
   return parseFloat(parseFloat(num).toFixed(decimalPoints)).toString();
 };
 
-export const truncateNumberOutput = (num, decimalPoints = 8) => {
+export const truncateNumberOutput = (num, decimalPoints = 8, maxDigit) => {
   const trailingZeroes = /0*$|\.0*$/;
   let [whole, fraction] = num.toString().split(".");
   fraction = fraction ? fraction.substring(0, decimalPoints) : "";
-  const result = fraction
-    ? `${whole}.${fraction}`.replace(trailingZeroes, "")
-    : whole;
+  let result = fraction ? `${whole}.${fraction}`.replace(trailingZeroes, "") : whole;
+  if (maxDigit) {
+    result = fraction ? result.substring(0, maxDigit + 1) : result.substring(0, maxDigit)
+    result = parseFloat(result).toString()
+  }
   return result;
 };
 
@@ -164,10 +166,10 @@ export const extractBookData = (bookOrders) => {
 
   const extractedData = []
   for (let priceWei of Object.keys(prices)) {
-    const price = Web3.utils.fromWei(priceWei)
+    const price = truncateNumberOutput(Web3.utils.fromWei(priceWei), 8, 10)
     let { amount, total } = prices[priceWei]
-    amount = Web3.utils.fromWei(amount)
-    total = Web3.utils.fromWei(total)
+    amount = truncateNumberOutput(Web3.utils.fromWei(amount), 2)
+    total = truncateNumberOutput(Web3.utils.fromWei(total), 2)
     extractedData.push({ price, amount, total })
   }
   return extractedData
