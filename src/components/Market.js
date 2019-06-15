@@ -17,21 +17,19 @@ import {
 class Market extends Component {
   componentDidMount = () => {
     this.redirectToDefaultMarketIfMarketSymbolInvalid();
-    const currentMarket = this.props.match.params.marketSymbol;
-    const isLoaded = this.props.market.currentMarket
-    if (!isLoaded && currentMarket) {
-      this.props.marketLoadAsync(currentMarket);
-    }
     window.scrollTo(0, 0);
   };
 
   componentDidUpdate = prevProps => {
     this.redirectToDefaultMarketIfMarketSymbolInvalid();
+    window.redirectToDefaultMarketIfMarketSymbolInvalid = this.redirectToDefaultMarketIfMarketSymbolInvalid
     const currentMarket = this.props.match.params.marketSymbol;
     const previousMarket = prevProps.match.params.marketSymbol;
-    const marketChanged = currentMarket !== previousMarket;
-    if (marketChanged && currentMarket) {
-      this.props.marketLoadAsync(currentMarket);
+    const existingMarket = this.props.market.currentMarket;
+    const marketChanged = currentMarket !== previousMarket && currentMarket !== existingMarket;
+    const appLoaded = !this.props.app.loading
+    if (marketChanged && appLoaded) {
+      this.props.marketLoadAsync();
       window.scrollTo(0, 0);
     }
   };
