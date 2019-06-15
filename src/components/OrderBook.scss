@@ -47,6 +47,7 @@ $overlay: rgba(130,130,130,.1);
           .table {
             display: flex;
             flex-direction: column;
+            overflow: hidden;
             thead, tbody {
               display: flex;
               flex-direction: column-reverse;
