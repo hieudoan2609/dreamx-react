@@ -18,6 +18,8 @@ $buy: #27d68a;
 $sell: #f36972;
 $darken: rgba(1, 1, 1, 0.5);
 $overlay: rgba(130,130,130,.1);
+$dark-overlay: rgb(63,72,89);
+$light-overlay: rgb(242,242,242);
 
 .OrderBook {
   > .head {
@@ -34,99 +36,53 @@ $overlay: rgba(130,130,130,.1);
     }
   }
   > .body {
-    .table, .thead, .tbody, .tr, .th, .td {
-      display: flex;
-      flex-grow: 1;
-      width: 100%;
-      justify-content: center;
-      &:first-child {
-        justify-content: flex-start;
-      }
-      &:last-child {
-        justify-content: flex-end;
+    .Table {
+      .table-wrapper {
+        .table-responsive {
+          .table {
+            thead, tbody {
+              th, td {
+                padding: 10px 0px;
+                padding-right: 10px;
+                font-size: .8rem;
+                text-align: center;
+                &:first-child {
+                  text-align: left;
+                  padding-left: 10px;
+                }
+                &:last-child {
+                  text-align: right;
+                }
+              }
+            }
+            tbody {
+              tr {
+                cursor: pointer;
+                transition: background-color 300ms ease;
+                &:hover {
+                  & ~ .tr {
+                    background-color: $overlay;  
+                  }
+                  background-color: $overlay;  
+                }
+              }
+            }
+          }
+        }
       }
     }
-    .table {
-      flex-direction: column;
-      .td {
-        font-size: 0.8rem;
-        color: $faded-text;
-      }
-      .th {
-        font-size: 14px;
-        font-weight: bold;
-        text-transform: capitalize;
-      }
-      .tr {
-        justify-content: space-between;
-      }
-    }
-    // display: flex;
-    // flex-grow: 1;
-    // min-height: 0;
-    // .Table {
-    //   .table-wrapper {
-    //     .table-responsive {
-    //       .table {
-    //         display: flex;
-    //         flex-direction: column;
-    //         overflow: hidden;
-    //         thead, tbody {
-    //           display: flex;
-    //           flex-direction: column-reverse;
-    //           tr {
-    //             display: flex;
-    //             width: 100%;
-    //           }
-    //           td {
-    //           }
-    //           th, td {
-    //             width: 100%;
-    //             display: flex;
-    //             > .body {
-    //               display: inline-block;
-    //             }
-    //             padding: 12px 0px;
-    //             padding-right: 10px;
-    //             text-align: center;
-    //             flex-direction: column;
-    //             &:first-child {
-    //               padding-left: 10px;
-    //               text-align: left;
-    //             }
-    //             &:last-child {
-    //               text-align: right;
-    //             }
-    //           }
-    //         }
-    //         tbody {
-    //           tr {
-    //             cursor: pointer;
-    //             transition: background-color 300ms ease;
-    //             &:hover {
-    //               & ~ tr {
-    //                 background-color: $overlay;  
-    //               }
-    //               background-color: $overlay;
-    //             }
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
-    // .not-available, .not-available > div {
-    //   height: 100%;
-    // }
-  }
-  &.light {
-    .th {
-      color: $light-text;
+    .not-available, .not-available > div {
+      height: 100%;
     }
   }
-  &.dark {
-    .th {
-      color: $dark-text;
+  &.buy {
+    td.price {
+      color: $buy;
+    }
+  }
+  &.sell {
+    td.price {
+      color: $sell;
     }
   }
 }

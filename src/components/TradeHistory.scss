@@ -24,15 +24,13 @@ $overlay: rgba(130,130,130,.1);
   .header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     padding: 10px;
+    font-size: .8rem;
     .left {
       text-transform: uppercase;
-      font-size: .8rem;
       font-weight: bold;
     }
     .right {
-      font-size: .8rem;
       color: $faded-text;
     }
   }

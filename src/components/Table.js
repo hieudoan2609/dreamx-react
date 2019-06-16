@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 
 import "./Table.scss";
 import Paginator from "./Paginator";
+import { formatAttrNameToUserFriendly } from '../helpers'
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -51,14 +52,6 @@ class Table extends Component {
     const lastIndex = firstIndex + perPage;
     const paginated = records.slice(firstIndex, lastIndex);
     return paginated;
-  };
-
-  formatNameToUserFriendly = name => {
-    return name
-      .split(/(?=[A-Z])/)
-      .join(" ")
-      .toLowerCase()
-      .replace(/\b\w/g, l => l.toUpperCase());
   };
 
   handleSort = property => {
@@ -141,7 +134,7 @@ class Table extends Component {
                   {this.renderSortArrow(col)}
 
                   <div className="text">
-                    {this.formatNameToUserFriendly(col)}
+                    {formatAttrNameToUserFriendly(col)}
                   </div>
                 </div>
               </th>
@@ -155,7 +148,7 @@ class Table extends Component {
           <div className="body">
             {this.renderSortArrow(col)}
 
-            <div className="text">{this.formatNameToUserFriendly(col)}</div>
+            <div className="text">{formatAttrNameToUserFriendly(col)}</div>
           </div>
         </th>
       );

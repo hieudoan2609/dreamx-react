@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 import Loading from './Loading'
 import { extractBookData, truncateNumberOutput, capitalize } from '../helpers'
-
+import ScrollableTable from './ScrollableTable'
 import "./OrderBook.scss";
 
 class OrderBook extends Component {
@@ -23,15 +23,13 @@ class OrderBook extends Component {
     )
   }
 
-  // renderTableHeader = () => {
-
-  // }
-
   render() {
-    const bookData = extractBookData(this.props.bookData)
+    const order = this.props.type === 'buy' ? 'desc' : 'asc'
+    // const bookData = extractBookData(this.props.bookData)
+    // bookData.push({ price: "12.34567890", amount: "12345678.00", total: "12345678.00" })
 
     return (
-      <div className={`OrderBook card ${this.props.theme}`}>
+      <div className={`OrderBook card ${this.props.theme} ${this.props.type}`}>
         <Loading
           active={this.props.loading}
           type="absolute"
@@ -41,25 +39,20 @@ class OrderBook extends Component {
           <div className="left">
             {capitalize(this.props.type)} Orders
           </div>
-          {this.renderTotal()}
+          <div className="right">
+            {this.renderTotal()}
+          </div>
         </div>
         <div className="body">
-          <div className="table">
-            <div className="thead">
-              <div className="tr">
-                <div className="th">price</div>
-                <div className="th">amount</div>
-                <div className="th">total</div>
-              </div>
-            </div>
-            <div className="tbody">
-              <div className="tr">
-                <div className="td">11.23456789</div>
-                <div className="td">1234567890.90</div>
-                <div className="td">1234567890.90</div>
-              </div>
-            </div>
-          </div>
+          <ScrollableTable
+            theme={this.props.theme}
+            data={extractBookData(this.props.bookData)}
+            dataName={`${this.props.type} orders`}
+            defaultOrderBy='price'
+            defaultOrder={order}
+            manuallySortable={false}
+            height={500}
+          />
         </div>
       </div>
     );

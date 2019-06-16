@@ -196,3 +196,11 @@ export const processOrder = (getState, order) => {
   order.total = Web3.utils.fromWei(getOrderPriceAmountTotal(order).total);
   return order;
 }
+
+export const formatAttrNameToUserFriendly = name => {
+  return name
+    .split(/(?=[A-Z])/)
+    .join(" ")
+    .toLowerCase()
+    .replace(/\b\w/g, l => l.toUpperCase());
+};

@@ -25,6 +25,7 @@ class ScrollableTable extends Component {
         loggedIn={this.props.loggedIn}
         loginRequired={this.props.loginRequired}
         manuallySortable={this.props.manuallySortable}
+        defaultOrder={this.props.defaultOrder}
       />
     );
   }
@@ -45,6 +46,7 @@ ScrollableTable.propTypes = {
   defaultOrderBy: PropTypes.string.isRequired,
   height: PropTypes.number.isRequired,
   // non-required props
+  defaultOrder: PropTypes.string, // 'desc', 'asc'
   perPage: PropTypes.number,
   excludeFromSorting: PropTypes.array,
   dateColumn: PropTypes.string, // the data of this column should be raw timestamps and should pass moment(timestamp).isValid(), for example: 2019-05-13T14:03:28.738Z or 1557825217091
