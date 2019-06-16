@@ -10,7 +10,7 @@ import "./OrderBook.scss";
 
 class OrderBook extends Component {
   renderTotal = () => {
-    if (!this.props.base || !this.props.quote) {
+    if (this.props.bookData.length === 0 || !this.props.base || !this.props.quote) {
       return
     }
 
