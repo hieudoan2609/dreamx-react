@@ -2,14 +2,14 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import "./OrderBook.scss";
+import "./TradeHistory.scss";
 import ScrollableTable from './ScrollableTable'
 import Loading from './Loading'
 
 class TradeHistory extends Component {
   render() {
     return (
-      <div className={`OrderBook card ${this.props.theme}`}>
+      <div className={`TradeHistory card ${this.props.theme}`}>
         <Loading
           active={this.props.loading}
           type="absolute"

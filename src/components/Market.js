@@ -5,8 +5,7 @@ import { withRouter } from "react-router";
 import Chart from "./Chart";
 import Trade from "./Trade";
 import MyOpenOrders from "./MyOpenOrders";
-import BuyBook from "./BuyBook";
-import SellBook from "./SellBook";
+import OrderBook from "./OrderBook";
 import TradeHistory from "./TradeHistory";
 import "./Market.scss";
 import {
@@ -127,15 +126,26 @@ class Market extends Component {
 
         <div className="row">
           <div className="col-lg-4">
-            <BuyBook 
+            <OrderBook 
               theme={this.props.app.theme} 
               loading={isLoading}
+              type='buy'
+              total={this.props.orderBook.totalBuy}
+              bookData={this.props.orderBook.buyBook}
+              base={this.getBaseAndQuoteBalances().base}
+              quote={this.getBaseAndQuoteBalances().quote}
+
             />
           </div>
           <div className="col-lg-4">
-            <SellBook 
+            <OrderBook 
               theme={this.props.app.theme} 
               loading={isLoading}
+              type='sell'
+              total={this.props.orderBook.totalSell}
+              bookData={this.props.orderBook.sellBook}
+              base={this.getBaseAndQuoteBalances().base}
+              quote={this.getBaseAndQuoteBalances().quote}
             />
           </div>
           <div className="col-lg-4">

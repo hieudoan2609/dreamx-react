@@ -20,80 +20,113 @@ $darken: rgba(1, 1, 1, 0.5);
 $overlay: rgba(130,130,130,.1);
 
 .OrderBook {
-  display: flex;
-  .header {
+  > .head {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     padding: 10px;
+    font-size: .8rem;
     .left {
       text-transform: uppercase;
-      font-size: .8rem;
       font-weight: bold;
     }
     .right {
-      font-size: .8rem;
       color: $faded-text;
     }
   }
-  .body {
-    display: flex;
-    flex-grow: 1;
-    min-height: 0;
-    .Table {
-      .table-wrapper {
-        .table-responsive {
-          .table {
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            thead, tbody {
-              display: flex;
-              flex-direction: column-reverse;
-              tr {
-                display: flex;
-                width: 100%;
-              }
-              td {
-                font-size: 0.8rem;
-              }
-              th, td {
-                width: 100%;
-                display: flex;
-                > .body {
-                  display: inline-block;
-                }
-                padding: 12px 0px;
-                padding-right: 10px;
-                text-align: center;
-                flex-direction: column;
-                &:first-child {
-                  padding-left: 10px;
-                  text-align: left;
-                }
-                &:last-child {
-                  text-align: right;
-                }
-              }
-            }
-            tbody {
-              tr {
-                cursor: pointer;
-                transition: background-color 300ms ease;
-                &:hover {
-                  & ~ tr {
-                    background-color: $overlay;  
-                  }
-                  background-color: $overlay;
-                }
-              }
-            }
-          }
-        }
+  > .body {
+    .table, .thead, .tbody, .tr, .th, .td {
+      display: flex;
+      flex-grow: 1;
+      width: 100%;
+      justify-content: center;
+      &:first-child {
+        justify-content: flex-start;
+      }
+      &:last-child {
+        justify-content: flex-end;
       }
     }
-    .not-available, .not-available > div {
-      height: 100%;
+    .table {
+      flex-direction: column;
+      .td {
+        font-size: 0.8rem;
+        color: $faded-text;
+      }
+      .th {
+        font-size: 14px;
+        font-weight: bold;
+        text-transform: capitalize;
+      }
+      .tr {
+        justify-content: space-between;
+      }
+    }
+    // display: flex;
+    // flex-grow: 1;
+    // min-height: 0;
+    // .Table {
+    //   .table-wrapper {
+    //     .table-responsive {
+    //       .table {
+    //         display: flex;
+    //         flex-direction: column;
+    //         overflow: hidden;
+    //         thead, tbody {
+    //           display: flex;
+    //           flex-direction: column-reverse;
+    //           tr {
+    //             display: flex;
+    //             width: 100%;
+    //           }
+    //           td {
+    //           }
+    //           th, td {
+    //             width: 100%;
+    //             display: flex;
+    //             > .body {
+    //               display: inline-block;
+    //             }
+    //             padding: 12px 0px;
+    //             padding-right: 10px;
+    //             text-align: center;
+    //             flex-direction: column;
+    //             &:first-child {
+    //               padding-left: 10px;
+    //               text-align: left;
+    //             }
+    //             &:last-child {
+    //               text-align: right;
+    //             }
+    //           }
+    //         }
+    //         tbody {
+    //           tr {
+    //             cursor: pointer;
+    //             transition: background-color 300ms ease;
+    //             &:hover {
+    //               & ~ tr {
+    //                 background-color: $overlay;  
+    //               }
+    //               background-color: $overlay;
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+    // .not-available, .not-available > div {
+    //   height: 100%;
+    // }
+  }
+  &.light {
+    .th {
+      color: $light-text;
+    }
+  }
+  &.dark {
+    .th {
+      color: $dark-text;
     }
   }
 }
