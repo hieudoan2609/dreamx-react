@@ -17,6 +17,8 @@ $buy: #27d68a;
 $sell: #f36972;
 $darken: rgba(1, 1, 1, 0.5);
 $overlay: rgba(130,130,130,.1);
+$dark-disabled: #5d5f61;
+$light-disabled: #c3c5c7;
 
 .Account {
   .card {
@@ -31,6 +33,9 @@ $overlay: rgba(130,130,130,.1);
       transition: color 300ms ease;
       &:last-child {
         margin-right: 0px;
+      }
+      &.disabled {
+        cursor: not-allowed;
       }
     }
   }
@@ -58,6 +63,12 @@ $overlay: rgba(130,130,130,.1);
       &:hover {
         color: $light-primary-shade;
       }
+      &.disabled {
+        color: $light-disabled;
+        &:hover {
+          color: $light-disabled;
+        }
+      }
     }
   }
   &.dark {
@@ -65,6 +76,12 @@ $overlay: rgba(130,130,130,.1);
       color: $dark-primary;
       &:hover {
         color: $dark-primary-shade;
+      }
+      &.disabled {
+        color: $dark-disabled;
+        &:hover {
+          color: $dark-disabled;
+        }
       }
     }
   }

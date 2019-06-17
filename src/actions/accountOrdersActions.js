@@ -121,3 +121,62 @@ export const accountOrdersClearSearch = () => {
     });
   };
 };
+
+export const accountOrdersCancelAsync = (order) => {
+  return async (dispatch, getState) => {
+    if (order.status === 'closed') {
+      return;
+    }
+    // set cancelPending
+    const { app } = getState()
+    const { API_HTTP_ROOT } = config
+    const { orderHash, accountAddress } = order
+    const contractAddress = app.contractAddress
+    const payload = await generateOrderCancelPayloadAsync({ contractAddress, accountAddress, orderHash })
+
+    if (!payload) {
+      // reset cancelPending
+      return
+    }
+
+    try {
+      const response = await axios.post(
+        `${API_HTTP_ROOT}/order_cancels`,
+        payload
+      );
+      console.log(response)
+      // reset cancelPending
+    } catch (err) {
+      const feedback = { type: 'error', message: 'Service is unvailable, please try again later.' }
+      if (err.toString() === "Error: Request failed with status code 503") {
+        // reset cancelPending
+      }
+    }
+  }
+}
+
+const generateOrderCancelPayloadAsync = async ({ contractAddress, accountAddress, orderHash }) => {
+  const { web3 } = singletons;
+  const nonce = Date.now();
+  const hash = web3.utils.soliditySha3(contractAddress, accountAddress, orderHash, nonce);
+
+  try {
+    const signature = await web3.eth.personal.sign(hash, accountAddress);
+    const payload = {
+      order_hash: orderHash,
+      account_address: accountAddress,
+      nonce,
+      cancel_hash: hash,
+      signature
+    }
+    return payload;
+  } catch {
+    return;
+  }
+}
+
+export const accountOrdersCancelAllAsync = () => {
+  return async dispatch => {
+    console.log('CANCEL ALL')
+  }
+}

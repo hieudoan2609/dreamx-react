@@ -19,7 +19,9 @@ import {
   accountOrdersHandleSearchInput,
   accountOrdersClearSearch,
   accountTradesHandleSearchInput,
-  accountTradesClearSearch
+  accountTradesClearSearch,
+  accountOrdersCancelAsync,
+  accountOrdersCancelAllAsync
 } from "../actions";
 import {
   extractKeysFromObject,
@@ -202,7 +204,7 @@ class Account extends Component {
       const date = accountOrder.createdAt;
       const cancelAll = (
         <div className="actions">
-          <div className="action">cancel</div>
+          <div className={`action ${accountOrder.status === 'closed' ? 'disabled' : ''}`} onClick={() => this.props.accountOrdersCancelAsync(accountOrder)}>cancel</div>
         </div>
       );
 
@@ -220,10 +222,6 @@ class Account extends Component {
     });
 
     return extractedData;
-  };
-
-  handleCancelAll = () => {
-    console.log("CANCEL ALL");
   };
 
   renderOrdersTable = () => {
@@ -244,7 +242,7 @@ class Account extends Component {
         height={this.state.tableHeight}
         clearSearch={this.props.accountOrdersClearSearch}
         clickableHeaders={[
-          { name: "cancelAll", onClick: this.handleCancelAll }
+          { name: "cancelAll", onClick: this.props.accountOrdersCancelAllAsync }
         ]}
       />
     );
@@ -448,7 +446,9 @@ const mapActionsToProps = {
   accountOrdersHandleSearchInput,
   accountOrdersClearSearch,
   accountTradesHandleSearchInput,
-  accountTradesClearSearch
+  accountTradesClearSearch,
+  accountOrdersCancelAsync,
+  accountOrdersCancelAllAsync
 };
 
 export default connect(
