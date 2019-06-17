@@ -3,7 +3,9 @@ import axios from 'axios'
 import {
   ACCOUNT_ORDERS_FILTER,
   ACCOUNT_ORDERS_LOAD,
-  ACCOUNT_ORDERS_CLEAR_FILTER
+  ACCOUNT_ORDERS_CLEAR_FILTER,
+  ACCOUNT_ORDERS_CANCEL_PENDING_ON,
+  ACCOUNT_ORDERS_CANCEL_PENDING_OFF
 } from "../actions/types";
 import config from '../config'
 import { processOrder } from "../helpers";
@@ -124,34 +126,33 @@ export const accountOrdersClearSearch = () => {
 
 export const accountOrdersCancelAsync = (order) => {
   return async (dispatch, getState) => {
-    if (order.status === 'closed') {
+    const { app, accountOrders} = getState()
+    if (order.status === 'closed' || accountOrders.cancelPending) {
       return;
     }
-    // set cancelPending
-    const { app } = getState()
+    dispatch({ type: ACCOUNT_ORDERS_CANCEL_PENDING_ON })
     const { API_HTTP_ROOT } = config
     const { orderHash, accountAddress } = order
     const contractAddress = app.contractAddress
     const payload = await generateOrderCancelPayloadAsync({ contractAddress, accountAddress, orderHash })
 
     if (!payload) {
-      // reset cancelPending
+      dispatch({ type: ACCOUNT_ORDERS_CANCEL_PENDING_OFF })
       return
     }
 
     try {
-      const response = await axios.post(
+      await axios.post(
         `${API_HTTP_ROOT}/order_cancels`,
         payload
       );
-      console.log(response)
-      // reset cancelPending
     } catch (err) {
-      const feedback = { type: 'error', message: 'Service is unvailable, please try again later.' }
       if (err.toString() === "Error: Request failed with status code 503") {
-        // reset cancelPending
+        // show read-only alert
       }
     }
+
+    dispatch({ type: ACCOUNT_ORDERS_CANCEL_PENDING_OFF })
   }
 }
 
@@ -176,7 +177,11 @@ const generateOrderCancelPayloadAsync = async ({ contractAddress, accountAddress
 }
 
 export const accountOrdersCancelAllAsync = () => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const { accountOrders } = getState()
+    if (accountOrders.cancelPending) {
+      return;
+    }
     console.log('CANCEL ALL')
   }
 }
