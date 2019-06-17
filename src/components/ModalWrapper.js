@@ -32,6 +32,18 @@ class ModalWrapper extends Component {
     document.removeEventListener("keydown", this.onEsc, false);
   };
 
+  renderFront = () => {
+    return <div className="front">{this.props.renderFrontModal()}</div>
+  }
+
+  renderBack = () => {
+    if (!this.props.renderBackModal) {
+      return
+    }
+
+    return <div className="back">{this.props.renderBackModal()}</div>
+  }
+
   render() {
     return (
       <CSSTransition
@@ -51,8 +63,8 @@ class ModalWrapper extends Component {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="wrapper">
-                    <div className="front">{this.props.renderFrontModal()}</div>
-                    <div className="back">{this.props.renderBackModal()}</div>
+                    {this.renderFront()}
+                    {this.renderBack()}
                   </div>
                 </div>
               </div>
@@ -78,10 +90,11 @@ ModalWrapper.propTypes = {
   theme: PropTypes.string.isRequired,
   show: PropTypes.bool.isRequired,
   onHide: PropTypes.func.isRequired,
-  pending: PropTypes.bool.isRequired,
-  completed: PropTypes.bool.isRequired,
   renderFrontModal: PropTypes.func.isRequired,
-  renderBackModal: PropTypes.func.isRequired
+  // non-required props
+  renderBackModal: PropTypes.func,
+  pending: PropTypes.bool,
+  completed: PropTypes.bool
 };
 
 export default ModalWrapper;

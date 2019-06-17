@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import Market from "./components/Market";
 import Account from "./components/Account";
 import Menu from "./components/Menu";
+import AlertModal from "./components/AlertModal";
 import {
   toggleTheme,
   loadTheme,
@@ -51,6 +52,8 @@ class App extends Component {
             theme={this.props.app.theme}
             rootPath={`/market/${this.props.market.currentMarket}`}
           />
+
+          <AlertModal />
 
           <div className="container">
             <div className="row">
