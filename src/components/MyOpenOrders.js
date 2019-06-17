@@ -7,6 +7,9 @@ import ScrollableTable from "./ScrollableTable";
 import {
   capitalize
 } from "../helpers";
+import {
+  accountOrdersCancelAllAsync
+} from "../actions"
 import Loading from './Loading'
 
 class MyOpenOrders extends Component {
@@ -43,10 +46,6 @@ class MyOpenOrders extends Component {
     return extractedData;
   };
 
-  handleCancelAll = () => {
-    console.log("CANCEL ALL");
-  };
-
   render() {
     return (
       <div className={`MyOpenOrders card ${this.props.theme}`}>
@@ -69,7 +68,7 @@ class MyOpenOrders extends Component {
             dataName='open orders'
             excludeFromSorting={["cancelAll"]}
             clickableHeaders={[
-              { name: "cancelAll", onClick: this.handleCancelAll }
+              { name: "cancelAll", onClick: this.props.accountOrdersCancelAllAsync }
             ]}
             height={200}
           />
@@ -80,15 +79,15 @@ class MyOpenOrders extends Component {
 }
 
 const mapStateToProps = (state) => {
- return state;
+  return state;
 };
 
-// const mapActionsToProps = {
-//  getMyOpenOrdersData
-// };
+const mapActionsToProps = {
+  accountOrdersCancelAllAsync
+};
 
 MyOpenOrders.propTypes = {
   theme: PropTypes.string.isRequired
 };
 
-export default connect(mapStateToProps)(MyOpenOrders);
+export default connect(mapStateToProps, mapActionsToProps)(MyOpenOrders);

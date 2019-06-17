@@ -32,16 +32,23 @@ class ModalWrapper extends Component {
     document.removeEventListener("keydown", this.onEsc, false);
   };
 
-  renderFront = () => {
-    return <div className="front">{this.props.renderFrontModal()}</div>
-  }
-
-  renderBack = () => {
+  renderModalContent = () => {
     if (!this.props.renderBackModal) {
-      return
+      return (
+        <div className="modal-content">
+          {this.props.renderFrontModal()}
+        </div>
+      )
+    } else {
+      return (
+        <div className="modal-content">
+          <div className="wrapper">
+            <div className="front">{this.props.renderFrontModal()}</div>
+            <div className="back">{this.props.renderBackModal()}</div>
+          </div>
+        </div>
+      )
     }
-
-    return <div className="back">{this.props.renderBackModal()}</div>
   }
 
   render() {
@@ -61,12 +68,7 @@ class ModalWrapper extends Component {
           >
             <div className="modal">
               <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content">
-                  <div className="wrapper">
-                    {this.renderFront()}
-                    {this.renderBack()}
-                  </div>
-                </div>
+                {this.renderModalContent()}
               </div>
 
               <div className="backdrop" onClick={this.props.onHide} />

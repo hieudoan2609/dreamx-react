@@ -4,7 +4,7 @@ import {
 } from "../actions/types";
 
 const INITIAL_STATE = {
-  type: "",
+  type: "readonly", // alertModal.js requires a default type
   show: false
 };
 

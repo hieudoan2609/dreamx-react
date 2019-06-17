@@ -1,0 +1,59 @@
+$light-text: rgba(0, 0, 0, 0.54);
+$light-primary: #303f9f;
+$light-primary-tint: #4452a8;
+$light-primary-shade: #26327f;
+$light-secondary: #f5f5f5;
+$light-secondary-tint: white;
+$light-secondary-shade: #dcdcdc;
+$light-button-shadow: 0 14px 26px -12px rgba(85, 172, 238, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(85, 172, 238, 0.2);
+$light-button-shadow-hover: 0 2px 2px 0 rgba(85, 172, 238, 0.14), 0 3px 1px -2px rgba(85, 172, 238, 0.2), 0 1px 5px 0 rgba(85, 172, 238, 0.12);
+$dark-text: hsla(0,0%,100%,.7);
+$dark-primary: #EA6C2C;
+$dark-primary-tint: #ec7a41;
+$dark-primary-shade: #d26127;
+$dark-secondary: #232d44;
+$dark-secondary-tint: #384256;
+$dark-secondary-shade: #1f283d;
+$dark-button-shadow: 0 14px 26px -12px rgba(255, 69, 0, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(255, 69, 0, 0.2);
+$dark-button-shadow-hover: 0 2px 2px 0 rgba(255, 69, 0, 0.14), 0 3px 1px -2px rgba(255, 69, 0, 0.2), 0 1px 5px 0 rgba(255, 69, 0, 0.12);
+$darken: rgba(1, 1, 1, 0.5);
+$shadow: 0px 5px 15px rgba(1, 1, 1, 0.1);
+$overlay: rgba(130,130,130,.1);
+$danger: rgba(220, 53, 69, 0.7);
+
+.AlertModal {
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: 0px;
+    height: 100%;
+    ion-icon {
+      font-size: 60px;
+    }
+    svg {
+      width: 60px;
+    }
+    > * {
+      margin-bottom: 10px;
+    }
+  }
+  &.light {
+    ion-icon {
+      color: $light-primary;
+    }
+    svg {
+      fill: $light-primary;
+    }
+  }
+  &.dark {
+    ion-icon {
+      color: $dark-primary;
+    }
+    svg {
+      fill: $dark-primary;
+    }
+  }
+}

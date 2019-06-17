@@ -10,6 +10,7 @@ import {
 import config from '../config'
 import { processOrder } from "../helpers";
 import singletons, { setSingleton } from "../singletons";
+import { alertModalShowReadonlyAlert } from '.'
 
 export const accountOrdersLoadAsync = accountAddress => {
   return async (dispatch, getState) => {
@@ -148,7 +149,7 @@ export const accountOrdersCancelAsync = (order) => {
       );
     } catch (err) {
       if (err.toString() === "Error: Request failed with status code 503") {
-        // show read-only alert
+        dispatch(alertModalShowReadonlyAlert())
       }
     }
 

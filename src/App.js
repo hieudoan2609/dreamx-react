@@ -7,13 +7,15 @@ import Market from "./components/Market";
 import Account from "./components/Account";
 import Menu from "./components/Menu";
 import AlertModal from "./components/AlertModal";
+import ModalWrapper from "./components/ModalWrapper";
 import {
   toggleTheme,
   loadTheme,
   initializeAppAsync,
   accountLoginAsync,
   appLoaded,
-  marketLoadAsync
+  marketLoadAsync,
+  alertModalHide
 } from "./actions";
 
 const logo = require("./images/logo.svg");
@@ -40,6 +42,15 @@ class App extends Component {
     this.props.appLoaded()
   };
 
+  renderAlertModal = () => {
+    return (
+      <AlertModal 
+        theme={this.props.app.theme}
+        type={this.props.alertModal.type}
+      />
+    );
+  }
+
   render() {
     return (
       <BrowserRouter>
@@ -53,7 +64,12 @@ class App extends Component {
             rootPath={`/market/${this.props.market.currentMarket}`}
           />
 
-          <AlertModal />
+          <ModalWrapper
+            theme={this.props.app.theme}
+            show={this.props.alertModal.show}
+            onHide={this.props.alertModalHide}
+            renderFrontModal={this.renderAlertModal}
+          />
 
           <div className="container">
             <div className="row">
@@ -83,7 +99,8 @@ const mapActionsToProps = {
   initializeAppAsync,
   accountLoginAsync,
   appLoaded,
-  marketLoadAsync
+  marketLoadAsync,
+  alertModalHide
 };
 
 export default connect(
