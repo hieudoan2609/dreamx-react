@@ -60,8 +60,8 @@ const updateOrderBookOrdersAsync = (newOrders) => {
   return async (dispatch, getState) => {
     const { orderBook } = getState()
 
-    const updatedBuyBook = []
-    const updatedSellBook = []
+    let updatedBuyBook = []
+    let updatedSellBook = []
     let updatedTotalBuy = Web3.utils.toBN(0)
     let updatedTotalSell = Web3.utils.toBN(0)
     for (let newOrder of newOrders) {
@@ -88,6 +88,9 @@ const updateOrderBookOrdersAsync = (newOrders) => {
         updatedTotalSell = updatedTotalSell.add(Web3.utils.toBN(order.giveAmount))
       }
     }
+    // remove closed orders
+    updatedBuyBook = updatedBuyBook.filter(o => o.status === 'open')
+    updatedSellBook = updatedSellBook.filter(o => o.status === 'open')
     updatedTotalBuy = updatedTotalBuy.toString()
     updatedTotalSell = updatedTotalSell.toString()
     dispatch({
