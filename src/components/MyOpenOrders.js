@@ -8,7 +8,8 @@ import {
   capitalize
 } from "../helpers";
 import {
-  accountOrdersCancelAllAsync
+  accountOrdersCancelAllAsync,
+  accountOrdersCancelAsync
 } from "../actions"
 import Loading from './Loading'
 
@@ -36,7 +37,7 @@ class MyOpenOrders extends Component {
       const date = accountOrder.createdAt;
       const cancelAll = (
         <div className="actions">
-          <div className="action">cancel</div>
+          <div className='action' onClick={() => this.props.accountOrdersCancelAsync(accountOrder)}>cancel</div>
         </div>
       );
 
@@ -83,7 +84,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapActionsToProps = {
-  accountOrdersCancelAllAsync
+  accountOrdersCancelAllAsync,
+  accountOrdersCancelAsync
 };
 
 MyOpenOrders.propTypes = {

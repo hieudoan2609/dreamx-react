@@ -145,7 +145,7 @@ export const accountOrdersCancelAsync = (order) => {
     try {
       await axios.post(
         `${API_HTTP_ROOT}/order_cancels`,
-        payload
+        [payload]
       );
     } catch (err) {
       if (err.toString() === "Error: Request failed with status code 503") {
