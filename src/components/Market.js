@@ -111,6 +111,7 @@ class Market extends Component {
               makerMinimum={this.props.app.makerMinimum}
               takerFee={this.props.app.takerFee}
               takerMinimum={this.props.app.takerMinimum}
+              onRef={ref => (this.trade = ref)}
             />
           </div>
         </div>
@@ -134,7 +135,7 @@ class Market extends Component {
               bookData={this.props.orderBook.buyBook}
               base={this.getBaseAndQuoteBalances().base}
               quote={this.getBaseAndQuoteBalances().quote}
-
+              trade={this.trade}
             />
           </div>
           <div className="col-lg-4">
@@ -146,6 +147,7 @@ class Market extends Component {
               bookData={this.props.orderBook.sellBook}
               base={this.getBaseAndQuoteBalances().base}
               quote={this.getBaseAndQuoteBalances().quote}
+              trade={this.trade}
             />
           </div>
           <div className="col-lg-4">

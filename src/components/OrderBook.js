@@ -23,6 +23,13 @@ class OrderBook extends Component {
     )
   }
 
+  onRowClick = (row) => {
+    if (this.props.trade) {
+      this.props.trade.onPriceChange(row.price)
+      window.scrollTo(0, 0)
+    }
+  }
+
   render() {
     const order = this.props.type === 'buy' ? 'desc' : 'asc'
     // const bookData = extractBookData(this.props.bookData)
@@ -52,6 +59,7 @@ class OrderBook extends Component {
             defaultOrder={order}
             manuallySortable={false}
             height={500}
+            onRowClick={this.onRowClick}
           />
         </div>
       </div>
@@ -72,7 +80,8 @@ OrderBook.propTypes = {
   bookData: PropTypes.array.isRequired, // [ { price, amount, total }, ... ]
   loading: PropTypes.bool.isRequired,
   base: PropTypes.object, // { symbol, balance, address }
-  quote: PropTypes.object // { symbol, balance, address }
+  quote: PropTypes.object, // { symbol, balance, address }
+  trade: PropTypes.object // ref to Trade component
 };
 
 export default OrderBook;

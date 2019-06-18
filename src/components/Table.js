@@ -181,30 +181,33 @@ class Table extends Component {
               <tr>{this.renderTableHeaders()}</tr>
             </thead>
             <tbody>
-              {records.map((row, i) => (
-                <tr key={i}>
-                  {Object.keys(row).map(key => {
-                    if (
-                      this.props.dateColumn &&
-                      key === this.props.dateColumn
-                    ) {
-                      const format = this.props.dateFormat || "MM-DD HH:mm:ss";
-                      const formattedDate = moment(row[key]).format(format);
+              {records.map((row, i) => {
+                const onRowClick = this.props.onRowClick ? () => this.props.onRowClick(row) : undefined
+                return (
+                  <tr key={i} onClick={onRowClick} >
+                    {Object.keys(row).map(key => {
+                      if (
+                        this.props.dateColumn &&
+                        key === this.props.dateColumn
+                      ) {
+                        const format = this.props.dateFormat || "MM-DD HH:mm:ss";
+                        const formattedDate = moment(row[key]).format(format);
+                        return (
+                          <td key={key} className={`${key}`}>
+                            {formattedDate}
+                          </td>
+                        );
+                      }
+
                       return (
                         <td key={key} className={`${key}`}>
-                          {formattedDate}
+                          {row[key]}
                         </td>
                       );
-                    }
-
-                    return (
-                      <td key={key} className={`${key}`}>
-                        {row[key]}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
+                    })}
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>
@@ -272,7 +275,8 @@ Table.propTypes = {
   clickableHeaders: PropTypes.array, // [ { name: string, onClick: func } ], clickable headers are unsortable
   loginRequired: PropTypes.bool,
   loggedIn: PropTypes.bool,
-  manuallySortable: PropTypes.bool
+  manuallySortable: PropTypes.bool,
+  onRowClick: PropTypes.func
 };
 
 export default Table;

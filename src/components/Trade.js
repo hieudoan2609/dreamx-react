@@ -30,6 +30,14 @@ const INITIAL_STATE = {
 class Trade extends Component {
   state = INITIAL_STATE;
 
+  componentDidMount = () => {
+    this.props.onRef(this)
+  }
+
+  componentWillUnmount = () => {
+    this.props.onRef(undefined)
+  }
+
   handleTabChange = tab => {
     const { price, priceWei, amount, amountWei, fee, total, feedback, totalMinusFee, amountMinusFee } = INITIAL_STATE
     this.setState({ currentTab: tab, price, priceWei, amount, amountWei, fee, total, feedback, totalMinusFee, amountMinusFee });
@@ -90,17 +98,17 @@ class Trade extends Component {
     return { total, fee, totalMinusFee, amountMinusFee };
   };
 
-  onAmountChange = e => {
+  onAmountChange = value => {
     const { priceWei } = this.state;
-    const amount = truncateNumberInput(e.target.value);
+    const amount = truncateNumberInput(value);
     const amountWei = amount ? Web3.utils.toWei(amount) : "0";
     const { total, fee, totalMinusFee, amountMinusFee } = this.calculateFeeAndTotal( amountWei, priceWei );
     this.setState({ amount, amountWei, total, fee, totalMinusFee, amountMinusFee });
   };
 
-  onPriceChange = e => {
+  onPriceChange = value => {
     const { amountWei } = this.state;
-    const price = truncateNumberInput(e.target.value);
+    const price = truncateNumberInput(value);
     const priceWei = price ? Web3.utils.toWei(price) : "0";
     const { total, fee, totalMinusFee, amountMinusFee } = this.calculateFeeAndTotal( amountWei, priceWei );
     this.setState({ price, priceWei, total, fee, totalMinusFee, amountMinusFee });
@@ -162,7 +170,7 @@ class Trade extends Component {
             placeholder={`Amount`}
             spellCheck="false"
             value={this.state.amount}
-            onChange={this.onAmountChange}
+            onChange={(e) => this.onAmountChange(e.target.value)}
             disabled={this.state.pending ? true : false}
           />
           <div className="input-group-append">
@@ -176,7 +184,7 @@ class Trade extends Component {
             placeholder="Price"
             spellCheck="false"
             value={this.state.price}
-            onChange={this.onPriceChange}
+            onChange={(e) => this.onPriceChange(e.target.value)}
             disabled={this.state.pending ? true : false}
           />
           <div className="input-group-append">
@@ -355,7 +363,8 @@ Trade.propTypes = {
   makerFee: PropTypes.string.isRequired,
   makerMinimum: PropTypes.string.isRequired,
   takerFee: PropTypes.string.isRequired,
-  takerMinimum: PropTypes.string.isRequired
+  takerMinimum: PropTypes.string.isRequired,
+  onRef: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps)(Trade);

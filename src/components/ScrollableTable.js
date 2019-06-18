@@ -26,6 +26,7 @@ class ScrollableTable extends Component {
         loginRequired={this.props.loginRequired}
         manuallySortable={this.props.manuallySortable}
         defaultOrder={this.props.defaultOrder}
+        onRowClick={this.props.onRowClick}
       />
     );
   }
@@ -58,7 +59,8 @@ ScrollableTable.propTypes = {
   clickableHeaders: PropTypes.array, // [ { name: string, onClick: func } ]
   loginRequired: PropTypes.bool,
   loggedIn: PropTypes.bool,
-  manuallySortable: PropTypes.bool
+  manuallySortable: PropTypes.bool,
+  onRowClick: PropTypes.func
 };
 
 export default ScrollableTable;
