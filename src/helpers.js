@@ -1,5 +1,5 @@
 import _ from "lodash";
-import Web3 from 'web3'
+import * as Web3Utils from 'web3-utils'
 
 import singletons from "./singletons";
 
@@ -136,9 +136,9 @@ export function getSorting(order, orderBy) {
 }
 
 export const getOrderPriceAmountTotal = (order) => {
-  const oneEther = Web3.utils.toBN(Web3.utils.toWei('1'))
-  const takeAmount = Web3.utils.toBN(order.takeAmount)
-  const giveAmount = Web3.utils.toBN(order.giveAmount)
+  const oneEther = Web3Utils.toBN(Web3Utils.toWei('1'))
+  const takeAmount = Web3Utils.toBN(order.takeAmount)
+  const giveAmount = Web3Utils.toBN(order.giveAmount)
   const price = order.type === "sell"
     ? (takeAmount.mul(oneEther).div(giveAmount)).toString()
     : (giveAmount.mul(oneEther).div(takeAmount)).toString();
@@ -159,17 +159,17 @@ export const extractBookData = (bookOrders) => {
     if (!prices[price]) {
       prices[price] = { amount, total }
     } else {
-      prices[price].amount = (Web3.utils.toBN(prices[price].amount).add(Web3.utils.toBN(amount))).toString()
-      prices[price].total = (Web3.utils.toBN(prices[price].total).add(Web3.utils.toBN(total))).toString()
+      prices[price].amount = (Web3Utils.toBN(prices[price].amount).add(Web3Utils.toBN(amount))).toString()
+      prices[price].total = (Web3Utils.toBN(prices[price].total).add(Web3Utils.toBN(total))).toString()
     }
   }
 
   const extractedData = []
   for (let priceWei of Object.keys(prices)) {
-    const price = truncateNumberOutput(Web3.utils.fromWei(priceWei), 8, 10)
+    const price = truncateNumberOutput(Web3Utils.fromWei(priceWei), 8, 10)
     let { amount, total } = prices[priceWei]
-    amount = truncateNumberOutput(Web3.utils.fromWei(amount), 2)
-    total = truncateNumberOutput(Web3.utils.fromWei(total), 2)
+    amount = truncateNumberOutput(Web3Utils.fromWei(amount), 2)
+    total = truncateNumberOutput(Web3Utils.fromWei(total), 2)
     extractedData.push({ price, amount, total })
   }
   return extractedData
@@ -191,9 +191,9 @@ export const processOrder = (getState, order) => {
     order.giveTokenAddress === market.baseToken.address
       ? "buy"
       : "sell";
-  order.price = Web3.utils.fromWei(getOrderPriceAmountTotal(order).price);
-  order.amount = Web3.utils.fromWei(getOrderPriceAmountTotal(order).amount);
-  order.total = Web3.utils.fromWei(getOrderPriceAmountTotal(order).total);
+  order.price = Web3Utils.fromWei(getOrderPriceAmountTotal(order).price);
+  order.amount = Web3Utils.fromWei(getOrderPriceAmountTotal(order).amount);
+  order.total = Web3Utils.fromWei(getOrderPriceAmountTotal(order).total);
   return order;
 }
 

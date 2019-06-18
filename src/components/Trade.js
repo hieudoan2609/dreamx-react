@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { Component } from "react";
-import Web3 from "web3";
+import * as Web3Utils from "web3-utils";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
@@ -69,7 +69,7 @@ class Trade extends Component {
       <div className="balance">
         <div className="header">BALANCE</div>
         <div className="value">
-          {truncateNumberOutput(Web3.utils.fromWei(balance))} {symbol}
+          {truncateNumberOutput(Web3Utils.fromWei(balance))} {symbol}
         </div>
       </div>
     );
@@ -78,11 +78,11 @@ class Trade extends Component {
   calculateFeeAndTotal = (amountWei, priceWei) => {
     const { currentTab } = this.state;
     let { makerFee, takerFee } = this.props;
-    const oneEther = Web3.utils.toBN(1000000000000000000);
+    const oneEther = Web3Utils.toBN(1000000000000000000);
 
     let total, fee, totalMinusFee, amountMinusFee;
     if (amountWei && amountWei !== "0" && priceWei && priceWei !== "0") {
-      [ amountWei, priceWei, makerFee, takerFee ] = [ Web3.utils.toBN(amountWei), Web3.utils.toBN(priceWei), Web3.utils.toBN(makerFee), Web3.utils.toBN(takerFee) ];
+      [ amountWei, priceWei, makerFee, takerFee ] = [ Web3Utils.toBN(amountWei), Web3Utils.toBN(priceWei), Web3Utils.toBN(makerFee), Web3Utils.toBN(takerFee) ];
       total = priceWei.mul(amountWei).div(oneEther);
       fee = currentTab === "buy" ? amountWei.mul(makerFee).div(oneEther) : total.mul(takerFee).div(oneEther);
       totalMinusFee = total.sub(fee);
@@ -101,7 +101,7 @@ class Trade extends Component {
   onAmountChange = value => {
     const { priceWei } = this.state;
     const amount = truncateNumberInput(value);
-    const amountWei = amount ? Web3.utils.toWei(amount) : "0";
+    const amountWei = amount ? Web3Utils.toWei(amount) : "0";
     const { total, fee, totalMinusFee, amountMinusFee } = this.calculateFeeAndTotal( amountWei, priceWei );
     this.setState({ amount, amountWei, total, fee, totalMinusFee, amountMinusFee });
   };
@@ -109,7 +109,7 @@ class Trade extends Component {
   onPriceChange = value => {
     const { amountWei } = this.state;
     const price = truncateNumberInput(value);
-    const priceWei = price ? Web3.utils.toWei(price) : "0";
+    const priceWei = price ? Web3Utils.toWei(price) : "0";
     const { total, fee, totalMinusFee, amountMinusFee } = this.calculateFeeAndTotal( amountWei, priceWei );
     this.setState({ price, priceWei, total, fee, totalMinusFee, amountMinusFee });
   };
@@ -121,7 +121,7 @@ class Trade extends Component {
     } else {
       feePerToken = this.props.takerFee;
     }
-    const feePercent = (parseFloat(Web3.utils.fromWei(feePerToken)) * 100) / 1;
+    const feePercent = (parseFloat(Web3Utils.fromWei(feePerToken)) * 100) / 1;
     return feePercent;
   };
 
@@ -135,10 +135,10 @@ class Trade extends Component {
         <div className="fee-and-total">
           <small className="fee">
             Fee ({this.calculateFeePercent()}%):{" "}
-            <b>{truncateNumberOutput(Web3.utils.fromWei(this.state.fee))} {this.props.quote.symbol}</b>
+            <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.fee))} {this.props.quote.symbol}</b>
           </small>
           <small className="total">
-            Total: <b>{truncateNumberOutput(Web3.utils.fromWei(this.state.amountMinusFee))} {this.props.quote.symbol}</b>
+            Total: <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.amountMinusFee))} {this.props.quote.symbol}</b>
           </small>
         </div>
       )
@@ -147,10 +147,10 @@ class Trade extends Component {
         <div className="fee-and-total">
           <small className="fee">
             Fee ({this.calculateFeePercent()}%):{" "}
-            <b>{truncateNumberOutput(Web3.utils.fromWei(this.state.fee))} {this.props.base.symbol}</b>
+            <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.fee))} {this.props.base.symbol}</b>
           </small>
           <small className="total">
-            Total: <b>{truncateNumberOutput(Web3.utils.fromWei(this.state.totalMinusFee))} {this.props.base.symbol}</b>
+            Total: <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.totalMinusFee))} {this.props.base.symbol}</b>
           </small>
         </div>
       )
@@ -208,20 +208,20 @@ class Trade extends Component {
       return;
     };
     if (this.state.currentTab === 'buy') {
-      if (Web3.utils.toBN(this.state.total).lt(Web3.utils.toBN(this.props.makerMinimum))) {
-        this.setState({ feedback: { type: 'error', message: `Minimum order is ${Web3.utils.fromWei(this.props.makerMinimum)} ${this.props.base.symbol}.` }, pending: false });
+      if (Web3Utils.toBN(this.state.total).lt(Web3Utils.toBN(this.props.makerMinimum))) {
+        this.setState({ feedback: { type: 'error', message: `Minimum order is ${Web3Utils.fromWei(this.props.makerMinimum)} ${this.props.base.symbol}.` }, pending: false });
         return;
       }
-      if (Web3.utils.toBN(this.state.total).gt(Web3.utils.toBN(this.props.base.balance))) {
+      if (Web3Utils.toBN(this.state.total).gt(Web3Utils.toBN(this.props.base.balance))) {
         this.setState({ feedback: { type: 'error', message: 'Not enough balance.' }, pending: false });
         return;
       }
     } else {
-      if (Web3.utils.toBN(this.state.total).lt(Web3.utils.toBN(this.props.takerMinimum))) {
-        this.setState({ feedback: { type: 'error', message: `Minimum order is ${Web3.utils.fromWei(this.props.takerMinimum)} ${this.props.base.symbol}.` }, pending: false });
+      if (Web3Utils.toBN(this.state.total).lt(Web3Utils.toBN(this.props.takerMinimum))) {
+        this.setState({ feedback: { type: 'error', message: `Minimum order is ${Web3Utils.fromWei(this.props.takerMinimum)} ${this.props.base.symbol}.` }, pending: false });
         return;
       }
-      if (Web3.utils.toBN(this.state.amountWei).gt(Web3.utils.toBN(this.props.quote.balance))) {
+      if (Web3Utils.toBN(this.state.amountWei).gt(Web3Utils.toBN(this.props.quote.balance))) {
         this.setState({ feedback: { type: 'error', message: 'Not enough balance.' }, pending: false });
         return;
       }
@@ -294,7 +294,7 @@ class Trade extends Component {
       expiryTimestampInMilliseconds
     );
     try {
-      const signature = await web3.eth.personal.sign(hash, accountAddress);
+      const signature = await web3.eth.personal.sign(hash, accountAddress, undefined);
       const payload = {
         "account_address": accountAddress,
         "give_token_address": giveTokenAddress,

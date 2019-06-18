@@ -163,7 +163,7 @@ const generateOrderCancelPayloadAsync = async ({ contractAddress, accountAddress
   const hash = web3.utils.soliditySha3(contractAddress, accountAddress, orderHash, nonce);
 
   try {
-    const signature = await web3.eth.personal.sign(hash, accountAddress);
+    const signature = await web3.eth.personal.sign(hash, accountAddress, undefined);
     const payload = {
       order_hash: orderHash,
       account_address: accountAddress,

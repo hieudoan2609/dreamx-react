@@ -1,4 +1,4 @@
-import Web3 from 'web3'
+import * as Web3Utils from 'web3-utils'
 import React, { Component } from "react";
 // import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -15,7 +15,7 @@ class OrderBook extends Component {
     }
 
     const decimalPoints = 2
-    const total = truncateNumberOutput(Web3.utils.fromWei(this.props.total), decimalPoints)
+    const total = truncateNumberOutput(Web3Utils.fromWei(this.props.total), decimalPoints)
     return (
       <div className="right">
         Total: {total} {this.props.quote.symbol}

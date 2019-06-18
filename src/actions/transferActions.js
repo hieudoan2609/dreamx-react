@@ -315,7 +315,7 @@ const generateWithdrawPayloadAsync = async ({
     nonce
   );
   try {
-    const signature = await web3.eth.personal.sign(hash, accountAddress);
+    const signature = await web3.eth.personal.sign(hash, accountAddress, undefined);
     const payload = {
       account_address: accountAddress,
       amount: amountWei,

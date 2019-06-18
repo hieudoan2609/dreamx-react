@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Web3 from "web3";
+import * as Web3Utils from "web3-utils";
 
 import Login from "./Login";
 import TabMenu from "./TabMenu";
@@ -115,7 +115,7 @@ class Account extends Component {
       )[0];
       const status = transfer.blockNumber ? "Completed" : "Pending";
       const coin = token.symbol;
-      const amount = truncateNumberOutput(Web3.utils.fromWei(transfer.amount));
+      const amount = truncateNumberOutput(Web3Utils.fromWei(transfer.amount));
       const date = transfer.createdAt;
 
       let transactionHash;

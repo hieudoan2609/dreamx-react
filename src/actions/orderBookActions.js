@@ -1,5 +1,5 @@
 import axios from 'axios'
-import Web3 from 'web3'
+import * as Web3Utils from 'web3-utils'
 
 import {
   ORDER_BOOK_LOAD
@@ -14,15 +14,15 @@ export const orderBookLoadAsync = (marketSymbol) => {
     const orderBooksResponse = await axios.get(`${API_HTTP_ROOT}/order_books/${marketSymbol}?per_page=1000`)
     let buyBook = []
     let sellBook = []
-    let totalBuy = Web3.utils.toBN(0)
-    let totalSell = Web3.utils.toBN(0)
+    let totalBuy = Web3Utils.toBN(0)
+    let totalSell = Web3Utils.toBN(0)
     for (let order of orderBooksResponse.data.bid.records) {
       buyBook.push(processOrder(getState, order))
-      totalBuy = totalBuy.add(Web3.utils.toBN(order.takeAmount))
+      totalBuy = totalBuy.add(Web3Utils.toBN(order.takeAmount))
     }
     for (let order of orderBooksResponse.data.ask.records) {
       sellBook.push(processOrder(getState, order))
-      totalSell = totalSell.add(Web3.utils.toBN(order.giveAmount))
+      totalSell = totalSell.add(Web3Utils.toBN(order.giveAmount))
     }
     totalBuy = totalBuy.toString()
     totalSell = totalSell.toString()
@@ -62,30 +62,30 @@ const updateOrderBookOrdersAsync = (newOrders) => {
 
     let updatedBuyBook = []
     let updatedSellBook = []
-    let updatedTotalBuy = Web3.utils.toBN(0)
-    let updatedTotalSell = Web3.utils.toBN(0)
+    let updatedTotalBuy = Web3Utils.toBN(0)
+    let updatedTotalSell = Web3Utils.toBN(0)
     for (let newOrder of newOrders) {
       newOrder = processOrder(getState, newOrder)
       if (newOrder.type === 'buy') {
         updatedBuyBook.push(newOrder)
-        updatedTotalBuy = updatedTotalBuy.add(Web3.utils.toBN(newOrder.takeAmount))
+        updatedTotalBuy = updatedTotalBuy.add(Web3Utils.toBN(newOrder.takeAmount))
       } else {
         updatedSellBook.push(newOrder)
-        updatedTotalSell = updatedTotalSell.add(Web3.utils.toBN(newOrder.giveAmount))
+        updatedTotalSell = updatedTotalSell.add(Web3Utils.toBN(newOrder.giveAmount))
       }
     }
     for (let order of orderBook.buyBook) {
       const newOrder = updatedBuyBook.filter(o => o.orderHash === order.orderHash)[0]
       if (!newOrder) {
         updatedBuyBook.push(order)
-        updatedTotalBuy = updatedTotalBuy.add(Web3.utils.toBN(order.takeAmount))
+        updatedTotalBuy = updatedTotalBuy.add(Web3Utils.toBN(order.takeAmount))
       }
     }
     for (let order of orderBook.sellBook) {
       const newOrder = updatedSellBook.filter(o => o.orderHash === order.orderHash)[0]
       if (!newOrder) {
         updatedSellBook.push(order)
-        updatedTotalSell = updatedTotalSell.add(Web3.utils.toBN(order.giveAmount))
+        updatedTotalSell = updatedTotalSell.add(Web3Utils.toBN(order.giveAmount))
       }
     }
     // remove closed orders
