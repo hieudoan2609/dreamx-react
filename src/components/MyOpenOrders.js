@@ -69,7 +69,7 @@ class MyOpenOrders extends Component {
             dataName='open orders'
             excludeFromSorting={["cancelAll"]}
             clickableHeaders={[
-              { name: "cancelAll", onClick: this.props.accountOrdersCancelAllAsync }
+              { name: "cancelAll", onClick: () => this.props.accountOrdersCancelAllAsync({ market: this.props.market.currentMarket }) }
             ]}
             height={200}
           />

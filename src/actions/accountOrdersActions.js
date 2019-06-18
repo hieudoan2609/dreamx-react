@@ -177,12 +177,19 @@ const generateOrderCancelPayloadAsync = async ({ contractAddress, accountAddress
   }
 }
 
-export const accountOrdersCancelAllAsync = () => {
+export const accountOrdersCancelAllAsync = ({ market }) => {
   return async (dispatch, getState) => {
     const { accountOrders } = getState()
+
     if (accountOrders.cancelPending) {
       return;
     }
-    console.log('CANCEL ALL')
+
+    if (!market) {
+      const orders = accountOrders.all.filter(o => o.status === 'open')
+      console.log(orders)
+    } else {
+      console.log(`CANCEL ALL ${market} ORDERS`)
+    }
   }
 }
