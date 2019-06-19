@@ -162,33 +162,38 @@ export const accountOrdersCancelAllAsync = ({ market }) => {
     const { API_HTTP_ROOT } = config
     const { accountOrders, app } = getState()
     const contractAddress = app.contractAddress
+
+    let orders = []
     if (!market) {
-      const orders = accountOrders.all.filter(o => o.status === 'open')
-      if (orders.length === 0 || accountOrders.cancelPending) {
-        return;
-      }
-      dispatch({ type: ACCOUNT_ORDERS_CANCEL_PENDING_ON })
-      const payloads = await generateOrderCancelPayloadsAsync({ contractAddress, orders })
-      if (!payloads) {
-        dispatch({ type: ACCOUNT_ORDERS_CANCEL_PENDING_OFF })
-        return
-      }
-
-      try {
-        await axios.post(
-          `${API_HTTP_ROOT}/order_cancels`,
-          payloads
-        )
-      } catch (err) {
-        if (err.toString() === "Error: Request failed with status code 503") {
-          dispatch(alertModalShowReadonlyAlert())
-        }
-      }
-
-      dispatch({ type: ACCOUNT_ORDERS_CANCEL_PENDING_OFF })
+      orders = accountOrders.all.filter(o => o.status === 'open')
     } else {
-      console.log(`CANCEL ALL ${market} ORDERS`)
+      orders = accountOrders.all.filter(o => o.status === 'open' && o.marketSymbol === market)
     }
+
+    console.log(orders)
+
+    if (orders.length === 0 || accountOrders.cancelPending) {
+      return;
+    }
+    dispatch({ type: ACCOUNT_ORDERS_CANCEL_PENDING_ON })
+    const payloads = await generateOrderCancelPayloadsAsync({ contractAddress, orders })
+    if (!payloads) {
+      dispatch({ type: ACCOUNT_ORDERS_CANCEL_PENDING_OFF })
+      return
+    }
+
+    try {
+      await axios.post(
+        `${API_HTTP_ROOT}/order_cancels`,
+        payloads
+      )
+    } catch (err) {
+      if (err.toString() === "Error: Request failed with status code 503") {
+        dispatch(alertModalShowReadonlyAlert())
+      }
+    }
+
+    dispatch({ type: ACCOUNT_ORDERS_CANCEL_PENDING_OFF })
   }
 }
 
