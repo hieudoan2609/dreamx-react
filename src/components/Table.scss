@@ -18,6 +18,8 @@ $light-primary-shade: #26327f;
 $dark-primary-shade: #d26127;
 $darken: rgba(1, 1, 1, 0.5);
 $faded-text: #9c9fa3;
+$dark-disabled: #5d5f61;
+$light-disabled: #c3c5c7;
 
 *:focus {
   box-shadow: none !important;
@@ -64,6 +66,12 @@ $faded-text: #9c9fa3;
             font-size: 14px;
             cursor: pointer;
             user-select: none;
+            &.clickable {
+              transition: color 300ms ease;
+              &.disabled {
+                cursor: not-allowed;
+              }
+            }
             .body {
               position: relative;
               .icon {
@@ -112,6 +120,12 @@ $faded-text: #9c9fa3;
           &:hover {
             color: $light-primary-shade;
           }
+          &.disabled {
+            color: $light-disabled;
+            &:hover {
+              color: $light-disabled;
+            }
+          }
         }
       }
       color: $faded-text;
@@ -133,6 +147,12 @@ $faded-text: #9c9fa3;
           color: $dark-primary;
           &:hover {
             color: $dark-primary-shade;
+          }
+          &.disabled {
+            color: $dark-disabled;
+            &:hover {
+              color: $dark-disabled;
+            }
           }
         }
       }

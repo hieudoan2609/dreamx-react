@@ -162,12 +162,12 @@ export const accountOrdersCancelAllAsync = ({ market }) => {
     const { API_HTTP_ROOT } = config
     const { accountOrders, app } = getState()
     const contractAddress = app.contractAddress
-    if (accountOrders.cancelPending) {
-      return;
-    }
-    dispatch({ type: ACCOUNT_ORDERS_CANCEL_PENDING_ON })
     if (!market) {
       const orders = accountOrders.all.filter(o => o.status === 'open')
+      if (orders.length === 0 || accountOrders.cancelPending) {
+        return;
+      }
+      dispatch({ type: ACCOUNT_ORDERS_CANCEL_PENDING_ON })
       const payloads = await generateOrderCancelPayloadsAsync({ contractAddress, orders })
       if (!payloads) {
         dispatch({ type: ACCOUNT_ORDERS_CANCEL_PENDING_OFF })

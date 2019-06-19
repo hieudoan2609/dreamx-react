@@ -128,7 +128,7 @@ class Table extends Component {
                 scope="col"
                 key={col}
                 onClick={header.onClick}
-                className="clickable"
+                className={`clickable ${header.disabled ? 'disabled' : ''}`}
               >
                 <div className="body">
                   {this.renderSortArrow(col)}
@@ -272,7 +272,7 @@ Table.propTypes = {
   searchable: PropTypes.bool,
   searchValue: PropTypes.string, // required if table is searchable
   clearSearch: PropTypes.func, // required if table is searchable,
-  clickableHeaders: PropTypes.array, // [ { name: string, onClick: func } ], clickable headers are unsortable
+  clickableHeaders: PropTypes.array, // [ { name: string, onClick: func, disabled: bool } ], clickable headers are unsortable
   loginRequired: PropTypes.bool,
   loggedIn: PropTypes.bool,
   manuallySortable: PropTypes.bool,
