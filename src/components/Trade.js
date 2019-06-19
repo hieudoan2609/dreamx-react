@@ -197,8 +197,7 @@ class Trade extends Component {
   };
 
   submitAsync = async () => {
-    // TO BE REMOVED
-    // this.setState({ feedback: {}, pending: true })
+    this.setState({ feedback: {}, pending: true })
 
     if (!this.state.amountWei) {
       this.setState({ feedback: { type: 'error', message: 'Amount cannot be empty.' }, pending: false });
@@ -228,8 +227,7 @@ class Trade extends Component {
       }
     }
 
-    const matches = await this.matchAsync()
-    console.log(matches)
+    console.log('MATCH ORDER')
 
     // if (matches) {
     //   await this.tradeAsync()
