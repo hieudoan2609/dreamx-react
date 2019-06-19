@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import "./Trade.scss";
 import TabMenu from "./TabMenu";
 import Button from "./Button";
-import { truncateNumberInput, truncateNumberOutput } from "../helpers";
+import { truncateNumberInput, truncateNumberOutput, getOrderPriceAmountTotal } from "../helpers";
 import singletons from "../singletons";
 import config from "../config";
 import Loading from './Loading'
@@ -227,8 +227,39 @@ class Trade extends Component {
       }
     }
 
-    await this.orderAsync()
+    const matches = await this.matchAsync()
+    console.log(matches)
+
+    // if (matches) {
+    //   await this.tradeAsync()
+    // } else {
+    //   await this.orderAsync()
+    // }
   };
+
+  matchAsync = async () => {
+    const { currentTab, priceWei, amountWei } = this.state
+    const { orderBook } = this.props
+    const matchingPrice = Web3Utils.toBN(priceWei)
+
+    let matches
+    if (currentTab === 'buy') {
+      matches = orderBook.sellBook.filter(o => {
+        const orderPrice = Web3Utils.toBN(getOrderPriceAmountTotal(o).price)
+        return orderPrice.lte(matchingPrice)
+      })
+    } else {
+      matches = orderBook.buyBook.filter(o => {
+        const orderPrice = Web3Utils.toBN(getOrderPriceAmountTotal(o).price)
+        return orderPrice.gte(matchingPrice)
+      })
+    }
+    return matches
+  }
+
+  tradeAsync = async () => {
+    console.log('TRADE')
+  }
 
   orderAsync = async () => {
     const { price, priceWei, amount, amountWei, fee, total, totalMinusFee, amountMinusFee } = INITIAL_STATE
