@@ -157,6 +157,41 @@ export const accountOrdersCancelAsync = (order) => {
   }
 }
 
+export const accountOrdersCancelAllAsync = ({ market }) => {
+  return async (dispatch, getState) => {
+    const { API_HTTP_ROOT } = config
+    const { accountOrders, app } = getState()
+    const contractAddress = app.contractAddress
+    if (accountOrders.cancelPending) {
+      return;
+    }
+    dispatch({ type: ACCOUNT_ORDERS_CANCEL_PENDING_ON })
+    if (!market) {
+      const orders = accountOrders.all.filter(o => o.status === 'open')
+      const payloads = await generateOrderCancelPayloadsAsync({ contractAddress, orders })
+      if (!payloads) {
+        dispatch({ type: ACCOUNT_ORDERS_CANCEL_PENDING_OFF })
+        return
+      }
+
+      try {
+        await axios.post(
+          `${API_HTTP_ROOT}/order_cancels`,
+          payloads
+        )
+      } catch (err) {
+        if (err.toString() === "Error: Request failed with status code 503") {
+          dispatch(alertModalShowReadonlyAlert())
+        }
+      }
+
+      dispatch({ type: ACCOUNT_ORDERS_CANCEL_PENDING_OFF })
+    } else {
+      console.log(`CANCEL ALL ${market} ORDERS`)
+    }
+  }
+}
+
 const generateOrderCancelPayloadAsync = async ({ contractAddress, accountAddress, orderHash }) => {
   const { web3 } = singletons;
   const nonce = Date.now();
@@ -177,19 +212,41 @@ const generateOrderCancelPayloadAsync = async ({ contractAddress, accountAddress
   }
 }
 
-export const accountOrdersCancelAllAsync = ({ market }) => {
-  return async (dispatch, getState) => {
-    const { accountOrders } = getState()
-
-    if (accountOrders.cancelPending) {
-      return;
+const generateOrderCancelPayloadsAsync = async ({ contractAddress, orders }) => {
+  const { web3 } = singletons;
+  const timestamp = Date.now()
+  const batch = new web3.BatchRequest();
+  const payloads = []
+  // generate unsigned payloads
+  orders.forEach((order, index) => {
+    const nonce = timestamp + index;
+    const { accountAddress, orderHash } = order
+    const hash = web3.utils.soliditySha3(contractAddress, accountAddress, orderHash, nonce);
+    const payload = {
+      order_hash: orderHash,
+      account_address: accountAddress,
+      nonce,
+      cancel_hash: hash,
+      signature: undefined
+    }
+    batch.add(web3.eth.personal.sign.request(hash, accountAddress, undefined, function() {return}))
+    payloads.push(payload)
+  })
+  // request signatures
+  const signatures = (await batch.execute()).response
+  // update unsighed payloads with signatures
+  let hasUnsignedPayload = false
+  payloads.forEach((payload, index) => {
+    if (!signatures[index]) {
+      hasUnsignedPayload = true
+      return
     }
 
-    if (!market) {
-      const orders = accountOrders.all.filter(o => o.status === 'open')
-      console.log(orders)
-    } else {
-      console.log(`CANCEL ALL ${market} ORDERS`)
-    }
+    payload.signature = signatures[index]
+  })
+  if (hasUnsignedPayload) {
+    return
+  } else {
+    return payloads
   }
 }
