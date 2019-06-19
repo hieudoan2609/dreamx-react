@@ -192,13 +192,15 @@ class Account extends Component {
     const { accountOrders } = this.props;
 
     const extractedData = accountOrders.filtered.map(accountOrder => {
-      const { price, amount, filled } = accountOrder;
       const type = (
         <div className={`pill ${accountOrder.type}`}>
           {capitalize(accountOrder.type)}
         </div>
       );
-      const total = `${accountOrder.total} ETH`;
+      const price = Web3Utils.fromWei(accountOrder.price)
+      const amount = Web3Utils.fromWei(accountOrder.amount)
+      const filled = Web3Utils.fromWei(accountOrder.filled)
+      const total = `${Web3Utils.fromWei(accountOrder.total)} ETH`;
       const status = capitalize(accountOrder.status);
       const market = accountOrder.marketSymbolFormatted;
       const date = accountOrder.createdAt;

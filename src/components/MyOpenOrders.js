@@ -12,6 +12,7 @@ import {
   accountOrdersCancelAsync
 } from "../actions"
 import Loading from './Loading'
+import * as Web3Utils from 'web3-utils'
 
 class MyOpenOrders extends Component {
   extractOpenOrdersData = () => {
@@ -27,13 +28,15 @@ class MyOpenOrders extends Component {
         continue
       }
 
-      const { price, amount, filled } = accountOrder;
+      const price = Web3Utils.fromWei(accountOrder.price)
+      const amount = Web3Utils.fromWei(accountOrder.amount)
+      const filled = Web3Utils.fromWei(accountOrder.filled)
       const type = (
         <div className={`pill ${accountOrder.type}`}>
           {capitalize(accountOrder.type)}
         </div>
       );
-      const total = `${accountOrder.total} ETH`;
+      const total = `${Web3Utils.fromWei(accountOrder.total)} ETH`;
       const date = accountOrder.createdAt;
       const cancelAll = (
         <div className="actions">

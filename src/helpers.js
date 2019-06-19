@@ -191,9 +191,9 @@ export const processOrder = (getState, order) => {
     order.giveTokenAddress === market.baseToken.address
       ? "buy"
       : "sell";
-  order.price = Web3Utils.fromWei(getOrderPriceAmountTotal(order).price);
-  order.amount = Web3Utils.fromWei(getOrderPriceAmountTotal(order).amount);
-  order.total = Web3Utils.fromWei(getOrderPriceAmountTotal(order).total);
+  order.price = getOrderPriceAmountTotal(order).price;
+  order.amount = getOrderPriceAmountTotal(order).amount;
+  order.total = getOrderPriceAmountTotal(order).total;
   return order;
 }
 
@@ -204,3 +204,11 @@ export const formatAttrNameToUserFriendly = name => {
     .toLowerCase()
     .replace(/\b\w/g, l => l.toUpperCase());
 };
+
+export function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}

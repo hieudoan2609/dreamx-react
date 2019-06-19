@@ -197,7 +197,8 @@ class Trade extends Component {
   };
 
   submitAsync = async () => {
-    this.setState({ feedback: {}, pending: true })
+    // TO BE REMOVED
+    // this.setState({ feedback: {}, pending: true })
 
     if (!this.state.amountWei) {
       this.setState({ feedback: { type: 'error', message: 'Amount cannot be empty.' }, pending: false });
@@ -248,10 +249,16 @@ class Trade extends Component {
         const orderPrice = Web3Utils.toBN(getOrderPriceAmountTotal(o).price)
         return orderPrice.lte(matchingPrice)
       })
+      .sort((a, b) => {
+        return Web3Utils.toBN(a.price) - Web3Utils.toBN(b.price)
+      })
     } else {
       matches = orderBook.buyBook.filter(o => {
         const orderPrice = Web3Utils.toBN(getOrderPriceAmountTotal(o).price)
         return orderPrice.gte(matchingPrice)
+      })
+      .sort((a, b) => {
+        return Web3Utils.toBN(b.price) - Web3Utils.toBN(a.price)
       })
     }
     return matches
