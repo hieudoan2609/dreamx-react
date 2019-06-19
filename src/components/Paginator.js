@@ -6,10 +6,6 @@ import _ from "lodash";
 import "./Paginator.scss";
 
 class Paginator extends Component {
-  state = {
-    totalLinks: this.props.totalPages > 5 ? 5 : this.props.totalPages
-  };
-
   onPageLinkClick = e => {
     const target = e.currentTarget;
     const firstPage = 1;
@@ -44,7 +40,9 @@ class Paginator extends Component {
   };
 
   renderPageLinksFromPage = pageNumber => {
-    return _.times(this.state.totalLinks, i => {
+    const totalLinks = this.props.totalPages > 5 ? 5 : this.props.totalPages
+
+    return _.times(totalLinks, i => {
       const currentPage = i + pageNumber;
       return (
         <li

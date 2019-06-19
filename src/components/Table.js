@@ -172,7 +172,6 @@ class Table extends Component {
       getSorting(this.state.order, this.state.orderBy)
     );
     const records = this.props.paginated ? this.paginate(sorted) : sorted;
-
     return (
       <div className={`table-wrapper ${this.props.dataName}`} ref={this.table}>
         <div className="table-responsive" style={{ height: this.props.height }}>
