@@ -174,7 +174,7 @@ export const extractBookData = (bookOrders) => {
   }
   return extractedData
 }
-
+// { filled, status, nonce, accountAddress, giveTokenAddress, giveAmount, takeTokenAddress, takeAmount, expiryTimestampInMilliseconds, orderHash, createdAt, marketSymbol, marketSymbolFormatted, type, price, amount, total }
 export const processOrder = (getState, order) => {
   const { markets } = getState()
   order = convertKeysToCamelCase(order)
@@ -211,4 +211,22 @@ export function shuffle(a) {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
+}
+
+// order = { giveTokenAddress, giveAmount, takeTokenAddress, takeAmount, type }
+export const matchBuyOrders = ({ order, buyBook }) => {
+  const matchingPrice = Web3Utils.toBN(getOrderPriceAmountTotal(order).price)
+  let results = []
+  const matched = buyBook.filter(o => {
+    const orderPrice = Web3Utils.toBN(getOrderPriceAmountTotal(o).price)
+    return orderPrice.gte(matchingPrice)
+  })
+  if (matched.length < 1) {
+    results.push(order)
+  }
+  return results
+}
+
+export const matchSellOrders = ({ price, amount, sellBook, baseAddress, quoteAddress }) => {
+  return 'MATCHED'
 }
