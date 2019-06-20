@@ -23,8 +23,25 @@ export const generateOrders = (orders) => {
     giveAmount = giveAmount.toString()
     takeAmount = takeAmount.toString()
     const createdAt = order.date
-    order = { giveTokenAddress, giveAmount, takeTokenAddress, takeAmount, createdAt }
+    const orderHash = order.orderHash
+    const type = order.type
+    const filled = order.filled
+    order = { giveTokenAddress, giveAmount, takeTokenAddress, takeAmount, createdAt, orderHash, type, filled }
+    if (!order.orderHash) {
+      // orderHash doesn't exist, this order is part of a match engine response, make it look like one
+      delete order.orderHash
+      delete order.createdAt
+      delete order.filled
+    }
     return order
   })
   return orders
+}
+
+export const generateTrades = (trades) => {
+  trades = trades.map(trade => {
+    trade.amount = Web3Utils.toWei(trade.amount)
+    return trade
+  })
+  return trades
 }

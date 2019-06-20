@@ -3,6 +3,8 @@ import * as Web3Utils from 'web3-utils'
 
 import singletons from "./singletons";
 
+const oneEther = Web3Utils.toBN(Web3Utils.toWei('1'))
+
 export const getNetworkNameFromId = networkId => {
   networkId = parseInt(networkId);
   const networks = { mainnet: 1, kovan: 42, ropsten: 3, rinkeby: 4 };
@@ -136,7 +138,6 @@ export function getSorting(order, orderBy) {
 }
 
 export const getOrderPriceAmountTotal = (order) => {
-  const oneEther = Web3Utils.toBN(Web3Utils.toWei('1'))
   const takeAmount = Web3Utils.toBN(order.takeAmount)
   const giveAmount = Web3Utils.toBN(order.giveAmount)
   const price = order.type === "sell"
@@ -215,16 +216,48 @@ export function shuffle(a) {
 
 // order = { giveTokenAddress, giveAmount, takeTokenAddress, takeAmount, type }
 export const matchBuyOrders = ({ order, buyBook }) => {
-  const matchingPrice = Web3Utils.toBN(getOrderPriceAmountTotal(order).price)
-  let results = []
+  const price = Web3Utils.toBN(getOrderPriceAmountTotal(order).price)
+  const volume = Web3Utils.toBN(order.giveAmount)
+  let filled = Web3Utils.toBN(0)
+  let remainingVolume = Web3Utils.toBN(order.giveAmount)
+  let result = { orders: [], trades: [] }
+  // find matched orders
   const matched = buyBook.filter(o => {
     const orderPrice = Web3Utils.toBN(getOrderPriceAmountTotal(o).price)
-    return orderPrice.gte(matchingPrice)
+    return orderPrice.gte(price)
   })
   if (matched.length < 1) {
-    results.push(order)
+    result.orders.push({ giveAmount: order.giveAmount, giveTokenAddress: order.giveTokenAddress, takeAmount: order.takeAmount, takeTokenAddress: order.takeTokenAddress })
+    return result
   }
-  return results
+  // fill matched orders
+  for (let matchedOrder of matched) {
+    if (filled.eq(volume)) {
+      break
+    }
+    const matchedOrderFilled = Web3Utils.toBN(matchedOrder.filled)
+    const matchedOrderGiveAmount = Web3Utils.toBN(matchedOrder.giveAmount)
+    const matchedOrderRemainingVolume = matchedOrderGiveAmount.sub(matchedOrderFilled)
+    let trade
+    if (remainingVolume.gt(matchedOrderRemainingVolume)) {
+      trade = { orderHash: matchedOrder.orderHash, amount: matchedOrderRemainingVolume.toString() }
+      filled = filled.add(matchedOrderRemainingVolume)
+      remainingVolume = remainingVolume.sub(filled)
+    } else {
+      trade = { orderHash: matchedOrder.orderHash, amount: remainingVolume.toString() }
+      filled = filled.add(remainingVolume)
+      remainingVolume = remainingVolume.sub(filled)
+    }
+    result.trades.push(trade)
+  }
+  // create a rest order if there is still remaining volume
+  if (!filled.eq(volume)) {
+    let giveAmount = remainingVolume
+    let takeAmount = giveAmount.mul(price).div(oneEther)
+    const restOrder = { giveAmount: giveAmount.toString(), giveTokenAddress: order.giveTokenAddress, takeAmount: takeAmount.toString(), takeTokenAddress: order.takeTokenAddress }
+    result.orders.push(restOrder)
+  }
+  return result
 }
 
 export const matchSellOrders = ({ price, amount, sellBook, baseAddress, quoteAddress }) => {
