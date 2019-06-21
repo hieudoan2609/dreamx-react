@@ -161,26 +161,26 @@ describe("matchSellOrders", () => {
     expect(receivedMatchResults).toEqual(expectedMatchResults)
   })
 
-  // test("orders with higher prices should be matched first", () => {
-  //   const buyBook = generateTestOrders([
-  //     { type: 'buy', price: '0.6', amount: '1', filled: '0', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "BUY#3" },
-  //     { type: 'buy', price: '0.5', amount: '1', filled: '0', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "BUY#4" },
-  //     { type: 'buy', price: '0.9', amount: '1', filled: '0', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "BUY#0" },
-  //     { type: 'buy', price: '0.8', amount: '1', filled: '0', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "BUY#1" },
-  //     { type: 'buy', price: '0.7', amount: '1', filled: '0', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "BUY#2" }
-  //   ])
-  //   const order = generateTestOrders([
-  //     { type: 'sell', price: '0', amount: '3' }
-  //   ])[0]
-  //   const expectedTrades = generateTestTrades([
-  //     { orderHash: 'BUY#0', amount: '0.9' },
-  //     { orderHash: 'BUY#1', amount: '0.8' },
-  //     { orderHash: 'BUY#2', amount: '0.7' }
-  //   ])
-  //   const expectedMatchResults = { trades: expectedTrades, orders: [] }
-  //   const receivedMatchResults = matchSellOrders({ order, buyBook })
-    // expect(receivedMatchResults).toEqual(expectedMatchResults)
-  // });
+  test("orders with lower prices should be matched first", () => {
+    const sellBook = generateTestOrders([
+      { type: 'sell', price: '1.8', amount: '1', filled: '0', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "SELL#3" },
+      { type: 'sell', price: '1.9', amount: '1', filled: '0', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "SELL#4" },
+      { type: 'sell', price: '1.5', amount: '1', filled: '0', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "SELL#0" },
+      { type: 'sell', price: '1.6', amount: '1', filled: '0', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "SELL#1" },
+      { type: 'sell', price: '1.7', amount: '1', filled: '0', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "SELL#2" }
+    ])
+    const order = generateTestOrders([
+      { type: 'buy', price: '2', amount: '3' }
+    ])[0]
+    const expectedTrades = generateTestTrades([
+      { orderHash: 'SELL#0', amount: '1' },
+      { orderHash: 'SELL#1', amount: '1' },
+      { orderHash: 'SELL#2', amount: '1' }
+    ])
+    const expectedMatchResults = { trades: expectedTrades, orders: [] }
+    const receivedMatchResults = matchSellOrders({ order, sellBook })
+    expect(receivedMatchResults).toEqual(expectedMatchResults)
+  });
 
   // test("if there are multiple orders of the same price, the older ones should be matched first", () => {
   //   const buyBook = generateTestOrders([
