@@ -4,6 +4,7 @@ import * as Web3Utils from 'web3-utils'
 import singletons from "./singletons";
 
 const oneEther = Web3Utils.toBN(Web3Utils.toWei('1'))
+const zero = Web3Utils.toBN('0')
 
 export const getNetworkNameFromId = networkId => {
   networkId = parseInt(networkId);
@@ -215,10 +216,18 @@ export function shuffle(a) {
 }
 
 const calculateTakeAmount = (giveAmount, totalGiveAmount, totalTakeAmount) => {
+  if (giveAmount.eq(zero) || totalGiveAmount.eq(zero) || totalTakeAmount.eq(zero)) {
+    return zero
+  }
+
   return giveAmount.mul(totalTakeAmount).div(totalGiveAmount)
 }
 
 const calculateGiveAmount = (takeAmount, totalGiveAmount, totalTakeAmount) => {
+  if (takeAmount.eq(zero) || totalGiveAmount.eq(zero) || totalTakeAmount.eq(zero)) {
+    return zero
+  }
+
   return takeAmount.mul(totalGiveAmount).div(totalTakeAmount)
 }
 
@@ -234,6 +243,28 @@ export const matchBuyOrders = ({ order, buyBook }) => {
   const matched = buyBook.filter(o => {
     const orderPrice = Web3Utils.toBN(getOrderPriceAmountTotal(o).price)
     return orderPrice.gte(price)
+  }).sort((a, b) => {
+  // sort matched orders
+    const aPrice = Web3Utils.toBN(getOrderPriceAmountTotal(a).price)
+    const bPrice = Web3Utils.toBN(getOrderPriceAmountTotal(b).price)
+    const aCreatedAt = new Date(a.createdAt).getTime()
+    const bCreatedAt = new Date(b.createdAt).getTime()
+    if (aPrice.lt(bPrice)) {
+      // a.price < b.price, b comes first
+      return 1
+    } else if (aPrice.gt(bPrice)) {
+      // a.price > b.price, a comes first
+      return -1
+    } else if (aCreatedAt > bCreatedAt) {
+      // a is more recently created, b comes first
+      return 1
+    } else if (aCreatedAt < bCreatedAt) {
+      // a is older than b, a comes first
+      return -1
+    } else {
+      // a and b are equal in price and date, keep their existing order
+      return 0
+    }
   })
   if (matched.length < 1) {
     result.orders.push({ type: order.type, giveAmount: order.giveAmount, giveTokenAddress: order.giveTokenAddress, takeAmount: order.takeAmount, takeTokenAddress: order.takeTokenAddress })
@@ -248,7 +279,9 @@ export const matchBuyOrders = ({ order, buyBook }) => {
     const matchedOrderGiveAmount = Web3Utils.toBN(matchedOrder.giveAmount)
     const matchedOrderTakeAmount = Web3Utils.toBN(matchedOrder.takeAmount)
     const matchedOrderRemainingGiveAmount = matchedOrderGiveAmount.sub(matchedOrderFilled)
-    const remainingTakeAmount = calculateTakeAmount(remainingGiveAmount, giveAmount, takeAmount)
+    // remaining amount of take tokens should be calculated by the matched order's give/take rate
+    // because it is relative to the matched order's price
+    const remainingTakeAmount = calculateTakeAmount(remainingGiveAmount, matchedOrderTakeAmount, matchedOrderGiveAmount)
     let trade, tradeAmount
     if (remainingTakeAmount.gt(matchedOrderRemainingGiveAmount)) {
       tradeAmount = matchedOrderRemainingGiveAmount
@@ -256,7 +289,8 @@ export const matchBuyOrders = ({ order, buyBook }) => {
       tradeAmount = remainingTakeAmount
     }
     trade = { orderHash: matchedOrder.orderHash, amount: tradeAmount.toString() }
-    // swap give/take amounts in calculateGiveAmount for the same ratio because order.giveAmount === matchedOrder.takeAmount and vice versa
+    // the amount of give tokens equivalent to the trade amount should be calculated by the matched order's give/take rate
+    // because it is relative to the matched order's price
     const tradeAmountEquivalentInGiveToken = calculateGiveAmount(tradeAmount, matchedOrderTakeAmount, matchedOrderGiveAmount)
     filledGiveAmount = filledGiveAmount.add(tradeAmountEquivalentInGiveToken)
     remainingGiveAmount = remainingGiveAmount.sub(tradeAmountEquivalentInGiveToken)
@@ -311,7 +345,7 @@ export const generateTestOrders = (orders) => {
       takeTokenAddress = baseAddress
       takeAmount = order.amount.mul(order.price).div(oneEther)
     }
-    const createdAt = order.date
+    const createdAt = order.createdAt
     const orderHash = order.orderHash
     const type = order.type
     const filled = calculateGiveAmount(order.filled, giveAmount, takeAmount)
