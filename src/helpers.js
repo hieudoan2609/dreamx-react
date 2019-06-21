@@ -412,7 +412,7 @@ export const generateTestOrders = (orders) => {
     const createdAt = order.createdAt
     const orderHash = order.orderHash
     const type = order.type
-    const filled = calculateGiveAmount(order.filled, giveAmount, takeAmount)
+    const filled = type === 'buy' ? calculateGiveAmount(order.filled, giveAmount, takeAmount) : order.filled
     order = { giveTokenAddress, giveAmount: giveAmount.toString(), takeTokenAddress, takeAmount: takeAmount.toString(), createdAt, orderHash, type, filled: filled.toString() }
     // remove undefined attrs
     for (let key of emptyAttrs) {
