@@ -306,8 +306,78 @@ export const matchBuyOrders = ({ order, buyBook }) => {
   return result
 }
 
-export const matchSellOrders = ({ price, amount, sellBook, baseAddress, quoteAddress }) => {
-  return 'MATCHED'
+export const matchSellOrders = ({ order, buyBook }) => {
+  const result = { orders: [], trades: [] }
+  const price = Web3Utils.toBN(getOrderPriceAmountTotal(order).price)
+  const giveAmount = Web3Utils.toBN(order.giveAmount)
+  const takeAmount = Web3Utils.toBN(order.takeAmount)
+  let filledGiveAmount = Web3Utils.toBN(0)
+  let remainingGiveAmount = Web3Utils.toBN(order.giveAmount)
+  // find matched orders
+  const matched = buyBook.filter(o => {
+    const orderPrice = Web3Utils.toBN(getOrderPriceAmountTotal(o).price)
+    return orderPrice.lte(price)
+  }).sort((a, b) => {
+  // sort matched orders
+    const aPrice = Web3Utils.toBN(getOrderPriceAmountTotal(a).price)
+    const bPrice = Web3Utils.toBN(getOrderPriceAmountTotal(b).price)
+    const aCreatedAt = new Date(a.createdAt).getTime()
+    const bCreatedAt = new Date(b.createdAt).getTime()
+    if (aPrice.lt(bPrice)) {
+      // a.price < b.price, a comes first
+      return -1
+    } else if (aPrice.gt(bPrice)) {
+      // a.price > b.price, b comes first
+      return 1
+    } else if (aCreatedAt > bCreatedAt) {
+      // a is more recently created, b comes first
+      return 1
+    } else if (aCreatedAt < bCreatedAt) {
+      // a is older than b, a comes first
+      return -1
+    } else {
+      // a and b are equal in price and date, keep their existing order
+      return 0
+    }
+  })
+  if (matched.length < 1) {
+    result.orders.push({ type: order.type, giveAmount: order.giveAmount, giveTokenAddress: order.giveTokenAddress, takeAmount: order.takeAmount, takeTokenAddress: order.takeTokenAddress })
+    return result
+  }
+  // // fill matched orders
+  // for (let matchedOrder of matched) {
+  //   if (filledGiveAmount.eq(giveAmount)) {
+  //     break
+  //   }
+  //   const matchedOrderFilled = Web3Utils.toBN(matchedOrder.filled)
+  //   const matchedOrderGiveAmount = Web3Utils.toBN(matchedOrder.giveAmount)
+  //   const matchedOrderTakeAmount = Web3Utils.toBN(matchedOrder.takeAmount)
+  //   const matchedOrderRemainingGiveAmount = matchedOrderGiveAmount.sub(matchedOrderFilled)
+  //   // remaining amount of take tokens should be calculated by the matched order's give/take rate
+  //   // because it is relative to the matched order's price
+  //   const remainingTakeAmount = calculateTakeAmount(remainingGiveAmount, matchedOrderTakeAmount, matchedOrderGiveAmount)
+  //   let trade, tradeAmount
+  //   if (remainingTakeAmount.gt(matchedOrderRemainingGiveAmount)) {
+  //     tradeAmount = matchedOrderRemainingGiveAmount
+  //   } else {
+  //     tradeAmount = remainingTakeAmount
+  //   }
+  //   trade = { orderHash: matchedOrder.orderHash, amount: tradeAmount.toString() }
+  //   // the amount of give tokens equivalent to the trade amount should be calculated by the matched order's give/take rate
+  //   // because it is relative to the matched order's price
+  //   const tradeAmountEquivalentInGiveToken = calculateGiveAmount(tradeAmount, matchedOrderTakeAmount, matchedOrderGiveAmount)
+  //   filledGiveAmount = filledGiveAmount.add(tradeAmountEquivalentInGiveToken)
+  //   remainingGiveAmount = remainingGiveAmount.sub(tradeAmountEquivalentInGiveToken)
+  //   result.trades.push(trade)
+  // }
+  // // create a rest order if there is still remaining volume
+  // if (!filledGiveAmount.eq(giveAmount)) {
+  //   let restOrderGiveAmount = remainingGiveAmount
+  //   let restOrderTakeAmount = calculateTakeAmount(remainingGiveAmount, giveAmount, takeAmount)
+  //   const restOrder = { type: order.type, giveAmount: restOrderGiveAmount.toString(), giveTokenAddress: order.giveTokenAddress, takeAmount: restOrderTakeAmount.toString(), takeTokenAddress: order.takeTokenAddress }
+  //   result.orders.push(restOrder)
+  // }
+  // return result
 }
 
 export const generateTestOrders = (orders) => {
