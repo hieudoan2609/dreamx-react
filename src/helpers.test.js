@@ -42,20 +42,23 @@ describe("matchBuyOrders", () => {
     expect(receivedMatchResults).toEqual(expectedMatchResults)
   });
 
-  // test("match a partially filled order, return a trade and a rest order", () => {
-  //   const buyBook = generateTestOrders([
-  //     { type: 'buy', price: '0.9', amount: '1', filled: '0.5', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "BUY#0" },
-  //   ])
-  //   const order = generateTestOrders([
-  //     { type: 'sell', price: '0.8', amount: '3' }
-  //   ])[0]
-  //   // const expectedTrades = generateTestTrades([
-  //   //   { orderHash: 'BUY#0', amount: '0.45' }
-  //   // ])
-  //   // const expectedOrders = generateTestOrders([
-  //   //   { type: 'sell', price: '0.8', amount: '2.5' }
-  //   // ])
-  // })
+  test("match a partially filled order, return a trade and a rest order", () => {
+    const buyBook = generateTestOrders([
+      { type: 'buy', price: '0.9', amount: '1', filled: '0.5', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "BUY#0" }
+    ])
+    const order = generateTestOrders([
+      { type: 'sell', price: '0.8', amount: '3' }
+    ])[0]
+    const expectedTrades = generateTestTrades([
+      { orderHash: 'BUY#0', amount: '0.45' }
+    ])
+    const expectedOrders = generateTestOrders([
+      { type: 'sell', price: '0.8', amount: '2.5' }
+    ])
+    const expectedMatchResults = { trades: expectedTrades, orders: expectedOrders }
+    const receivedMatchResults = matchBuyOrders({ order, buyBook })
+    expect(receivedMatchResults).toEqual(expectedMatchResults)
+  })
 
   test("orders with higher prices should be matched first", () => {});
 
