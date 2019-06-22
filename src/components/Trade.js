@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import "./Trade.scss";
 import TabMenu from "./TabMenu";
 import Button from "./Button";
-import { truncateNumberInput, truncateNumberOutput, getOrderPriceAmountTotal } from "../helpers";
+import { truncateNumberInput, truncateNumberOutput, findMatchedOrders } from "../helpers";
 import singletons from "../singletons";
 import config from "../config";
 import Loading from './Loading'
@@ -227,7 +227,8 @@ class Trade extends Component {
       }
     }
 
-    console.log('MATCH ORDER')
+    const order = this.generateOrderFromInput()
+    const matched = findMatchedOrders({ order, orderBook: this.props.orderBook })
 
     // if (matches) {
     //   await this.tradeAsync()
@@ -236,30 +237,22 @@ class Trade extends Component {
     // }
   };
 
-  matchAsync = async () => {
-    const { currentTab, priceWei, amountWei } = this.state
-    const { orderBook } = this.props
-    const matchingPrice = Web3Utils.toBN(priceWei)
-
-    let matches
-    if (currentTab === 'buy') {
-      matches = orderBook.sellBook.filter(o => {
-        const orderPrice = Web3Utils.toBN(getOrderPriceAmountTotal(o).price)
-        return orderPrice.lte(matchingPrice)
-      })
-      .sort((a, b) => {
-        return Web3Utils.toBN(a.price) - Web3Utils.toBN(b.price)
-      })
+  generateOrderFromInput = () => {
+    const type = this.state.currentTab
+    let giveTokenAddress, giveAmount, takeTokenAddress, takeAmount
+    if (type === 'buy') {
+      giveTokenAddress = this.props.base.address
+      giveAmount = this.state.total
+      takeTokenAddress = this.props.quote.address
+      takeAmount = this.state.amountWei
     } else {
-      matches = orderBook.buyBook.filter(o => {
-        const orderPrice = Web3Utils.toBN(getOrderPriceAmountTotal(o).price)
-        return orderPrice.gte(matchingPrice)
-      })
-      .sort((a, b) => {
-        return Web3Utils.toBN(b.price) - Web3Utils.toBN(a.price)
-      })
+      giveTokenAddress = this.props.quote.address
+      giveAmount = this.state.amountWei
+      takeTokenAddress = this.props.base.address
+      takeAmount = this.state.total
     }
-    return matches
+    const order = { giveTokenAddress, giveAmount, takeTokenAddress, takeAmount, type }
+    return order
   }
 
   tradeAsync = async () => {

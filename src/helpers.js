@@ -231,6 +231,17 @@ const calculateGiveAmount = (takeAmount, totalGiveAmount, totalTakeAmount) => {
   return takeAmount.mul(totalGiveAmount).div(totalTakeAmount)
 }
 
+export const findMatchedOrders = ({ order, orderBook }) => {
+  const { buyBook, sellBook } = orderBook
+  let result
+  if (order.type === 'buy') {
+    result = matchSellOrders({ order, sellBook })
+  } else {
+    result = matchBuyOrders({ order, buyBook })
+  }
+  return result
+}
+
 // order = { giveTokenAddress, giveAmount, takeTokenAddress, takeAmount, type }
 export const matchBuyOrders = ({ order, buyBook }) => {
   const result = { orders: [], trades: [] }
@@ -351,7 +362,6 @@ export const matchSellOrders = ({ order, sellBook }) => {
     }
     const matchedOrderFilled = Web3Utils.toBN(matchedOrder.filled)
     const matchedOrderGiveAmount = Web3Utils.toBN(matchedOrder.giveAmount)
-    const matchedOrderTakeAmount = Web3Utils.toBN(matchedOrder.takeAmount)
     const matchedOrderRemainingGiveAmount = matchedOrderGiveAmount.sub(matchedOrderFilled)
     let trade, tradeAmount
     if (remainingTakeAmount.gt(matchedOrderRemainingGiveAmount)) {
