@@ -30,7 +30,6 @@ describe("matchBuyOrders", () => {
     const order = generateTestOrders([
       { type: 'sell', price: '0.8', amount: '3' }
     ])[0]
-    console.log(order)
     const expectedTrades = generateTestTrades([
       { orderHash: 'BUY#0', amount: '0.9' },
       { orderHash: 'BUY#1', amount: '0.8' }
@@ -102,6 +101,10 @@ describe("matchBuyOrders", () => {
     const receivedMatchResults = matchBuyOrders({ order, buyBook })
     expect(receivedMatchResults).toEqual(expectedMatchResults)
   })
+
+  // test.only("rest order must meet maker's minimum", () => {})
+
+  // test("trades must meet taker's minimum", () => {})
 })
 
 describe("matchSellOrders", () => {

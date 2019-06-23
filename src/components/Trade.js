@@ -225,7 +225,6 @@ class Trade extends Component {
 
     const order = this.generateOrderFromInput()
     const matchedResults = findMatchedOrders({ order, orderBook: this.props.orderBook })
-    console.log(matchedResults)
     this.setState({ pending: false })
     // const payloads = await this.generatePayloadsAsync(matchedResults)
 
