@@ -144,7 +144,6 @@ export const getOrderPriceAmountTotal = (order) => {
   const price = order.type === "sell"
     ? (takeAmount.mul(oneEther).div(giveAmount)).toString()
     : (giveAmount.mul(oneEther).div(takeAmount)).toString();
-
   const amount = order.type === "sell"
     ? order.giveAmount
     : order.takeAmount;
@@ -157,12 +156,26 @@ export const getOrderPriceAmountTotal = (order) => {
 export const extractBookData = (bookOrders) => {
   const prices = {}
   for (let order of bookOrders) {
-    const { price, amount, total } = getOrderPriceAmountTotal(order)
-    if (!prices[price]) {
-      prices[price] = { amount, total }
+    let { price, amount, total } = getOrderPriceAmountTotal(order)
+    amount = Web3Utils.toBN(amount)
+    total = Web3Utils.toBN(total)
+    const giveAmount = Web3Utils.toBN(order.giveAmount)
+    const takeAmount = Web3Utils.toBN(order.takeAmount)
+    const filled = Web3Utils.toBN(order.filled)
+    const filledTakeAmount = calculateTakeAmount(filled, giveAmount, takeAmount)
+    let amountAfterFilled, totalAfterFilled
+    if (order.type === 'buy') {
+      amountAfterFilled = amount.sub(filledTakeAmount)
+      totalAfterFilled = total.sub(filled)
     } else {
-      prices[price].amount = (Web3Utils.toBN(prices[price].amount).add(Web3Utils.toBN(amount))).toString()
-      prices[price].total = (Web3Utils.toBN(prices[price].total).add(Web3Utils.toBN(total))).toString()
+      amountAfterFilled = amount.sub(filled)
+      totalAfterFilled = total.sub(filledTakeAmount)
+    }
+    if (!prices[price]) {
+      prices[price] = { amount: amountAfterFilled, total: totalAfterFilled }
+    } else {
+      prices[price].amount = (Web3Utils.toBN(prices[price].amount).add(amountAfterFilled)).toString()
+      prices[price].total = (Web3Utils.toBN(prices[price].total).add(totalAfterFilled)).toString()
     }
   }
 
