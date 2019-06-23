@@ -163,20 +163,20 @@ export const extractBookData = (bookOrders) => {
     const giveAmount = Web3Utils.toBN(order.giveAmount)
     const takeAmount = Web3Utils.toBN(order.takeAmount)
     const filled = Web3Utils.toBN(order.filled)
-    const filledTakeAmount = calculateTakeAmount(filled, giveAmount, takeAmount)
-    let amountAfterFilled, totalAfterFilled
+    const filledTake = calculateTakeAmount(filled, giveAmount, takeAmount)
+    let remainingAmount, remainingTotal
     if (order.type === 'buy') {
-      amountAfterFilled = amount.sub(filledTakeAmount)
-      totalAfterFilled = total.sub(filled)
+      remainingAmount = amount.sub(filledTake)
+      remainingTotal = total.sub(filled)
     } else {
-      amountAfterFilled = amount.sub(filled)
-      totalAfterFilled = total.sub(filledTakeAmount)
+      remainingAmount = amount.sub(filled)
+      remainingTotal = total.sub(filledTake)
     }
     if (!prices[price]) {
-      prices[price] = { amount: amountAfterFilled, total: totalAfterFilled }
+      prices[price] = { amount: remainingAmount, total: remainingTotal }
     } else {
-      prices[price].amount = (Web3Utils.toBN(prices[price].amount).add(amountAfterFilled)).toString()
-      prices[price].total = (Web3Utils.toBN(prices[price].total).add(totalAfterFilled)).toString()
+      prices[price].amount = (Web3Utils.toBN(prices[price].amount).add(remainingAmount)).toString()
+      prices[price].total = (Web3Utils.toBN(prices[price].total).add(remainingTotal)).toString()
     }
   }
 
@@ -229,7 +229,7 @@ export function shuffle(a) {
   return a;
 }
 
-const calculateTakeAmount = (giveAmount, totalGiveAmount, totalTakeAmount) => {
+export const calculateTakeAmount = (giveAmount, totalGiveAmount, totalTakeAmount) => {
   if (giveAmount.eq(zero) || totalGiveAmount.eq(zero) || totalTakeAmount.eq(zero)) {
     return zero
   }
@@ -237,7 +237,7 @@ const calculateTakeAmount = (giveAmount, totalGiveAmount, totalTakeAmount) => {
   return giveAmount.mul(totalTakeAmount).div(totalGiveAmount)
 }
 
-const calculateGiveAmount = (takeAmount, totalGiveAmount, totalTakeAmount) => {
+export const calculateGiveAmount = (takeAmount, totalGiveAmount, totalTakeAmount) => {
   if (takeAmount.eq(zero) || totalGiveAmount.eq(zero) || totalTakeAmount.eq(zero)) {
     return zero
   }
@@ -336,7 +336,7 @@ export const matchSellOrders = ({ order, sellBook }) => {
   const price = Web3Utils.toBN(getOrderVolume(order).price)
   const giveAmount = Web3Utils.toBN(order.giveAmount)
   const takeAmount = Web3Utils.toBN(order.takeAmount)
-  let filledTakeAmount = Web3Utils.toBN(0)
+  let filledTake = Web3Utils.toBN(0)
   let remainingTakeAmount = Web3Utils.toBN(order.takeAmount)
   // find matched orders
   const matched = sellBook.filter(o => {
@@ -371,7 +371,7 @@ export const matchSellOrders = ({ order, sellBook }) => {
   }
   // fill matched orders
   for (let matchedOrder of matched) {
-    if (filledTakeAmount.eq(takeAmount)) {
+    if (filledTake.eq(takeAmount)) {
       break
     }
     const matchedOrderFilled = Web3Utils.toBN(matchedOrder.filled)
@@ -384,12 +384,12 @@ export const matchSellOrders = ({ order, sellBook }) => {
       tradeAmount = remainingTakeAmount
     }
     trade = { orderHash: matchedOrder.orderHash, amount: tradeAmount.toString() }
-    filledTakeAmount = filledTakeAmount.add(tradeAmount)
+    filledTake = filledTake.add(tradeAmount)
     remainingTakeAmount = remainingTakeAmount.sub(tradeAmount)
     result.trades.push(trade)
   }
   // create a rest order if there is still remaining volume
-  if (!filledTakeAmount.eq(takeAmount)) {
+  if (!filledTake.eq(takeAmount)) {
     let restOrderGiveAmount = calculateGiveAmount(remainingTakeAmount, giveAmount, takeAmount)
     let restOrderTakeAmount = remainingTakeAmount
     const restOrder = { type: order.type, giveAmount: restOrderGiveAmount.toString(), giveTokenAddress: order.giveTokenAddress, takeAmount: restOrderTakeAmount.toString(), takeTokenAddress: order.takeTokenAddress }

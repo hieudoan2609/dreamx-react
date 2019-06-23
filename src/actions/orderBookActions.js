@@ -5,7 +5,7 @@ import {
   ORDER_BOOK_LOAD
 } from "../actions/types";
 import config from '../config'
-import { processOrder } from "../helpers";
+import { processOrder, calculateTakeAmount } from "../helpers";
 import singletons, { setSingleton } from "../singletons";
 
 export const orderBookLoadAsync = (marketSymbol) => {
@@ -17,12 +17,22 @@ export const orderBookLoadAsync = (marketSymbol) => {
     let totalBuy = Web3Utils.toBN(0)
     let totalSell = Web3Utils.toBN(0)
     for (let order of orderBooksResponse.data.bid.records) {
-      buyBook.push(processOrder(getState, order))
-      totalBuy = totalBuy.add(Web3Utils.toBN(order.takeAmount))
+      order = processOrder(getState, order)
+      const takeAmount = Web3Utils.toBN(order.takeAmount)
+      const giveAmount = Web3Utils.toBN(order.giveAmount)
+      const filled = Web3Utils.toBN(order.filled)
+      const filledTake = calculateTakeAmount(filled, giveAmount, takeAmount)
+      const remainingTakeAmount = takeAmount.sub(filledTake)
+      totalBuy = totalBuy.add(remainingTakeAmount)
+      buyBook.push(order)
     }
     for (let order of orderBooksResponse.data.ask.records) {
-      sellBook.push(processOrder(getState, order))
-      totalSell = totalSell.add(Web3Utils.toBN(order.giveAmount))
+      order = processOrder(getState, order)
+      const giveAmount = Web3Utils.toBN(order.giveAmount)
+      const filled = Web3Utils.toBN(order.filled)
+      const remainingGiveAmount = giveAmount.sub(filled)
+      totalSell = totalSell.add(remainingGiveAmount)
+      sellBook.push(order)
     }
     totalBuy = totalBuy.toString()
     totalSell = totalSell.toString()

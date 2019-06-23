@@ -32,8 +32,6 @@ class OrderBook extends Component {
 
   render() {
     const order = this.props.type === 'buy' ? 'desc' : 'asc'
-    // const bookData = extractBookData(this.props.bookData)
-    // bookData.push({ price: "12.34567890", amount: "12345678.00", total: "12345678.00" })
 
     return (
       <div className={`OrderBook card ${this.props.theme} ${this.props.type}`}>
