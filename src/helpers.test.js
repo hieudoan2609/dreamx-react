@@ -19,7 +19,7 @@ describe("matchBuyOrders", () => {
     expect(receivedMatchResults).toEqual(expectedMatchResults)
   })
 
-  test.only("match all orders, return trades and a rest order", () => {
+  test("match all orders, return trades and a rest order", () => {
     const buyBook = generateTestOrders([
       { type: 'buy', price: '0.9', amount: '1', filled: '0', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "BUY#0" },
       { type: 'buy', price: '0.8', amount: '1', filled: '0', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "BUY#1" },

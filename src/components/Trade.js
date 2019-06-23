@@ -228,14 +228,92 @@ class Trade extends Component {
     }
 
     const order = this.generateOrderFromInput()
-    const matched = findMatchedOrders({ order, orderBook: this.props.orderBook })
+    const matchedResults = findMatchedOrders({ order, orderBook: this.props.orderBook })
+    const payloads = await this.generatePayloadsAsync(matchedResults)
 
-    // if (matches) {
-    //   await this.tradeAsync()
-    // } else {
-    //   await this.orderAsync()
-    // }
+    if (!payloads) {
+      this.setState({ pending: false })
+      return;
+    }
+
+    await this.submitPayloadsAsync(payloads)
   };
+
+  generatePayloadsAsync = async (matchedResults) => {
+    const { web3 } = singletons;
+    const { app, account } = this.props
+    const contractAddress = app.contractAddress
+    const accountAddress = account.address
+    let nonce = Date.now()
+    const expiryTimestampInMilliseconds = 33117212071000
+    const batch = new web3.BatchRequest();
+    const payloads = { orders: [], trades: [] }
+    const unsignedPayloads = []
+    // generate unsigned payloads
+    matchedResults.orders.forEach((order) => {
+      nonce++
+      const { giveTokenAddress, giveAmount, takeTokenAddress, takeAmount } = order
+      const hash = web3.utils.soliditySha3(contractAddress, accountAddress, giveTokenAddress, giveAmount, takeTokenAddress, takeAmount, nonce, expiryTimestampInMilliseconds);
+      const payload = { account_address: accountAddress, give_token_address: giveTokenAddress, give_amount: giveAmount, take_token_address: takeTokenAddress, take_amount: takeAmount, nonce, expiry_timestamp_in_milliseconds: expiryTimestampInMilliseconds, order_hash: hash, signature: undefined }
+      batch.add(web3.eth.personal.sign.request(hash, accountAddress, undefined, function() {return}))
+      unsignedPayloads.push(payload)
+    })
+    matchedResults.trades.forEach((trade) => {
+      nonce++
+      const { orderHash, amount } = trade
+      const hash = web3.utils.soliditySha3(contractAddress, orderHash, accountAddress, amount, nonce);
+      const payload = { account_address: accountAddress, order_hash: orderHash, amount, nonce, trade_hash: hash, signature: undefined }
+      batch.add(web3.eth.personal.sign.request(hash, accountAddress, undefined, function() {return}))
+      unsignedPayloads.push(payload)
+    })
+    // request signatures
+    const signatures = (await batch.execute()).response
+    // update unsigned payloads with signatures
+    let hasUnsignedPayload = false
+    unsignedPayloads.forEach((payload, index) => {
+      if (!signatures[index]) {
+        hasUnsignedPayload = true
+        return
+      }
+
+      payload.signature = signatures[index]
+
+      if (payload.trade_hash) {
+        payloads.trades.push(payload)
+      } else {
+        payloads.orders.push(payload)
+      }
+    })
+    if (hasUnsignedPayload) {
+      return
+    } else {
+      return payloads
+    }
+  }
+
+  submitPayloadsAsync = async (payloads) => {
+    const { API_HTTP_ROOT } = config;
+    const { price, priceWei, amount, amountWei, fee, total, totalMinusFee, amountMinusFee } = INITIAL_STATE
+    const hasOrderPayloads = payloads.orders.length > 0
+    const hasTradePayloads = payloads.trades.length > 0
+    try {
+      if (hasOrderPayloads) {
+        const payload = payloads.orders[0]
+        await axios.post(`${API_HTTP_ROOT}/orders`, payload);
+      }
+      if (hasTradePayloads) {
+        const payload = payloads.trades
+        await axios.post(`${API_HTTP_ROOT}/trades`, payload);
+      }
+      const feedback = { type: 'success', message: 'Your order has been submitted.' }
+      this.setState({ pending: false, price, priceWei, amount, amountWei, fee, total, totalMinusFee, amountMinusFee, feedback })
+    } catch (err) {
+      const feedback = { type: 'error', message: 'Service is unvailable, please try again later.' }
+      if (err.toString() === "Error: Request failed with status code 503") {
+        this.setState({ pending: false, feedback })
+      }
+    }
+  }
 
   generateOrderFromInput = () => {
     const type = this.state.currentTab
@@ -253,92 +331,6 @@ class Trade extends Component {
     }
     const order = { giveTokenAddress, giveAmount, takeTokenAddress, takeAmount, type }
     return order
-  }
-
-  tradeAsync = async () => {
-    console.log('TRADE')
-  }
-
-  orderAsync = async () => {
-    const { price, priceWei, amount, amountWei, fee, total, totalMinusFee, amountMinusFee } = INITIAL_STATE
-    const { API_HTTP_ROOT } = config;
-    const { app, account, base, quote } = this.props
-    const orderType = this.state.currentTab
-    const contractAddress = app.contractAddress
-    const accountAddress = account.address
-    let giveTokenAddress, giveAmount, takeTokenAddress, takeAmount
-    if (orderType === 'buy') {
-      giveTokenAddress = base.address
-      giveAmount = this.state.total
-      takeTokenAddress = quote.address
-      takeAmount = this.state.amountWei
-    } else {
-      giveTokenAddress = quote.address
-      giveAmount = this.state.amountWei
-      takeTokenAddress = base.address
-      takeAmount = this.state.total
-    }
-    const expiryTimestampInMilliseconds = 33117212071000;
-    const payload = await this.generateOrderPayloadAsync({ contractAddress, accountAddress, giveTokenAddress, giveAmount, takeTokenAddress, takeAmount, expiryTimestampInMilliseconds })
-
-    if (!payload) {
-      this.setState({ pending: false })
-      return;
-    }
-
-    try {
-      await axios.post(
-        `${API_HTTP_ROOT}/orders`,
-        payload
-      );
-      const feedback = { type: 'success', message: 'Your order has been submitted.' }
-      this.setState({ pending: false, price, priceWei, amount, amountWei, fee, total, totalMinusFee, amountMinusFee, feedback })
-    } catch (err) {
-      const feedback = { type: 'error', message: 'Service is unvailable, please try again later.' }
-      if (err.toString() === "Error: Request failed with status code 503") {
-        this.setState({ pending: false, feedback })
-      }
-    }
-  }
-
-  generateOrderPayloadAsync = async ({
-    contractAddress,
-    accountAddress,
-    giveTokenAddress,
-    giveAmount,
-    takeTokenAddress,
-    takeAmount,
-    expiryTimestampInMilliseconds
-  }) => {
-    const { web3 } = singletons;
-    const nonce = Date.now();
-    const hash = web3.utils.soliditySha3(
-      contractAddress,
-      accountAddress,
-      giveTokenAddress,
-      giveAmount,
-      takeTokenAddress,
-      takeAmount,
-      nonce,
-      expiryTimestampInMilliseconds
-    );
-    try {
-      const signature = await web3.eth.personal.sign(hash, accountAddress, undefined);
-      const payload = {
-        "account_address": accountAddress,
-        "give_token_address": giveTokenAddress,
-        "give_amount": giveAmount,
-        "take_token_address": takeTokenAddress,
-        "take_amount": takeAmount,
-        "nonce": nonce,
-        "expiry_timestamp_in_milliseconds": expiryTimestampInMilliseconds,
-        "order_hash": hash,
-        signature
-      }
-      return payload;
-    } catch {
-      return;
-    }
   }
 
   render() {

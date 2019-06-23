@@ -175,6 +175,7 @@ export const accountOrdersCancelAllAsync = ({ market }) => {
     }
     dispatch({ type: ACCOUNT_ORDERS_CANCEL_PENDING_ON })
     const payloads = await generateOrderCancelPayloadsAsync({ contractAddress, orders })
+
     if (!payloads) {
       dispatch({ type: ACCOUNT_ORDERS_CANCEL_PENDING_OFF })
       return
@@ -237,7 +238,7 @@ const generateOrderCancelPayloadsAsync = async ({ contractAddress, orders }) => 
   })
   // request signatures
   const signatures = (await batch.execute()).response
-  // update unsighed payloads with signatures
+  // update unsigned payloads with signatures
   let hasUnsignedPayload = false
   payloads.forEach((payload, index) => {
     if (!signatures[index]) {
