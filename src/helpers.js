@@ -138,7 +138,8 @@ export function getSorting(order, orderBy) {
     : (a, b) => -desc(a, b, orderBy);
 }
 
-export const getOrderPriceAmountTotal = (order) => {
+// return { price, amount, total, remainingAmount, remainingTotal }
+export const getOrderVolume = (order) => {
   const takeAmount = Web3Utils.toBN(order.takeAmount)
   const giveAmount = Web3Utils.toBN(order.giveAmount)
   const price = order.type === "sell"
@@ -156,7 +157,7 @@ export const getOrderPriceAmountTotal = (order) => {
 export const extractBookData = (bookOrders) => {
   const prices = {}
   for (let order of bookOrders) {
-    let { price, amount, total } = getOrderPriceAmountTotal(order)
+    let { price, amount, total } = getOrderVolume(order)
     amount = Web3Utils.toBN(amount)
     total = Web3Utils.toBN(total)
     const giveAmount = Web3Utils.toBN(order.giveAmount)
@@ -206,9 +207,9 @@ export const processOrder = (getState, order) => {
     order.giveTokenAddress === market.baseToken.address
       ? "buy"
       : "sell";
-  order.price = getOrderPriceAmountTotal(order).price;
-  order.amount = getOrderPriceAmountTotal(order).amount;
-  order.total = getOrderPriceAmountTotal(order).total;
+  order.price = getOrderVolume(order).price;
+  order.amount = getOrderVolume(order).amount;
+  order.total = getOrderVolume(order).total;
   return order;
 }
 
@@ -258,19 +259,19 @@ export const findMatchedOrders = ({ order, orderBook }) => {
 // order = { giveTokenAddress, giveAmount, takeTokenAddress, takeAmount, type }
 export const matchBuyOrders = ({ order, buyBook }) => {
   const result = { orders: [], trades: [] }
-  const price = Web3Utils.toBN(getOrderPriceAmountTotal(order).price)
+  const price = Web3Utils.toBN(getOrderVolume(order).price)
   const giveAmount = Web3Utils.toBN(order.giveAmount)
   const takeAmount = Web3Utils.toBN(order.takeAmount)
   let filledGiveAmount = Web3Utils.toBN(0)
   let remainingGiveAmount = Web3Utils.toBN(order.giveAmount)
   // find matched orders
   const matched = buyBook.filter(o => {
-    const orderPrice = Web3Utils.toBN(getOrderPriceAmountTotal(o).price)
+    const orderPrice = Web3Utils.toBN(getOrderVolume(o).price)
     return orderPrice.gte(price)
   }).sort((a, b) => {
   // sort matched orders
-    const aPrice = Web3Utils.toBN(getOrderPriceAmountTotal(a).price)
-    const bPrice = Web3Utils.toBN(getOrderPriceAmountTotal(b).price)
+    const aPrice = Web3Utils.toBN(getOrderVolume(a).price)
+    const bPrice = Web3Utils.toBN(getOrderVolume(b).price)
     const aCreatedAt = new Date(a.createdAt).getTime()
     const bCreatedAt = new Date(b.createdAt).getTime()
     if (aPrice.lt(bPrice)) {
@@ -332,19 +333,19 @@ export const matchBuyOrders = ({ order, buyBook }) => {
 
 export const matchSellOrders = ({ order, sellBook }) => {
   const result = { orders: [], trades: [] }
-  const price = Web3Utils.toBN(getOrderPriceAmountTotal(order).price)
+  const price = Web3Utils.toBN(getOrderVolume(order).price)
   const giveAmount = Web3Utils.toBN(order.giveAmount)
   const takeAmount = Web3Utils.toBN(order.takeAmount)
   let filledTakeAmount = Web3Utils.toBN(0)
   let remainingTakeAmount = Web3Utils.toBN(order.takeAmount)
   // find matched orders
   const matched = sellBook.filter(o => {
-    const orderPrice = Web3Utils.toBN(getOrderPriceAmountTotal(o).price)
+    const orderPrice = Web3Utils.toBN(getOrderVolume(o).price)
     return orderPrice.lte(price)
   }).sort((a, b) => {
   // sort matched orders
-    const aPrice = Web3Utils.toBN(getOrderPriceAmountTotal(a).price)
-    const bPrice = Web3Utils.toBN(getOrderPriceAmountTotal(b).price)
+    const aPrice = Web3Utils.toBN(getOrderVolume(a).price)
+    const bPrice = Web3Utils.toBN(getOrderVolume(b).price)
     const aCreatedAt = new Date(a.createdAt).getTime()
     const bCreatedAt = new Date(b.createdAt).getTime()
     if (aPrice.lt(bPrice)) {
