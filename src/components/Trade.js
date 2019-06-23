@@ -207,20 +207,16 @@ class Trade extends Component {
       this.setState({ feedback: { type: 'error', message: 'Price cannot be empty.' }, pending: false });
       return;
     };
+    if (Web3Utils.toBN(this.state.total).lt(Web3Utils.toBN(this.props.makerMinimum))) {
+      this.setState({ feedback: { type: 'error', message: `Minimum order is ${Web3Utils.fromWei(this.props.makerMinimum)} ${this.props.base.symbol}.` }, pending: false });
+      return;
+    }
     if (this.state.currentTab === 'buy') {
-      if (Web3Utils.toBN(this.state.total).lt(Web3Utils.toBN(this.props.makerMinimum))) {
-        this.setState({ feedback: { type: 'error', message: `Minimum order is ${Web3Utils.fromWei(this.props.makerMinimum)} ${this.props.base.symbol}.` }, pending: false });
-        return;
-      }
       if (Web3Utils.toBN(this.state.total).gt(Web3Utils.toBN(this.props.base.balance))) {
         this.setState({ feedback: { type: 'error', message: 'Not enough balance.' }, pending: false });
         return;
       }
     } else {
-      if (Web3Utils.toBN(this.state.total).lt(Web3Utils.toBN(this.props.takerMinimum))) {
-        this.setState({ feedback: { type: 'error', message: `Minimum order is ${Web3Utils.fromWei(this.props.takerMinimum)} ${this.props.base.symbol}.` }, pending: false });
-        return;
-      }
       if (Web3Utils.toBN(this.state.amountWei).gt(Web3Utils.toBN(this.props.quote.balance))) {
         this.setState({ feedback: { type: 'error', message: 'Not enough balance.' }, pending: false });
         return;
@@ -229,14 +225,16 @@ class Trade extends Component {
 
     const order = this.generateOrderFromInput()
     const matchedResults = findMatchedOrders({ order, orderBook: this.props.orderBook })
-    const payloads = await this.generatePayloadsAsync(matchedResults)
+    console.log(matchedResults)
+    this.setState({ pending: false })
+    // const payloads = await this.generatePayloadsAsync(matchedResults)
 
-    if (!payloads) {
-      this.setState({ pending: false })
-      return;
-    }
+    // if (!payloads) {
+    //   this.setState({ pending: false })
+    //   return;
+    // }
 
-    await this.submitPayloadsAsync(payloads)
+    // await this.submitPayloadsAsync(payloads)
   };
 
   generatePayloadsAsync = async (matchedResults) => {
