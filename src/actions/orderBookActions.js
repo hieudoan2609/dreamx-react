@@ -89,8 +89,8 @@ const updateOrderBookOrdersAsync = (newOrders) => {
       }
     }
     // remove closed orders
-    updatedBuyBook = updatedBuyBook.filter(o => o.status === 'open')
-    updatedSellBook = updatedSellBook.filter(o => o.status === 'open')
+    updatedBuyBook = updatedBuyBook.filter(o => o.status !== 'closed')
+    updatedSellBook = updatedSellBook.filter(o => o.status !== 'closed')
     updatedTotalBuy = updatedTotalBuy.toString()
     updatedTotalSell = updatedTotalSell.toString()
     dispatch({
