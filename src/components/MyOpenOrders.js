@@ -24,7 +24,7 @@ class MyOpenOrders extends Component {
 
     const extractedData = []
     for (let accountOrder of accountOrders.all) {
-      if (accountOrder.marketSymbol !== market.currentMarket || accountOrder.status !== 'open') {
+      if (accountOrder.marketSymbol !== market.currentMarket || accountOrder.status === 'closed') {
         continue
       }
 
