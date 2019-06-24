@@ -315,6 +315,9 @@ export const matchBuyOrders = ({ order, buyBook, makerMin, takerMin }) => {
     } else {
       tradeAmount = remainingTakeAmount
     }
+    if (tradeAmount.lt(takerMin)) {
+      continue
+    }
     // the amount of give tokens equivalent to the trade amount should be calculated by the matched order's give/take rate
     // because it is relative to the matched order's price
     const tradeAmountEquivalentInGiveToken = calculateGiveAmount(tradeAmount, matchedOrderTakeAmount, matchedOrderGiveAmount)
@@ -333,14 +336,14 @@ export const matchBuyOrders = ({ order, buyBook, makerMin, takerMin }) => {
       filledGiveAmount = filledGiveAmount.sub(tradeAmountEquivalentInGiveToken)
       remainingGiveAmount = remainingGiveAmount.add(tradeAmountEquivalentInGiveToken)
     }
-    // remove amountGive before returning
-    for (let trade of result.trades) {
-      delete trade.amountGive
-    }
     let restOrderGiveAmount = remainingGiveAmount
     let restOrderTakeAmount = calculateTakeAmount(remainingGiveAmount, giveAmount, takeAmount)
     const restOrder = { type: order.type, giveAmount: restOrderGiveAmount.toString(), giveTokenAddress: order.giveTokenAddress, takeAmount: restOrderTakeAmount.toString(), takeTokenAddress: order.takeTokenAddress }
     result.orders.push(restOrder)
+  }
+  // remove amountGive before returning
+  for (let trade of result.trades) {
+    delete trade.amountGive
   }
   return result
 }
