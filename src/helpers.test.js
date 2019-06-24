@@ -102,7 +102,29 @@ describe("matchBuyOrders", () => {
     expect(receivedMatchResults).toEqual(expectedMatchResults)
   })
 
-  // test.only("rest order must meet maker's minimum", () => {})
+  test("rest order must meet maker's minimum", () => {
+    const makerMin = Web3Utils.toWei("0.15")
+    const takerMin = Web3Utils.toWei("0.05")
+    const buyBook = generateTestOrders([
+      { type: 'buy', price: '1', amount: '0.05', filled: '0', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "BUY#0" },
+      { type: 'buy', price: '1', amount: '0.05', filled: '0', createdAt: "2018-06-19T20:25:59.459Z", orderHash: "BUY#1" },
+      { type: 'buy', price: '1', amount: '0.05', filled: '0', createdAt: "2017-06-19T20:25:59.459Z", orderHash: "BUY#2" },
+      { type: 'buy', price: '0.9', amount: '0.05', filled: '0', createdAt: "2016-06-19T20:25:59.459Z", orderHash: "BUY#3" },
+      { type: 'buy', price: '0.8', amount: '0.05', filled: '0', createdAt: "2015-06-19T20:25:59.459Z", orderHash: "BUY#4" }
+    ])
+    const order = generateTestOrders([
+      { type: 'sell', price: '1', amount: '0.24' }
+    ])[0]
+    const expectedTrades = generateTestTrades([
+      { orderHash: 'BUY#2', amount: '0.05' }
+    ])
+    const expectedOrders = generateTestOrders([
+      { type: 'sell', price: '1', amount: '0.19' }
+    ])
+    const expectedMatchResults = { trades: expectedTrades, orders: expectedOrders }
+    const receivedMatchResults = matchBuyOrders({ order, buyBook, makerMin, takerMin })
+    expect(receivedMatchResults).toEqual(expectedMatchResults)
+  })
 
   // test("trades must meet taker's minimum", () => {})
 })

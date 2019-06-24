@@ -245,7 +245,7 @@ export const calculateGiveAmount = (takeAmount, totalGiveAmount, totalTakeAmount
   return takeAmount.mul(totalGiveAmount).div(totalTakeAmount)
 }
 
-export const findMatchedOrders = ({ order, orderBook }) => {
+export const findMatchedOrders = ({ order, orderBook, makerMin, takerMin }) => {
   const { buyBook, sellBook } = orderBook
   let result
   if (order.type === 'buy') {
@@ -257,7 +257,9 @@ export const findMatchedOrders = ({ order, orderBook }) => {
 }
 
 // order = { giveTokenAddress, giveAmount, takeTokenAddress, takeAmount, type }
-export const matchBuyOrders = ({ order, buyBook }) => {
+export const matchBuyOrders = ({ order, buyBook, makerMin, takerMin }) => {
+  makerMin = Web3Utils.toBN(makerMin)
+  takerMin = Web3Utils.toBN(takerMin)
   const result = { orders: [], trades: [] }
   const price = Web3Utils.toBN(getOrderVolume(order).price)
   const giveAmount = Web3Utils.toBN(order.giveAmount)
@@ -313,16 +315,28 @@ export const matchBuyOrders = ({ order, buyBook }) => {
     } else {
       tradeAmount = remainingTakeAmount
     }
-    trade = { orderHash: matchedOrder.orderHash, amount: tradeAmount.toString() }
     // the amount of give tokens equivalent to the trade amount should be calculated by the matched order's give/take rate
     // because it is relative to the matched order's price
     const tradeAmountEquivalentInGiveToken = calculateGiveAmount(tradeAmount, matchedOrderTakeAmount, matchedOrderGiveAmount)
+    // amountGive is used for refunding the matching order after trade cancelling, it will be removed before it is returned
+    trade = { orderHash: matchedOrder.orderHash, amount: tradeAmount.toString(), amountGive: tradeAmountEquivalentInGiveToken }
     filledGiveAmount = filledGiveAmount.add(tradeAmountEquivalentInGiveToken)
     remainingGiveAmount = remainingGiveAmount.sub(tradeAmountEquivalentInGiveToken)
     result.trades.push(trade)
   }
   // create a rest order if there is still remaining volume
   if (!filledGiveAmount.eq(giveAmount)) {
+    // remaining volume is below maker's minimum, cancel trades until it is back above
+    while (remainingGiveAmount.lt(makerMin)) {
+      const lastTrade = result.trades.pop()
+      const tradeAmountEquivalentInGiveToken = lastTrade.amountGive
+      filledGiveAmount = filledGiveAmount.sub(tradeAmountEquivalentInGiveToken)
+      remainingGiveAmount = remainingGiveAmount.add(tradeAmountEquivalentInGiveToken)
+    }
+    // remove amountGive before returning
+    for (let trade of result.trades) {
+      delete trade.amountGive
+    }
     let restOrderGiveAmount = remainingGiveAmount
     let restOrderTakeAmount = calculateTakeAmount(remainingGiveAmount, giveAmount, takeAmount)
     const restOrder = { type: order.type, giveAmount: restOrderGiveAmount.toString(), giveTokenAddress: order.giveTokenAddress, takeAmount: restOrderTakeAmount.toString(), takeTokenAddress: order.takeTokenAddress }
@@ -331,7 +345,7 @@ export const matchBuyOrders = ({ order, buyBook }) => {
   return result
 }
 
-export const matchSellOrders = ({ order, sellBook }) => {
+export const matchSellOrders = ({ order, sellBook, makerMin, takerMin }) => {
   const result = { orders: [], trades: [] }
   const price = Web3Utils.toBN(getOrderVolume(order).price)
   const giveAmount = Web3Utils.toBN(order.giveAmount)
