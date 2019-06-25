@@ -194,6 +194,8 @@ class Trade extends Component {
   };
 
   submitAsync = async () => {
+    const { makerMinimum, takerMinimum } = this.props
+
     this.setState({ feedback: {}, pending: true })
 
     if (!this.state.amountWei) {
@@ -221,16 +223,15 @@ class Trade extends Component {
     }
 
     const order = this.generateOrderFromInput()
-    const matchedResults = findMatchedOrders({ order, orderBook: this.props.orderBook })
-    this.setState({ pending: false })
-    // const payloads = await this.generatePayloadsAsync(matchedResults)
+    const matchedResults = findMatchedOrders({ order, orderBook: this.props.orderBook, makerMinimum, takerMinimum })
+    const payloads = await this.generatePayloadsAsync(matchedResults)
 
-    // if (!payloads) {
-    //   this.setState({ pending: false })
-    //   return;
-    // }
+    if (!payloads) {
+      this.setState({ pending: false })
+      return;
+    }
 
-    // await this.submitPayloadsAsync(payloads)
+    await this.submitPayloadsAsync(payloads)
   };
 
   generatePayloadsAsync = async (matchedResults) => {
@@ -377,6 +378,7 @@ Trade.propTypes = {
   quote: PropTypes.object, // { symbol, balance, address }
   makerFee: PropTypes.string.isRequired,
   makerMinimum: PropTypes.string.isRequired,
+  takerMinimum: PropTypes.string.isRequired,
   onRef: PropTypes.func.isRequired
 };
 

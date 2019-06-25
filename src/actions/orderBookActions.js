@@ -10,6 +10,8 @@ import singletons, { setSingleton } from "../singletons";
 
 export const orderBookLoadAsync = (marketSymbol) => {
   return async (dispatch, getState) => {
+    const { app } = getState()
+    const takerMinimum = Web3Utils.toBN(app.takerMinimum)
     const { API_HTTP_ROOT } = config;
     const orderBooksResponse = await axios.get(`${API_HTTP_ROOT}/order_books/${marketSymbol}?per_page=1000`)
     let buyBook = []
@@ -23,6 +25,11 @@ export const orderBookLoadAsync = (marketSymbol) => {
       const filled = Web3Utils.toBN(order.filled)
       const filledTake = calculateTakeAmount(filled, giveAmount, takeAmount)
       const remainingTakeAmount = takeAmount.sub(filledTake)
+      const remainingGiveAmount = giveAmount.sub(filled)
+      // skip this order if its remaining volume doesn't meet taker's minimum
+      if (remainingGiveAmount.lt(takerMinimum)) {
+        continue
+      }
       totalBuy = totalBuy.add(remainingTakeAmount)
       buyBook.push(order)
     }
@@ -31,6 +38,10 @@ export const orderBookLoadAsync = (marketSymbol) => {
       const giveAmount = Web3Utils.toBN(order.giveAmount)
       const filled = Web3Utils.toBN(order.filled)
       const remainingGiveAmount = giveAmount.sub(filled)
+      // skip this order if its remaining volume doesn't meet taker's minimum
+      if (remainingGiveAmount.lt(takerMinimum)) {
+        continue
+      }
       totalSell = totalSell.add(remainingGiveAmount)
       sellBook.push(order)
     }
