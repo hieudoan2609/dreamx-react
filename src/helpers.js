@@ -138,20 +138,15 @@ export function getSorting(order, orderBy) {
     : (a, b) => -desc(a, b, orderBy);
 }
 
-// return { price, amount, total, remainingAmount, remainingTotal }
+// return { price, amount, filled, total }
 export const getOrderVolume = (order) => {
   const takeAmount = Web3Utils.toBN(order.takeAmount)
   const giveAmount = Web3Utils.toBN(order.giveAmount)
-  const price = order.type === "sell"
-    ? (takeAmount.mul(oneEther).div(giveAmount)).toString()
-    : (giveAmount.mul(oneEther).div(takeAmount)).toString();
-  const amount = order.type === "sell"
-    ? order.giveAmount
-    : order.takeAmount;
-  const total = order.type === "sell"
-    ? order.takeAmount
-    : order.giveAmount;
-  return { price, amount, total }
+  const price = order.type === "sell" ? (takeAmount.mul(oneEther).div(giveAmount)).toString() : (giveAmount.mul(oneEther).div(takeAmount)).toString();
+  const amount = order.type === "sell" ? order.giveAmount : order.takeAmount;
+  const filled = order.type === "sell" ? order.filled : calculateTakeAmount(Web3Utils.toBN(order.filled), giveAmount, takeAmount).toString()
+  const total = order.type === "sell" ? order.takeAmount : order.giveAmount;
+  return { price, amount, filled, total }
 }
 
 export const extractBookData = (bookOrders) => {
@@ -207,9 +202,11 @@ export const processOrder = (getState, order) => {
     order.giveTokenAddress === market.baseToken.address
       ? "buy"
       : "sell";
-  order.price = getOrderVolume(order).price;
-  order.amount = getOrderVolume(order).amount;
-  order.total = getOrderVolume(order).total;
+  const { price, amount, filled, total } = getOrderVolume(order)
+  order.price = price;
+  order.amount = amount;
+  order.amountFilled = filled;
+  order.total = total;
   return order;
 }
 

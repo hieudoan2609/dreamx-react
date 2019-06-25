@@ -199,7 +199,7 @@ class Account extends Component {
       );
       const price = Web3Utils.fromWei(accountOrder.price)
       const amount = Web3Utils.fromWei(accountOrder.amount)
-      const filled = Web3Utils.fromWei(accountOrder.filled)
+      const filled = Web3Utils.fromWei(accountOrder.amountFilled)
       const total = `${Web3Utils.fromWei(accountOrder.total)} ETH`;
       const status = accountOrder.status === 'closed' ? "Closed" : "Open";
       const market = accountOrder.marketSymbolFormatted;
