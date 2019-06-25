@@ -166,9 +166,9 @@ export const accountOrdersCancelAllAsync = ({ market }) => {
 
     let orders = []
     if (!market) {
-      orders = accountOrders.all.filter(o => o.status === 'open')
+      orders = accountOrders.all.filter(o => o.status !== 'closed')
     } else {
-      orders = accountOrders.all.filter(o => o.status === 'open' && o.marketSymbol === market)
+      orders = accountOrders.all.filter(o => o.status !== 'closed' && o.marketSymbol === market)
     }
 
     if (orders.length === 0 || accountOrders.cancelPending) {

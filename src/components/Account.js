@@ -227,7 +227,7 @@ class Account extends Component {
   };
 
   renderOrdersTable = () => {
-    const hasOpenOrders = this.props.accountOrders.all.filter(o => o.status === 'open').length > 0
+    const hasOpenOrders = this.props.accountOrders.all.filter(o => o.status !== 'closed').length > 0
 
     return (
       <PaginatedTable
