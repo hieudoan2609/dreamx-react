@@ -163,14 +163,14 @@ export const extractBookData = (bookOrders) => {
     const giveAmount = Web3Utils.toBN(order.giveAmount)
     const takeAmount = Web3Utils.toBN(order.takeAmount)
     const filled = Web3Utils.toBN(order.filled)
-    const filledTake = calculateTakeAmount(filled, giveAmount, takeAmount)
+    const filledTakeAmount = calculateTakeAmount(filled, giveAmount, takeAmount)
     let remainingAmount, remainingTotal
     if (order.type === 'buy') {
-      remainingAmount = amount.sub(filledTake)
+      remainingAmount = amount.sub(filledTakeAmount)
       remainingTotal = total.sub(filled)
     } else {
       remainingAmount = amount.sub(filled)
-      remainingTotal = total.sub(filledTake)
+      remainingTotal = total.sub(filledTakeAmount)
     }
     if (!prices[price]) {
       prices[price] = { amount: remainingAmount, total: remainingTotal }
@@ -271,7 +271,7 @@ export const matchBuyOrders = ({ order, buyBook, makerMin, takerMin }) => {
     const orderPrice = Web3Utils.toBN(getOrderVolume(o).price)
     return orderPrice.gte(price)
   }).sort((a, b) => {
-  // sort matched orders
+  // sort matched orders by descending price and date
     const aPrice = Web3Utils.toBN(getOrderVolume(a).price)
     const bPrice = Web3Utils.toBN(getOrderVolume(b).price)
     const aCreatedAt = new Date(a.createdAt).getTime()
@@ -349,18 +349,20 @@ export const matchBuyOrders = ({ order, buyBook, makerMin, takerMin }) => {
 }
 
 export const matchSellOrders = ({ order, sellBook, makerMin, takerMin }) => {
+  makerMin = Web3Utils.toBN(makerMin)
+  takerMin = Web3Utils.toBN(takerMin)
   const result = { orders: [], trades: [] }
   const price = Web3Utils.toBN(getOrderVolume(order).price)
   const giveAmount = Web3Utils.toBN(order.giveAmount)
   const takeAmount = Web3Utils.toBN(order.takeAmount)
-  let filledTake = Web3Utils.toBN(0)
+  let filledTakeAmount = Web3Utils.toBN(0)
   let remainingTakeAmount = Web3Utils.toBN(order.takeAmount)
   // find matched orders
   const matched = sellBook.filter(o => {
     const orderPrice = Web3Utils.toBN(getOrderVolume(o).price)
     return orderPrice.lte(price)
   }).sort((a, b) => {
-  // sort matched orders
+  // sort matched orders by ascending price and date
     const aPrice = Web3Utils.toBN(getOrderVolume(a).price)
     const bPrice = Web3Utils.toBN(getOrderVolume(b).price)
     const aCreatedAt = new Date(a.createdAt).getTime()
@@ -388,7 +390,7 @@ export const matchSellOrders = ({ order, sellBook, makerMin, takerMin }) => {
   }
   // fill matched orders
   for (let matchedOrder of matched) {
-    if (filledTake.eq(takeAmount)) {
+    if (filledTakeAmount.eq(takeAmount)) {
       break
     }
     const matchedOrderFilled = Web3Utils.toBN(matchedOrder.filled)
@@ -401,12 +403,19 @@ export const matchSellOrders = ({ order, sellBook, makerMin, takerMin }) => {
       tradeAmount = remainingTakeAmount
     }
     trade = { orderHash: matchedOrder.orderHash, amount: tradeAmount.toString() }
-    filledTake = filledTake.add(tradeAmount)
+    filledTakeAmount = filledTakeAmount.add(tradeAmount)
     remainingTakeAmount = remainingTakeAmount.sub(tradeAmount)
     result.trades.push(trade)
   }
   // create a rest order if there is still remaining volume
-  if (!filledTake.eq(takeAmount)) {
+  if (!filledTakeAmount.eq(takeAmount)) {
+    // remaining volume is below maker's minimum, cancel trades until it is back above
+    while (remainingTakeAmount.lt(makerMin)) {
+      const lastTrade = result.trades.pop()
+      const tradeAmount = Web3Utils.toBN(lastTrade.amount)
+      filledTakeAmount = filledTakeAmount.sub(tradeAmount)
+      remainingTakeAmount = remainingTakeAmount.add(tradeAmount)
+    }
     let restOrderGiveAmount = calculateGiveAmount(remainingTakeAmount, giveAmount, takeAmount)
     let restOrderTakeAmount = remainingTakeAmount
     const restOrder = { type: order.type, giveAmount: restOrderGiveAmount.toString(), giveTokenAddress: order.giveTokenAddress, takeAmount: restOrderTakeAmount.toString(), takeTokenAddress: order.takeTokenAddress }
