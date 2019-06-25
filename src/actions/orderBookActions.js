@@ -89,10 +89,14 @@ const updateOrderBookOrdersAsync = (newOrders) => {
       newOrder = processOrder(getState, newOrder)
       if (newOrder.type === 'buy') {
         updatedBuyBook.push(newOrder)
-        updatedTotalBuy = updatedTotalBuy.add(Web3Utils.toBN(newOrder.takeAmount))
+        if (newOrder.status !== 'closed') {
+          updatedTotalBuy = updatedTotalBuy.add(Web3Utils.toBN(newOrder.takeAmount))
+        }
       } else {
         updatedSellBook.push(newOrder)
-        updatedTotalSell = updatedTotalSell.add(Web3Utils.toBN(newOrder.giveAmount))
+        if (newOrder.status !== 'closed') {
+          updatedTotalSell = updatedTotalSell.add(Web3Utils.toBN(newOrder.giveAmount))
+        }
       }
     }
     for (let order of orderBook.buyBook) {
