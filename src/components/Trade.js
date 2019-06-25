@@ -77,14 +77,14 @@ class Trade extends Component {
 
   calculateFeeAndTotal = (amountWei, priceWei) => {
     const { currentTab } = this.state;
-    let { makerFee, takerFee } = this.props;
+    let { makerFee } = this.props;
     const oneEther = Web3Utils.toBN(1000000000000000000);
 
     let total, fee, totalMinusFee, amountMinusFee;
     if (amountWei && amountWei !== "0" && priceWei && priceWei !== "0") {
-      [ amountWei, priceWei, makerFee, takerFee ] = [ Web3Utils.toBN(amountWei), Web3Utils.toBN(priceWei), Web3Utils.toBN(makerFee), Web3Utils.toBN(takerFee) ];
+      [ amountWei, priceWei, makerFee ] = [ Web3Utils.toBN(amountWei), Web3Utils.toBN(priceWei), Web3Utils.toBN(makerFee) ];
       total = priceWei.mul(amountWei).div(oneEther);
-      fee = currentTab === "buy" ? amountWei.mul(makerFee).div(oneEther) : total.mul(takerFee).div(oneEther);
+      fee = currentTab === "buy" ? amountWei.mul(makerFee).div(oneEther) : total.mul(makerFee).div(oneEther);
       totalMinusFee = total.sub(fee);
       amountMinusFee = amountWei.sub(fee);
     } else {
@@ -115,13 +115,10 @@ class Trade extends Component {
   };
 
   calculateFeePercent = () => {
-    let feePerToken;
-    if (this.state.currentTab === "buy") {
-      feePerToken = this.props.makerFee;
-    } else {
-      feePerToken = this.props.takerFee;
-    }
-    const feePercent = (parseFloat(Web3Utils.fromWei(feePerToken)) * 100) / 1;
+    const fee = Web3Utils.toBN(this.props.makerFee)
+    const oneHundred = Web3Utils.toBN(100)
+    const one = Web3Utils.toBN(1)
+    const feePercent = Web3Utils.fromWei(fee.mul(oneHundred).div(one))
     return feePercent;
   };
 
@@ -380,8 +377,6 @@ Trade.propTypes = {
   quote: PropTypes.object, // { symbol, balance, address }
   makerFee: PropTypes.string.isRequired,
   makerMinimum: PropTypes.string.isRequired,
-  takerFee: PropTypes.string.isRequired,
-  takerMinimum: PropTypes.string.isRequired,
   onRef: PropTypes.func.isRequired
 };
 

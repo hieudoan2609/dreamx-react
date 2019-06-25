@@ -47,10 +47,10 @@ export const initializeAppAsync = () => {
         contractAddress: contract.data.address,
         networkId: contract.data.network_id,
         networkName: getNetworkNameFromId(contract.data.network_id),
-        makerFee: fees.data.maker_fee_per_giving_token,
-        makerMinimum: fees.data.maker_order_minimum_eth,
-        takerFee: fees.data.taker_fee_per_giving_token,
-        takerMinimum: fees.data.taker_order_minimum_eth
+        makerFee: fees.data.maker_fee,
+        makerMinimum: fees.data.maker_minimum,
+        takerFee: fees.data.taker_fee,
+        takerMinimum: fees.data.taker_minimum
       }
     });
   };

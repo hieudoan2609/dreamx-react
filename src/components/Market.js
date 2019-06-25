@@ -109,8 +109,6 @@ class Market extends Component {
               quote={this.getBaseAndQuoteBalances().quote}
               makerFee={this.props.app.makerFee}
               makerMinimum={this.props.app.makerMinimum}
-              takerFee={this.props.app.takerFee}
-              takerMinimum={this.props.app.takerMinimum}
               onRef={ref => (this.trade = ref)}
             />
           </div>
