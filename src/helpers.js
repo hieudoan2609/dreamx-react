@@ -402,6 +402,9 @@ export const matchSellOrders = ({ order, sellBook, makerMin, takerMin }) => {
     } else {
       tradeAmount = remainingTakeAmount
     }
+    if (tradeAmount.lt(takerMin)) {
+      continue
+    }
     trade = { orderHash: matchedOrder.orderHash, amount: tradeAmount.toString() }
     filledTakeAmount = filledTakeAmount.add(tradeAmount)
     remainingTakeAmount = remainingTakeAmount.sub(tradeAmount)
