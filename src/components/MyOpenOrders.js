@@ -30,7 +30,7 @@ class MyOpenOrders extends Component {
 
       const price = Web3Utils.fromWei(accountOrder.price)
       const amount = Web3Utils.fromWei(accountOrder.amount)
-      const filled = Web3Utils.fromWei(accountOrder.filled)
+      const filled = Web3Utils.fromWei(accountOrder.amountFilled)
       const type = (
         <div className={`pill ${accountOrder.type}`}>
           {capitalize(accountOrder.type)}
