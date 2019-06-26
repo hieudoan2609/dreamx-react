@@ -14,6 +14,10 @@ import {
 } from "../actions";
 
 class Market extends Component {
+  state = {
+    tradeRef: undefined
+  }
+
   componentDidMount = () => {
     this.redirectToDefaultMarketIfMarketSymbolInvalid();
     window.scrollTo(0, 0);
@@ -84,6 +88,10 @@ class Market extends Component {
     return { base, quote };
   };
 
+  registerTradeRef = (ref) => {
+    this.setState({ tradeRef: ref })
+  }
+
   render() {
     const isLoading = this.props.market.loading || this.props.app.loading || this.props.account.loading
 
@@ -110,7 +118,7 @@ class Market extends Component {
               makerFee={this.props.app.makerFee}
               makerMinimum={this.props.app.makerMinimum}
               takerMinimum={this.props.app.takerMinimum}
-              onRef={ref => (this.trade = ref)}
+              onRef={this.registerTradeRef}
             />
           </div>
         </div>
@@ -134,7 +142,7 @@ class Market extends Component {
               bookData={this.props.orderBook.buyBook}
               base={this.getBaseAndQuoteBalances().base}
               quote={this.getBaseAndQuoteBalances().quote}
-              trade={this.trade}
+              tradeRef={this.state.tradeRef}
             />
           </div>
           <div className="col-lg-4">
@@ -146,7 +154,7 @@ class Market extends Component {
               bookData={this.props.orderBook.sellBook}
               base={this.getBaseAndQuoteBalances().base}
               quote={this.getBaseAndQuoteBalances().quote}
-              trade={this.trade}
+              tradeRef={this.state.tradeRef}
             />
           </div>
           <div className="col-lg-4">
