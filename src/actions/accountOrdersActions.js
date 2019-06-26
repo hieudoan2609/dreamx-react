@@ -10,7 +10,7 @@ import {
 import config from '../config'
 import { processOrder } from "../helpers";
 import singletons, { setSingleton } from "../singletons";
-import { alertModalShowReadonlyAlert } from '.'
+import { alertModalShowReadonlyAlert, alertModalShowGenericAlert } from '.'
 
 export const accountOrdersLoadAsync = accountAddress => {
   return async (dispatch, getState) => {
@@ -151,6 +151,8 @@ export const accountOrdersCancelAsync = (order) => {
       console.log(err.response)
       if (err.toString() === "Error: Request failed with status code 503") {
         dispatch(alertModalShowReadonlyAlert())
+      } else {
+        dispatch(alertModalShowGenericAlert())
       }
     }
 
@@ -188,8 +190,11 @@ export const accountOrdersCancelAllAsync = ({ market }) => {
         payloads
       )
     } catch (err) {
+      console.log(err.response)
       if (err.toString() === "Error: Request failed with status code 503") {
         dispatch(alertModalShowReadonlyAlert())
+      } else {
+        dispatch(alertModalShowGenericAlert())
       }
     }
 

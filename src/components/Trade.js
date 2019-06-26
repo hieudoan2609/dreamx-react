@@ -303,10 +303,14 @@ class Trade extends Component {
       const feedback = { type: 'success', message: 'Your order has been submitted.' }
       this.setState({ pending: false, price, priceWei, amount, amountWei, fee, total, totalMinusFee, amountMinusFee, feedback })
     } catch (err) {
-      const feedback = { type: 'error', message: 'Service is unvailable, please try again later.' }
+      console.log(err.response)
+      let feedback
       if (err.toString() === "Error: Request failed with status code 503") {
-        this.setState({ pending: false, feedback })
+        feedback = { type: 'error', message: 'Service is unvailable, please try again later.' }
+      } else {
+        feedback = { type: 'error', message: 'There was an error, please try again later.' }
       }
+      this.setState({ pending: false, feedback })
     }
   }
 

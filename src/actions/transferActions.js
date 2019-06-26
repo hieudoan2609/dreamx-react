@@ -292,11 +292,9 @@ const withdrawAsync = async (dispatch, getState) => {
     });
   } catch (err) {
     console.log(err.response)
-    if (err.toString() === "Error: Request failed with status code 503") {
-      dispatch({
-        type: TRANSFER_FAILED
-      });
-    }
+    dispatch({
+      type: TRANSFER_FAILED
+    });
   }
 };
 
