@@ -31,11 +31,11 @@ class Trade extends Component {
   state = INITIAL_STATE;
 
   componentDidMount = () => {
-    this.props.onRef(this)
+    this.props.registerTradeComponent(this)
   }
 
   componentWillUnmount = () => {
-    this.props.onRef(undefined)
+    this.props.registerTradeComponent(undefined)
   }
 
   handleTabChange = tab => {
@@ -383,7 +383,7 @@ Trade.propTypes = {
   makerFee: PropTypes.string.isRequired,
   makerMinimum: PropTypes.string.isRequired,
   takerMinimum: PropTypes.string.isRequired,
-  onRef: PropTypes.func.isRequired
+  registerTradeComponent: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps)(Trade);

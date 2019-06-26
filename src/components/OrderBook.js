@@ -24,8 +24,8 @@ class OrderBook extends Component {
   }
 
   onRowClick = (row) => {
-    if (this.props.tradeRef) {
-      this.props.tradeRef.onPriceChange(row.price)
+    if (this.props.Trade) {
+      this.props.Trade.onPriceChange(row.price)
       window.scrollTo(0, 0)
     }
   }
@@ -79,7 +79,7 @@ OrderBook.propTypes = {
   loading: PropTypes.bool.isRequired,
   base: PropTypes.object, // { symbol, balance, address }
   quote: PropTypes.object, // { symbol, balance, address }
-  tradeRef: PropTypes.object // ref to Trade component
+  Trade: PropTypes.object // ref to Trade component
 };
 
 export default OrderBook;

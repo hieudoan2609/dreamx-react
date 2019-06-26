@@ -15,7 +15,7 @@ import {
 
 class Market extends Component {
   state = {
-    tradeRef: undefined
+    Trade: undefined
   }
 
   componentDidMount = () => {
@@ -88,8 +88,8 @@ class Market extends Component {
     return { base, quote };
   };
 
-  registerTradeRef = (ref) => {
-    this.setState({ tradeRef: ref })
+  registerTradeComponent = (Trade) => {
+    this.setState({ Trade })
   }
 
   render() {
@@ -118,7 +118,7 @@ class Market extends Component {
               makerFee={this.props.app.makerFee}
               makerMinimum={this.props.app.makerMinimum}
               takerMinimum={this.props.app.takerMinimum}
-              onRef={this.registerTradeRef}
+              registerTradeComponent={this.registerTradeComponent}
             />
           </div>
         </div>
@@ -142,7 +142,7 @@ class Market extends Component {
               bookData={this.props.orderBook.buyBook}
               base={this.getBaseAndQuoteBalances().base}
               quote={this.getBaseAndQuoteBalances().quote}
-              tradeRef={this.state.tradeRef}
+              Trade={this.state.Trade}
             />
           </div>
           <div className="col-lg-4">
@@ -154,7 +154,7 @@ class Market extends Component {
               bookData={this.props.orderBook.sellBook}
               base={this.getBaseAndQuoteBalances().base}
               quote={this.getBaseAndQuoteBalances().quote}
-              tradeRef={this.state.tradeRef}
+              Trade={this.state.Trade}
             />
           </div>
           <div className="col-lg-4">
