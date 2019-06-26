@@ -21,7 +21,7 @@ class AlertModal extends Component {
           </Button>
         </div>
       )
-    } else {
+    } else if (this.props.type === 'generic') {
       return (
         <div className="modal-body">
           {alertIcon}

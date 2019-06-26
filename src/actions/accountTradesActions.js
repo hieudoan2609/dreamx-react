@@ -1,9 +1,13 @@
+import axios from 'axios'
+
 import {
   ACCOUNT_TRADES_FILTER,
   ACCOUNT_TRADES_LOAD,
   ACCOUNT_TRADES_CLEAR_FILTER
 } from "../actions/types";
 import singletons from "../singletons";
+import config from "../config";
+import { convertKeysToCamelCase } from '../helpers'
 
 const accountTradesData = [
   {
@@ -318,8 +322,11 @@ export const accountTradesLoadAsync = accountAddress => {
   return async (dispatch, getState) => {
     const { markets, account } = getState();
     const { web3 } = singletons;
+    const { API_HTTP_ROOT } = config;
 
-    const accountTrades = accountTradesData.map(t => {
+    const tradesResponse = await axios.get(`${API_HTTP_ROOT}/trades?account_address=${accountAddress}`)
+    const accountTrades = tradesResponse.data.records.map(t => {
+      t = convertKeysToCamelCase(t)
       const market = markets.all.filter(
         m =>
           (m.baseToken.address === t.giveTokenAddress &&
