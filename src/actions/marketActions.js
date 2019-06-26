@@ -1,7 +1,7 @@
 import { matchPath } from 'react-router'
 
 import { MARKET_LOAD, MARKET_LOADING } from "../actions/types";
-import { orderBookLoadAsync } from "."
+import { orderBookLoadAsync, marketTradesLoadAsync } from "."
 
 export const marketLoadAsync = () => {
   return async (dispatch, getState) => {
@@ -17,6 +17,7 @@ export const marketLoadAsync = () => {
     const baseSymbol = currentMarket.split("_")[0] || ""
     const quoteSymbol = currentMarket.split("_")[1] || ""
     await dispatch(orderBookLoadAsync(currentMarket))
+    await dispatch(marketTradesLoadAsync(currentMarket))
     dispatch({
       type: MARKET_LOAD,
       payload: {

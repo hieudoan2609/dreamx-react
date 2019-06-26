@@ -10,3 +10,4 @@ export * from "./tickersActions";
 export * from "./marketActions";
 export * from "./orderBookActions";
 export * from "./alertModalActions";
+export * from "./marketTradesActions";

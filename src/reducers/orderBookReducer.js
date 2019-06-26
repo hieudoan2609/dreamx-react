@@ -12,7 +12,7 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case ORDER_BOOK_LOAD:
-      return { ...state, buyBook: action.payload.buyBook, sellBook: action.payload.sellBook, totalBuy: action.payload.totalBuy, totalSell: action.payload.totalSell, loading: false }
+      return { ...state, buyBook: action.payload.buyBook, sellBook: action.payload.sellBook, totalBuy: action.payload.totalBuy, totalSell: action.payload.totalSell }
     default:
       return state;
   }
