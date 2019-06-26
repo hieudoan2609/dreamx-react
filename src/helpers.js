@@ -485,3 +485,35 @@ export const generateTestTrades = (trades) => {
   })
   return trades
 }
+
+export const processTrade = (getState, trade) => {
+  const { markets, account } = getState()
+  trade = convertKeysToCamelCase(trade)
+  const market = markets.all.filter(
+    m =>
+      (m.baseToken.address === trade.giveTokenAddress &&
+        m.quoteToken.address === trade.takeTokenAddress) ||
+      (m.quoteToken.address === trade.giveTokenAddress &&
+        m.baseToken.address === trade.takeTokenAddress)
+  )[0];
+  trade.marketSymbol = market.symbol;
+  trade.marketSymbolFormatted = `${market.quoteToken.symbol}/${market.baseToken.symbol}`;
+  trade.type = trade.giveTokenAddress === market.baseToken.address ? "buy" : "sell";
+  trade.price =
+    trade.type === "sell"
+      ? parseFloat(trade.takeAmount) / parseFloat(trade.giveAmount)
+      : parseFloat(trade.giveAmount) / parseFloat(trade.takeAmount);
+  trade.amount =
+    trade.type === "sell"
+      ? Web3Utils.fromWei(trade.giveAmount)
+      : Web3Utils.fromWei(trade.takeAmount);
+  trade.fee =
+    trade.makerAddress === account.address
+      ? Web3Utils.fromWei(trade.makerFee)
+      : Web3Utils.fromWei(trade.takerFee);
+  trade.total =
+    trade.type === "sell"
+      ? Web3Utils.fromWei(trade.takeAmount)
+      : Web3Utils.fromWei(trade.giveAmount);
+  return trade;
+}
