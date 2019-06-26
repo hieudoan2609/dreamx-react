@@ -334,7 +334,7 @@ class Trade extends Component {
 
   render() {
     return (
-      <div className={`Trade card ${this.props.theme}`}>
+      <div className={`Trade card ${this.props.theme}`} ref={this.props.tradeRef}>
         <Loading
           active={this.props.loading}
           type="absolute"
@@ -383,7 +383,8 @@ Trade.propTypes = {
   makerFee: PropTypes.string.isRequired,
   makerMinimum: PropTypes.string.isRequired,
   takerMinimum: PropTypes.string.isRequired,
-  registerTradeComponent: PropTypes.func.isRequired
+  registerTradeComponent: PropTypes.func.isRequired,
+  tradeRef: PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps)(Trade);

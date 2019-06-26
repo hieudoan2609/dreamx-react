@@ -24,9 +24,12 @@ class OrderBook extends Component {
   }
 
   onRowClick = (row) => {
+    const offset = 80;
+    const currentScrolled = window.pageYOffset;
+    const tradeTop = this.props.tradeRef.current.getBoundingClientRect().top + currentScrolled - offset;
     if (this.props.Trade) {
       this.props.Trade.onPriceChange(row.price)
-      window.scrollTo(0, 0)
+      window.scrollTo(0, tradeTop)
     }
   }
 

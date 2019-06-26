@@ -14,6 +14,11 @@ import {
 } from "../actions";
 
 class Market extends Component {
+  constructor(props) {
+    super(props);
+    this.trade = React.createRef();
+  }
+
   state = {
     Trade: undefined
   }
@@ -119,6 +124,7 @@ class Market extends Component {
               makerMinimum={this.props.app.makerMinimum}
               takerMinimum={this.props.app.takerMinimum}
               registerTradeComponent={this.registerTradeComponent}
+              tradeRef={this.trade}
             />
           </div>
         </div>
@@ -143,6 +149,7 @@ class Market extends Component {
               base={this.getBaseAndQuoteBalances().base}
               quote={this.getBaseAndQuoteBalances().quote}
               Trade={this.state.Trade}
+              tradeRef={this.trade}
             />
           </div>
           <div className="col-lg-4">
@@ -155,6 +162,7 @@ class Market extends Component {
               base={this.getBaseAndQuoteBalances().base}
               quote={this.getBaseAndQuoteBalances().quote}
               Trade={this.state.Trade}
+              tradeRef={this.trade}
             />
           </div>
           <div className="col-lg-4">
