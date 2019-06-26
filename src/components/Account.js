@@ -261,7 +261,20 @@ class Account extends Component {
 
     const extractedData = accountTrades.filtered.map(t => {
       const { price, amount } = t;
-      const type = <div className={`pill ${t.type}`}>{capitalize(t.type)}</div>;
+      let type
+      if (t.type === 'buy') {
+        if (t.makerAddress === this.props.account.address) {
+          type = <div className={`pill buy`}>Buy</div>
+        } else {
+          type = <div className={`pill sell`}>Sell</div>
+        }
+      } else {
+        if (t.makerAddress === this.props.account.address) {
+          type = <div className={`pill sell`}>Sell</div>
+        } else {
+          type = <div className={`pill buy`}>Buy</div>
+        }
+      }
       const total = `${t.total} ETH`;
       const market = t.marketSymbolFormatted;
       const date = t.createdAt;
