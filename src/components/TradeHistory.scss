@@ -35,6 +35,35 @@ $overlay: rgba(130,130,130,.1);
     }
   }
   .body {
+    .Table {
+      .table-wrapper {
+        .table-responsive {
+          .table {
+            thead, tbody {
+              th, td {
+                font-size: .8rem;
+                padding: 10px 0px;
+                padding-right: 10px;
+                text-align: center;
+                &:first-child {
+                  text-align: left;
+                  padding-left: 10px;
+                }
+                &:last-child {
+                  text-align: right;
+                }
+                .buy {
+                  color: $buy;
+                }
+                .sell {
+                  color: $sell;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
     .not-available, .not-available > div {
       height: 100%;
     }

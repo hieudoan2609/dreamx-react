@@ -5,8 +5,19 @@ import PropTypes from "prop-types";
 import "./TradeHistory.scss";
 import ScrollableTable from './ScrollableTable'
 import Loading from './Loading'
+import { truncateNumberOutput } from '../helpers'
 
 class TradeHistory extends Component {
+  extractTradesData = () => {
+    const trades = this.props.marketTrades.all.map(t => {
+      const price = <span className={t.type}>{truncateNumberOutput(t.price, 8, 10)}</span>
+      const amount = truncateNumberOutput(t.amount, 2)
+      const time = t.createdAt
+      return { price, amount, time }
+    })
+    return trades
+  }
+
   render() {
     return (
       <div className={`TradeHistory card ${this.props.theme}`}>
@@ -23,10 +34,13 @@ class TradeHistory extends Component {
         <div className="body">
           <ScrollableTable
             theme={this.props.theme}
-            data={[]}
+            data={this.extractTradesData()}
             dataName='trades'
-            defaultOrderBy='date'
+            defaultOrderBy='time'
             height={500}
+            manuallySortable={false}
+            dateColumn='time'
+            dateFormat='HH:mm:ss'
           />
         </div>
       </div>

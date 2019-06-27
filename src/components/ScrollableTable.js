@@ -17,6 +17,7 @@ class ScrollableTable extends Component {
         height={this.props.height}
         excludeFromSorting={this.props.excludeFromSorting}
         dateColumn={this.props.dateColumn}
+        dateFormat={this.props.dateFormat}
         searchable={this.props.searchable}
         paginated={this.props.paginated}
         searchValue={this.props.searchValue}
