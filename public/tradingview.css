@@ -91,22 +91,12 @@ html.feature-no-touch.theme-light .container-3_8ayT2Q-:hover .background-Q1Fcmxl
   display: none;
 }
 
-/* symbol info */
-.pane-legend-line.apply-overflow-tooltip.main {
-  display: none;
-}
-
 /* volume toggle */
 .pane-legend-minbtn.apply-common-tooltip.apply {
   display: none;
 }
 
-/* legend icons */
+/* 3 icons next to volume */
 .pane-legend-icon-container {
-  display: none !important;
-}
-
-/* n/a value next to volume */
-.pane-legend-item-value-container .pane-legend-item-value-wrap:last-child {
   display: none !important;
 }

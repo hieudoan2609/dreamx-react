@@ -70,17 +70,16 @@ class TradingView extends Component {
 
   addEventListeners = (tvWidget) => {
     tvWidget.onChartReady(() => {
-      let overrides
+      let overrides = {
+        "paneProperties.legendProperties.showSeriesTitle": false,
+        "paneProperties.legendProperties.showBarChange": false,
+      }
       switch(this.props.theme) {
         case 'light':
-          overrides = { 
-            "paneProperties.background": "#ffffff"
-          }
+          overrides["paneProperties.background"] = "#ffffff"
           break
         case 'dark':
-          overrides = { 
-            "paneProperties.background": "#384256"
-          }
+          overrides["paneProperties.background"] = "#384256"
           break
         default:
           throw new Error('unknown theme')
