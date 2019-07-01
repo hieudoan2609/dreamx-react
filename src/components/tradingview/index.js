@@ -51,7 +51,8 @@ class TradingView extends Component {
       ],
       autosize: this.props.autosize,
       fullscreen: this.props.fullscreen,
-      custom_css_url: '../../tradingview.css'
+      custom_css_url: '../../tradingview.css',
+      theme: 'dark'
     }
 
     const tvWidget = new widget(widgetOptions);

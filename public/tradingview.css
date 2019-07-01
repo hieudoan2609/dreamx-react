@@ -1,4 +1,7 @@
-body.chart-page
-{
-  background-color: pink !important;
+html.theme-dark body.chart-page {
+  background-color: #384256;
+}
+
+html.theme-dark .group-wWM3zP_M- {
+  background-color: #384256;
 }
