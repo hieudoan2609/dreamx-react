@@ -17,8 +17,9 @@ import {
   marketLoadAsync,
   alertModalHide
 } from "./actions";
+import { ReactComponent as Logo } from './images/dream.svg'
 
-const logo = require("./images/logo.svg");
+const logo = <Logo/>
 
 class App extends Component {
   state = {

@@ -131,8 +131,7 @@ class Menu extends Component {
               <div className="wrapper">
                 <div className="pull-left">
                   <Link to={this.props.rootPath} className="brand">
-                    <img width={20} src={this.props.logo} alt="" />
-                    <span>{this.props.brandName}</span>
+                    {this.props.logo}
                   </Link>
 
                   <div className="items d-none d-md-flex">
