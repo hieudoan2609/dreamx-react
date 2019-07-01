@@ -1,18 +1,15 @@
 import axios from 'axios'
 
-const config = {
-    supported_resolutions: ["5", "15", "60", "D"]
-};
-
 class Datafeed {
-  constructor(apiHttpRoot, cable) {
+  constructor(apiHttpRoot, cable, config) {
     this.apiHttpRoot = apiHttpRoot
     this.cable = cable
     this.subscriptions = {}
+    this.config = config
   }
 
   onReady = cb => {
-    setTimeout(() => cb(config), 0)
+    setTimeout(() => cb(this.config), 0)
   }
 
   searchSymbol = (userInput, exchange, symbolType, onResultReadyCallback) => {}
@@ -29,7 +26,7 @@ class Datafeed {
       minmov: '1',
       pricescale: 100000000,
       intraday_multipliers: ['5', '15', '60', 'D'],
-      supported_resolution:  config.supported_resolution,
+      supported_resolution:  this.config.supported_resolution,
       volume_precision: 2,
       data_status: 'streaming',
       exchange,

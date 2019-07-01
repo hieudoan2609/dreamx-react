@@ -5,6 +5,10 @@ import PropTypes from "prop-types";
 import { widget } from './charting_library/charting_library.min';
 import Datafeed from './datafeed'
 
+const config = {
+    supported_resolutions: ["5", "15", "60", "D"]
+};
+
 class TradingView extends Component {
   static defaultProps = {
     interval: '60',
@@ -27,7 +31,7 @@ class TradingView extends Component {
     const widgetOptions = {
       debug: false,
       symbol: this.props.symbol,
-      datafeed: new Datafeed(this.props.apiHttpRoot, this.props.cable),
+      datafeed: new Datafeed(this.props.apiHttpRoot, this.props.cable, config),
       interval: this.props.interval,
       container_id: this.props.containerId,
       library_path: this.props.libraryPath,
@@ -46,6 +50,8 @@ class TradingView extends Component {
         "go_to_date",
         "timeframes_toolbar",
         "context_menus",
+        "header_interval_dialog_button",
+        "left_toolbar"
       ],
       enabled_features: [
         "hide_left_toolbar_by_default",
@@ -53,7 +59,8 @@ class TradingView extends Component {
       autosize: this.props.autosize,
       fullscreen: this.props.fullscreen,
       custom_css_url: '../../tradingview.css',
-      theme: this.props.theme
+      theme: this.props.theme,
+      favorites: config.supported_resolutions
     }
 
     const tvWidget = new widget(widgetOptions);
