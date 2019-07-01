@@ -24,7 +24,31 @@ class TradingView extends Component {
     if (symbolChanged) {
       this.tvWidget.setSymbol(this.props.symbol, this.props.interval)
     }
+
+    const themeChanged = prevProps.theme !== this.props.theme
+    if (themeChanged) {
+      this.loadTheme(this.props.theme)
+    }
   };
+
+  loadTheme = (theme) => {
+    this.tvWidget.changeTheme(theme)
+    let overrides = {
+      "paneProperties.legendProperties.showSeriesTitle": false,
+      "paneProperties.legendProperties.showBarChange": false,
+    }
+    switch(theme) {
+      case 'light':
+        overrides["paneProperties.background"] = "#ffffff"
+        break
+      case 'dark':
+        overrides["paneProperties.background"] = "#384256"
+        break
+      default:
+        throw new Error('unknown theme')
+    }
+    this.tvWidget.applyOverrides(overrides)
+  }
 
   componentDidMount = () => {
     this.props.onLoading()
@@ -59,8 +83,8 @@ class TradingView extends Component {
       autosize: this.props.autosize,
       fullscreen: this.props.fullscreen,
       custom_css_url: '../../tradingview.css',
-      theme: this.props.theme,
-      favorites: config.supported_resolutions
+      favorites: config.supported_resolutions,
+      theme: this.props.theme
     }
 
     const tvWidget = new widget(widgetOptions);
@@ -70,21 +94,7 @@ class TradingView extends Component {
 
   addEventListeners = (tvWidget) => {
     tvWidget.onChartReady(() => {
-      let overrides = {
-        "paneProperties.legendProperties.showSeriesTitle": false,
-        "paneProperties.legendProperties.showBarChange": false,
-      }
-      switch(this.props.theme) {
-        case 'light':
-          overrides["paneProperties.background"] = "#ffffff"
-          break
-        case 'dark':
-          overrides["paneProperties.background"] = "#384256"
-          break
-        default:
-          throw new Error('unknown theme')
-      }
-      tvWidget.applyOverrides(overrides)
+      this.loadTheme(this.props.theme)
       this.props.onLoaded()
     })
   }
