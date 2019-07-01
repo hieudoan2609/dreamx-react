@@ -50,7 +50,8 @@ class TradingView extends Component {
         "hide_left_toolbar_by_default",
       ],
       autosize: this.props.autosize,
-      fullscreen: this.props.fullscreen
+      fullscreen: this.props.fullscreen,
+      custom_css_url: '../../tradingview.css'
     }
 
     const tvWidget = new widget(widgetOptions);
