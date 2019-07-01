@@ -6,10 +6,10 @@
 	.st0{font-family:'SignPainter-HouseScript';}
 	.st1{font-size:12px;}
 	.st2{font-size:8px;}
-	.st3{fill:none;stroke:#000000;stroke-width:0.25;stroke-miterlimit:10;}
+	.st3{fill:#FFFFFF;stroke:#000000;stroke-width:0.25;stroke-miterlimit:10;}
 </style>
-<text transform="matrix(0.9848 -0.1736 0.1736 0.9848 8.6698 15.2762)" class="st0 st1">Dream</text>
-<text transform="matrix(0.9848 -0.1736 0.1736 0.9848 7.831 19.5612)" class="st0 st2">Market</text>
+<text transform="matrix(0.9848 -0.1736 0.1736 0.9848 8.699 15.2841)" class="st0 st1">Dream</text>
+<text transform="matrix(0.9848 -0.1736 0.1736 0.9848 7.8634 18.565)" class="st0 st2">Exchange</text>
 <g>
 	<g>
 		<path class="st3" d="M0.8,13.4L0.8,13.4c-0.2-0.2-0.1-0.5,0.1-0.7L15.5,0.5c0.2-0.2,0.5-0.1,0.7,0.1l0,0c0.2,0.2,0.1,0.5-0.1,0.7

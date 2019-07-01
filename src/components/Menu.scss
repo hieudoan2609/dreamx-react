@@ -102,6 +102,7 @@ $dark-secondary-shade: #1f283d;
       svg {
         fill: $light-primary;
         .st3 {
+          fill: transparent;
           stroke: $light-primary;
         }
         text {
@@ -141,6 +142,7 @@ $dark-secondary-shade: #1f283d;
       svg {
         fill: $dark-primary;
         .st3 {
+          fill: transparent;
           stroke: $dark-primary;
         }
         text {
