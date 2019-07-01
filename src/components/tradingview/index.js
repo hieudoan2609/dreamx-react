@@ -23,6 +23,7 @@ class TradingView extends Component {
   };
 
   componentDidMount = () => {
+    this.props.onLoading()
     const widgetOptions = {
       debug: false,
       symbol: this.props.symbol,
@@ -62,7 +63,9 @@ class TradingView extends Component {
 
   addEventListeners = (tvWidget) => {
     tvWidget.onChartReady(() => {
-      const overrides = { "paneProperties.background": "#384256" }
+      const overrides = { 
+        "paneProperties.background": "#384256"
+      }
       tvWidget.applyOverrides(overrides)
       this.props.onLoaded()
     })
