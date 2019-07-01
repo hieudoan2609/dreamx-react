@@ -53,7 +53,7 @@ class TradingView extends Component {
       autosize: this.props.autosize,
       fullscreen: this.props.fullscreen,
       custom_css_url: '../../tradingview.css',
-      theme: 'dark'
+      theme: this.props.theme
     }
 
     const tvWidget = new widget(widgetOptions);
@@ -63,8 +63,20 @@ class TradingView extends Component {
 
   addEventListeners = (tvWidget) => {
     tvWidget.onChartReady(() => {
-      const overrides = { 
-        "paneProperties.background": "#384256"
+      let overrides
+      switch(this.props.theme) {
+        case 'light':
+          overrides = { 
+            "paneProperties.background": "#ffffff"
+          }
+          break
+        case 'dark':
+          overrides = { 
+            "paneProperties.background": "#384256"
+          }
+          break
+        default:
+          throw new Error('unknown theme')
       }
       tvWidget.applyOverrides(overrides)
       this.props.onLoaded()
