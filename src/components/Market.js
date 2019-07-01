@@ -12,6 +12,8 @@ import {
   marketLoadAsync,
   tickersHandleSearchInput
 } from "../actions";
+import singletons from "../singletons";
+import config from "../config";
 
 class Market extends Component {
   constructor(props) {
@@ -98,6 +100,8 @@ class Market extends Component {
   }
 
   render() {
+    const { cable } = singletons;
+    const { API_HTTP_ROOT } = config;
     const isLoading = this.props.market.loading || this.props.app.loading || this.props.account.loading
 
     return (
@@ -111,6 +115,8 @@ class Market extends Component {
               currentMarket={this.props.market.currentMarket}
               searchValue={this.props.tickers.searchValue}
               handleSearchInput={this.props.tickersHandleSearchInput}
+              apiHttpRoot={API_HTTP_ROOT}
+              cable={cable}
             />
           </div>
           <div className="col-lg-4">

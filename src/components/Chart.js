@@ -5,8 +5,27 @@ import PropTypes from "prop-types";
 import "./Chart.scss";
 import Ticker from "./Ticker";
 import Loading from './Loading'
+import TradingView from './tradingview'
 
 class Chart extends Component {
+  renderChart = () => {
+    if (this.props.loading) {
+      return
+    }
+
+    const exchangeName = "DreamX"
+    const apiHttpRoot = this.props.apiHttpRoot
+    const cable = this.props.cable
+    const symbol = `${exchangeName}:${this.props.currentMarket.replace('_', '/')}`
+    return (
+      <TradingView
+        apiHttpRoot={apiHttpRoot}
+        cable={cable}
+        symbol={symbol}
+      />
+    )
+  }
+
   render() {
     return (
       <div className={`Chart card 
@@ -27,7 +46,7 @@ class Chart extends Component {
           />
         </div>
         <div className="chart">
-          CHART
+          {this.renderChart()}
         </div>
       </div>
     );
@@ -47,7 +66,10 @@ Chart.propTypes = {
   tickers: PropTypes.array.isRequired,
   currentMarket: PropTypes.string.isRequired,
   searchValue: PropTypes.string.isRequired,
-  handleSearchInput: PropTypes.func.isRequired
+  handleSearchInput: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
+  apiHttpRoot: PropTypes.string, // only becomes available once loading is done
+  cable: PropTypes.object // only becomes available once loading is done
 };
 
 export default Chart;
