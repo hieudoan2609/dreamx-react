@@ -99,6 +99,15 @@ $dark-secondary-shade: #1f283d;
       span {
         color: #333;
       }
+      svg {
+        fill: $light-primary;
+        .st3 {
+          stroke: $light-primary;
+        }
+        text {
+          fill: $light-text;
+        }
+      }
     }
     ion-icon {
       font-size: 24px;
@@ -128,6 +137,15 @@ $dark-secondary-shade: #1f283d;
     .brand {
       span {
         color: $dark-text;
+      }
+      svg {
+        fill: $dark-primary;
+        .st3 {
+          stroke: $dark-primary;
+        }
+        text {
+          fill: $dark-text;
+        }
       }
     }
     ion-icon {
