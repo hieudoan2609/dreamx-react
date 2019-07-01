@@ -56,6 +56,10 @@ class TradingView extends Component {
     }
 
     const tvWidget = new widget(widgetOptions);
+    tvWidget.onChartReady(() => {
+      const overrides = { "paneProperties.background": "#384256" }
+      tvWidget.applyOverrides(overrides)
+    })
     this.tvWidget = tvWidget;
   }
 
