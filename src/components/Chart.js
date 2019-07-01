@@ -9,7 +9,7 @@ import TradingView from './tradingview'
 
 class Chart extends Component {
   renderChart = () => {
-    if (this.props.loading) {
+    if (!this.props.apiHttpRoot || !this.props.cable || !this.props.currentMarket) {
       return
     }
 
@@ -22,6 +22,9 @@ class Chart extends Component {
         apiHttpRoot={apiHttpRoot}
         cable={cable}
         symbol={symbol}
+        theme={this.props.theme}
+        onLoading={this.props.onTradingviewLoading}
+        onLoaded={this.props.onTradingviewLoaded}
       />
     )
   }
@@ -69,7 +72,9 @@ Chart.propTypes = {
   handleSearchInput: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   apiHttpRoot: PropTypes.string, // only becomes available once loading is done
-  cable: PropTypes.object // only becomes available once loading is done
+  cable: PropTypes.object, // only becomes available once loading is done
+  onTradingviewLoading: PropTypes.func.isRequired,
+  onTradingviewLoaded: PropTypes.func.isRequired
 };
 
 export default Chart;

@@ -11,3 +11,4 @@ export * from "./marketActions";
 export * from "./orderBookActions";
 export * from "./alertModalActions";
 export * from "./marketTradesActions";
+export * from "./tradingviewActions";

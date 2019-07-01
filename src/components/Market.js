@@ -10,7 +10,9 @@ import TradeHistory from "./TradeHistory";
 import "./Market.scss";
 import {
   marketLoadAsync,
-  tickersHandleSearchInput
+  tickersHandleSearchInput,
+  tradingviewLoading,
+  tradingviewLoaded
 } from "../actions";
 import singletons from "../singletons";
 import config from "../config";
@@ -102,7 +104,7 @@ class Market extends Component {
   render() {
     const { cable } = singletons;
     const { API_HTTP_ROOT } = config;
-    const isLoading = this.props.market.loading || this.props.app.loading || this.props.account.loading
+    const isLoading = this.props.market.loading || this.props.app.loading || this.props.account.loading || this.props.tradingview.loading
 
     return (
       <div className="Market">
@@ -117,6 +119,8 @@ class Market extends Component {
               handleSearchInput={this.props.tickersHandleSearchInput}
               apiHttpRoot={API_HTTP_ROOT}
               cable={cable}
+              onTradingviewLoading={this.props.tradingviewLoading}
+              onTradingviewLoaded={this.props.tradingviewLoaded}
             />
           </div>
           <div className="col-lg-4">
@@ -189,7 +193,9 @@ const mapStateToProps = state => {
 
 const mapActionsToProps = {
   marketLoadAsync,
-  tickersHandleSearchInput
+  tickersHandleSearchInput,
+  tradingviewLoading,
+  tradingviewLoaded
 };
 
 export default withRouter(

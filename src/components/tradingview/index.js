@@ -56,11 +56,16 @@ class TradingView extends Component {
     }
 
     const tvWidget = new widget(widgetOptions);
+    this.addEventListeners(tvWidget)
+    this.tvWidget = tvWidget;
+  }
+
+  addEventListeners = (tvWidget) => {
     tvWidget.onChartReady(() => {
       const overrides = { "paneProperties.background": "#384256" }
       tvWidget.applyOverrides(overrides)
+      this.props.onLoaded()
     })
-    this.tvWidget = tvWidget;
   }
 
   componentWillUnmount() {
@@ -84,7 +89,10 @@ class TradingView extends Component {
 TradingView.propTypes = {
   apiHttpRoot: PropTypes.string.isRequired,
   cable: PropTypes.object.isRequired,
-  symbol: PropTypes.string.isRequired
+  symbol: PropTypes.string.isRequired,
+  onLoading: PropTypes.func.isRequired,
+  onLoaded: PropTypes.func.isRequired,
+  theme: PropTypes.string.isRequired
 };
 
 export default TradingView;
