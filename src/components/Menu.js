@@ -187,7 +187,6 @@ Menu.propTypes = {
   toggleTheme: PropTypes.func.isRequired,
   // logo: PropTypes.string.isRequired, // a logo is required but its proptype is disabled because it can be an object when testing with jest
   theme: PropTypes.string.isRequired,
-  brandName: PropTypes.string.isRequired,
   rootPath: PropTypes.string.isRequired // will be used for both nav brand and root item
 };
 

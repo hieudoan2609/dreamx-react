@@ -2,8 +2,8 @@ import * as Web3Utils from 'web3-utils'
 
 import { matchBuyOrders, matchSellOrders, generateTestOrders, generateTestTrades } from './helpers'
 
-const makerMin = Web3Utils.toWei("0.15")
-const takerMin = Web3Utils.toWei("0.05")
+const makerMinimum = Web3Utils.toWei("0.15")
+const takerMinimum = Web3Utils.toWei("0.05")
 
 describe("matchBuyOrders", () => {
   test("return the submitted order when there are no matched orders", () => {
@@ -18,7 +18,7 @@ describe("matchBuyOrders", () => {
       { type: 'sell', price: '1', amount: '1' }
     ])[0]
     const expectedMatchResults = { trades: [], orders: [order] }
-    const receivedMatchResults = matchBuyOrders({ order, buyBook, makerMin, takerMin })
+    const receivedMatchResults = matchBuyOrders({ order, buyBook, makerMinimum, takerMinimum })
     expect(receivedMatchResults).toEqual(expectedMatchResults)
   })
 
@@ -41,7 +41,7 @@ describe("matchBuyOrders", () => {
       { type: 'sell', price: '0.8', amount: '1' }
     ])
     const expectedMatchResults = { trades: expectedTrades, orders: expectedOrders }
-    const receivedMatchResults = matchBuyOrders({ order, buyBook, makerMin, takerMin })
+    const receivedMatchResults = matchBuyOrders({ order, buyBook, makerMinimum, takerMinimum })
     expect(receivedMatchResults).toEqual(expectedMatchResults)
   });
 
@@ -59,7 +59,7 @@ describe("matchBuyOrders", () => {
       { type: 'sell', price: '0.8', amount: '2.5' }
     ])
     const expectedMatchResults = { trades: expectedTrades, orders: expectedOrders }
-    const receivedMatchResults = matchBuyOrders({ order, buyBook, makerMin, takerMin })
+    const receivedMatchResults = matchBuyOrders({ order, buyBook, makerMinimum, takerMinimum })
     expect(receivedMatchResults).toEqual(expectedMatchResults)
   })
 
@@ -80,7 +80,7 @@ describe("matchBuyOrders", () => {
       { orderHash: 'BUY#2', amount: '0.7' }
     ])
     const expectedMatchResults = { trades: expectedTrades, orders: [] }
-    const receivedMatchResults = matchBuyOrders({ order, buyBook, makerMin, takerMin })
+    const receivedMatchResults = matchBuyOrders({ order, buyBook, makerMinimum, takerMinimum })
     expect(receivedMatchResults).toEqual(expectedMatchResults)
   });
 
@@ -101,7 +101,7 @@ describe("matchBuyOrders", () => {
       { orderHash: 'BUY#2', amount: '0.9' }
     ])
     const expectedMatchResults = { trades: expectedTrades, orders: [] }
-    const receivedMatchResults = matchBuyOrders({ order, buyBook, makerMin, takerMin })
+    const receivedMatchResults = matchBuyOrders({ order, buyBook, makerMinimum, takerMinimum })
     expect(receivedMatchResults).toEqual(expectedMatchResults)
   })
 
@@ -123,7 +123,7 @@ describe("matchBuyOrders", () => {
       { type: 'sell', price: '1', amount: '0.19' }
     ])
     const expectedMatchResults = { trades: expectedTrades, orders: expectedOrders }
-    const receivedMatchResults = matchBuyOrders({ order, buyBook, makerMin, takerMin })
+    const receivedMatchResults = matchBuyOrders({ order, buyBook, makerMinimum, takerMinimum })
     expect(receivedMatchResults).toEqual(expectedMatchResults)
   })
 
@@ -145,7 +145,7 @@ describe("matchBuyOrders", () => {
       { type: 'sell', price: '1', amount: '0.25' }
     ])
     const expectedMatchResults = { trades: expectedTrades, orders: expectedOrders }
-    const receivedMatchResults = matchBuyOrders({ order, buyBook, makerMin, takerMin })
+    const receivedMatchResults = matchBuyOrders({ order, buyBook, makerMinimum, takerMinimum })
     expect(receivedMatchResults).toEqual(expectedMatchResults)
   })
 })
@@ -163,7 +163,7 @@ describe("matchSellOrders", () => {
       { type: 'buy', price: '1', amount: '1' }
     ])[0]
     const expectedMatchResults = { trades: [], orders: [order] }
-    const receivedMatchResults = matchSellOrders({ order, sellBook, makerMin, takerMin })
+    const receivedMatchResults = matchSellOrders({ order, sellBook, makerMinimum, takerMinimum })
     expect(receivedMatchResults).toEqual(expectedMatchResults)
   })
 
@@ -186,7 +186,7 @@ describe("matchSellOrders", () => {
       { type: 'buy', price: '1.6', amount: '1' }
     ])
     const expectedMatchResults = { trades: expectedTrades, orders: expectedOrders }
-    const receivedMatchResults = matchSellOrders({ order, sellBook, makerMin, takerMin })
+    const receivedMatchResults = matchSellOrders({ order, sellBook, makerMinimum, takerMinimum })
     expect(receivedMatchResults).toEqual(expectedMatchResults)
   });
 
@@ -204,7 +204,7 @@ describe("matchSellOrders", () => {
       { type: 'buy', price: '1.6', amount: '2.5' }
     ])
     const expectedMatchResults = { trades: expectedTrades, orders: expectedOrders }
-    const receivedMatchResults = matchSellOrders({ order, sellBook, makerMin, takerMin })
+    const receivedMatchResults = matchSellOrders({ order, sellBook, makerMinimum, takerMinimum })
     expect(receivedMatchResults).toEqual(expectedMatchResults)
   })
 
@@ -225,7 +225,7 @@ describe("matchSellOrders", () => {
       { orderHash: 'SELL#2', amount: '1' }
     ])
     const expectedMatchResults = { trades: expectedTrades, orders: [] }
-    const receivedMatchResults = matchSellOrders({ order, sellBook, makerMin, takerMin })
+    const receivedMatchResults = matchSellOrders({ order, sellBook, makerMinimum, takerMinimum })
     expect(receivedMatchResults).toEqual(expectedMatchResults)
   });
 
@@ -246,7 +246,7 @@ describe("matchSellOrders", () => {
       { orderHash: 'SELL#2', amount: '1' }
     ])
     const expectedMatchResults = { trades: expectedTrades, orders: [] }
-    const receivedMatchResults = matchSellOrders({ order, sellBook, makerMin, takerMin })
+    const receivedMatchResults = matchSellOrders({ order, sellBook, makerMinimum, takerMinimum })
     expect(receivedMatchResults).toEqual(expectedMatchResults)
   })
 
@@ -268,7 +268,7 @@ describe("matchSellOrders", () => {
       { type: 'buy', price: '1', amount: '0.19' }
     ])
     const expectedMatchResults = { trades: expectedTrades, orders: expectedOrders }
-    const receivedMatchResults = matchSellOrders({ order, sellBook, makerMin, takerMin })
+    const receivedMatchResults = matchSellOrders({ order, sellBook, makerMinimum, takerMinimum })
     expect(receivedMatchResults).toEqual(expectedMatchResults)
   })
 
@@ -290,7 +290,7 @@ describe("matchSellOrders", () => {
       { type: 'buy', price: '1', amount: '0.25' }
     ])
     const expectedMatchResults = { trades: expectedTrades, orders: expectedOrders }
-    const receivedMatchResults = matchSellOrders({ order, sellBook, makerMin, takerMin })
+    const receivedMatchResults = matchSellOrders({ order, sellBook, makerMinimum, takerMinimum })
     expect(receivedMatchResults).toEqual(expectedMatchResults)
   })
 })
