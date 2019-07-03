@@ -392,7 +392,7 @@ class Account extends Component {
     }
     return (
       <Search
-        searchInputPlaceholder="Search by asset name or symbol..."
+        searchInputPlaceholder="Search asset..."
         searchValue={searchValue}
         handleSearchInput={handleSearchInput}
         theme={this.props.app.theme}
