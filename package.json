@@ -1,5 +1,6 @@
 {
   "name": "draemx-react",
+  "homepage": "https://dreamx.market",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -7,6 +8,7 @@
     "@material-ui/icons": "^3.0.2",
     "actioncable": "^5.2.3",
     "axios": "^0.18.0",
+    "gh-pages": "^2.0.1",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "node-sass": "^4.11.0",
@@ -23,6 +25,8 @@
     "web3-utils": "1.0.0-beta.55"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -b master -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --watchAll=false",
