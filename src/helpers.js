@@ -39,6 +39,7 @@ export const getOnchainBalanceAsync = async (accountAddress, tokenSymbol) => {
       const token = tokens[tokenSymbol];
       balance = await token.methods.balanceOf(accountAddress).call();
     }
+    balance = balance.toString()
 
     resolve(balance);
   });
