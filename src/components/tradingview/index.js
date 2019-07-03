@@ -104,12 +104,12 @@ class TradingView extends Component {
   addResolutionButtons = (tvWidget) => {
     config.supported_resolutions.forEach((resolution) => {
       const button = tvWidget.createButton()
+      button.textContent = config.resolution_human_readable_labels[resolution];
       button.addEventListener('click', () => {
         const symbol = tvWidget.symbolInterval().symbol
         const interval = resolution
         tvWidget.setSymbol(symbol, interval)
       });
-      button.textContent = config.resolution_human_readable_labels[resolution];
     })
   }
 

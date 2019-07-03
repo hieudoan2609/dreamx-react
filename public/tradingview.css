@@ -41,6 +41,21 @@ html.feature-no-touch.theme-dark .container-3_8ayT2Q-:hover .background-Q1Fcmxly
   stroke: #EA6C2C;
 }
 
+/* resolution button's hover state */
+html.theme-dark .customButton--jqJTfH5-.hovered-1mGRUp3y-, html.feature-no-touch.theme-dark .customButton--jqJTfH5-:hover, html.feature-no-touch.theme-dark .customButton--jqJTfH5-:active, html.feature-touch.theme-dark .customButton--jqJTfH5-:active {
+  color: #EA6C2C;
+}
+
+/* chart type button's hover state */
+html.theme-dark .button-13wlLwhJ-.hovered-FUo4RNOC-, html.feature-no-touch.theme-dark .button-13wlLwhJ-:hover, html.feature-no-touch.theme-dark .button-13wlLwhJ-:active, html.feature-touch.theme-dark .button-13wlLwhJ-:active {
+  color: #EA6C2C;
+}
+
+/* fullscreen button's hover state */
+html.theme-dark .button-2ioYhFEY-.isInteractive-20uLObIc-.hovered-3perbaxJ-, html.feature-no-touch.theme-dark .button-2ioYhFEY-.isInteractive-20uLObIc-:hover, html.feature-no-touch.theme-dark .button-2ioYhFEY-.isInteractive-20uLObIc-:active, html.feature-touch.theme-dark .button-2ioYhFEY-.isInteractive-20uLObIc-:active {
+  color: #EA6C2C;
+}
+
 /* LIGHT THEME */
 
 /* the bottommost layer */
@@ -82,6 +97,21 @@ html.feature-no-touch.theme-light .button-263WXsg--.isActive-2mI1-NUL-:hover .ic
 html.feature-no-touch.theme-light .container-3_8ayT2Q-:hover .background-Q1Fcmxly-, html.feature-no-touch.theme-light .container-3_8ayT2Q-:hover .background-Q1Fcmxly- {
   fill: #303f9f;
   stroke: #303f9f;
+}
+
+/* resolution button's hover state */
+html.theme-light .customButton--jqJTfH5-.hovered-1mGRUp3y-, html.feature-no-touch.theme-light .customButton--jqJTfH5-:hover, html.feature-no-touch.theme-light .customButton--jqJTfH5-:active, html.feature-touch.theme-light .customButton--jqJTfH5-:active {
+  color: #303f9f;
+}
+
+/* chart type button's hover state */
+html.theme-light .button-13wlLwhJ-.hovered-FUo4RNOC-, html.feature-no-touch.theme-light .button-13wlLwhJ-:hover, html.feature-no-touch.theme-light .button-13wlLwhJ-:active, html.feature-touch.theme-light .button-13wlLwhJ-:active {
+  color: #303f9f;
+}
+
+/* fullscreen button's hover state */
+html.theme-light .button-2ioYhFEY-.isInteractive-20uLObIc-.hovered-3perbaxJ-, html.feature-no-touch.theme-light .button-2ioYhFEY-.isInteractive-20uLObIc-:hover, html.feature-no-touch.theme-light .button-2ioYhFEY-.isInteractive-20uLObIc-:active, html.feature-touch.theme-light .button-2ioYhFEY-.isInteractive-20uLObIc-:active {
+  color: #303f9f;
 }
 
 /* GENERIC */
