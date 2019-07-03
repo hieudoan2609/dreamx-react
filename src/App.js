@@ -17,7 +17,6 @@ import {
   marketLoadAsync,
   alertModalHide
 } from "./actions";
-import { ReactComponent as Logo } from './images/dream.svg'
 
 const logo = {
   dark: '/dream-dark.png',
