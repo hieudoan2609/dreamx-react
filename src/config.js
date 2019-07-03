@@ -1,4 +1,4 @@
 export default {
-  API_HTTP_ROOT: "https://api.odin.trade",
-  API_WS_ROOT: "wss://api.odin.trade/cable"
+  API_HTTP_ROOT: "https://api-testnet.dreamx.market",
+  API_WS_ROOT: "wss://api-testnet.dreamx.market/cable"
 };
