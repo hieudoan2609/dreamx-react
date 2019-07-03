@@ -1,0 +1,102 @@
+/* DARK THEME */
+
+/* the bottommost layer */
+html.theme-dark body.chart-page {
+  background-color: #384256;
+}
+
+/* the header */
+html.theme-dark .group-wWM3zP_M- {
+  background-color: #384256;
+}
+
+/* resolution active state */
+html.theme-dark .button-2ioYhFEY-.isInteractive-20uLObIc-.isActive-22S-lGpa-, html.feature-no-touch.theme-dark .button-2ioYhFEY-.isInteractive-20uLObIc-.isActive-22S-lGpa-:hover, html.feature-no-touch.theme-dark .button-2ioYhFEY-.isInteractive-20uLObIc-.isActive-22S-lGpa-:active, html.feature-touch.theme-dark .button-2ioYhFEY-.isInteractive-20uLObIc-.isActive-22S-lGpa-:active {
+  color: #EA6C2C;
+}
+
+/* left toolbar seperator */
+html.theme-dark .inner-1xuW-gY4- {
+  background-color: #384256;
+}
+
+/* left toolbar background */
+html.theme-dark .group-2JyOhh7Z- {
+  background-color: #384256;
+}
+
+/* left toolbar item active state */
+html.theme-dark .button-263WXsg--.isActive-2mI1-NUL- .icon-1Y-3MM9F- {
+  color: #EA6C2C;
+}
+
+/* left toolbar active item hover state */
+html.feature-no-touch.theme-dark .button-263WXsg--.isActive-2mI1-NUL-:hover .icon-1Y-3MM9F-, html.feature-no-touch.theme-dark .button-263WXsg--.isActive-2mI1-NUL-:active .icon-1Y-3MM9F-, html.feature-touch.theme-dark .button-263WXsg--.isActive-2mI1-NUL-:active .icon-1Y-3MM9F- {
+  color: #EA6C2C;
+}
+
+/* left toolbar arrow hover state */
+html.feature-no-touch.theme-dark .container-3_8ayT2Q-:hover .background-Q1Fcmxly-, html.feature-no-touch.theme-dark .container-3_8ayT2Q-:hover .background-Q1Fcmxly- {
+  fill: #EA6C2C;
+  stroke: #EA6C2C;
+}
+
+/* LIGHT THEME */
+
+/* the bottommost layer */
+html.theme-light body.chart-page {
+  background-color: #ffffff;
+}
+
+/* the header */
+html.theme-light .group-wWM3zP_M- {
+  background-color: #ffffff;
+}
+
+/* resolution active state */
+html.theme-light .button-2ioYhFEY-.isInteractive-20uLObIc-.isActive-22S-lGpa-, html.feature-no-touch.theme-light .button-2ioYhFEY-.isInteractive-20uLObIc-.isActive-22S-lGpa-:hover, html.feature-no-touch.theme-light .button-2ioYhFEY-.isInteractive-20uLObIc-.isActive-22S-lGpa-:active, html.feature-touch.theme-light .button-2ioYhFEY-.isInteractive-20uLObIc-.isActive-22S-lGpa-:active {
+  color: #303f9f !important;
+}
+
+/* left toolbar seperator */
+html.theme-light .inner-1xuW-gY4- {
+  background-color: #ffffff;
+}
+
+/* left toolbar background */
+html.theme-light .group-2JyOhh7Z- {
+  background-color: #ffffff;
+}
+
+/* left toolbar item active state */
+html.theme-light .button-263WXsg--.isActive-2mI1-NUL- .icon-1Y-3MM9F- {
+  color: #303f9f;
+}
+
+/* left toolbar active item hover state */
+html.feature-no-touch.theme-light .button-263WXsg--.isActive-2mI1-NUL-:hover .icon-1Y-3MM9F-, html.feature-no-touch.theme-light .button-263WXsg--.isActive-2mI1-NUL-:active .icon-1Y-3MM9F-, html.feature-touch.theme-light .button-263WXsg--.isActive-2mI1-NUL-:active .icon-1Y-3MM9F- {
+  color: #303f9f;
+}
+
+/* left toolbar arrow hover state */
+html.feature-no-touch.theme-light .container-3_8ayT2Q-:hover .background-Q1Fcmxly-, html.feature-no-touch.theme-light .container-3_8ayT2Q-:hover .background-Q1Fcmxly- {
+  fill: #303f9f;
+  stroke: #303f9f;
+}
+
+/* GENERIC */
+
+/* the resolution dropdown toggler */
+.button-13wlLwhJ- {
+  display: none;
+}
+
+/* volume toggle */
+.pane-legend-minbtn.apply-common-tooltip.apply {
+  display: none;
+}
+
+/* 3 icons next to volume */
+.pane-legend-icon-container {
+  display: none !important;
+}
