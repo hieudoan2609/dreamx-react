@@ -116,6 +116,10 @@ html.theme-light .button-2ioYhFEY-.isInteractive-20uLObIc-.hovered-3perbaxJ-, ht
 
 /* GENERIC */
 
+.button-13wlLwhJ- {
+  display: flex !important;
+}
+
 /* volume toggle */
 .pane-legend-minbtn.apply-common-tooltip.apply {
   display: none;
