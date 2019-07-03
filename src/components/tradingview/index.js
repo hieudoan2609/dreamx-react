@@ -75,7 +75,8 @@ class TradingView extends Component {
         "timeframes_toolbar",
         "context_menus",
         "header_interval_dialog_button",
-        "left_toolbar"
+        "left_toolbar",
+        "header_resolutions"
       ],
       enabled_features: [
         "hide_left_toolbar_by_default",
@@ -83,9 +84,10 @@ class TradingView extends Component {
       autosize: this.props.autosize,
       fullscreen: this.props.fullscreen,
       custom_css_url: '../../tradingview.css',
-      favorites: config.supported_resolutions,
       theme: this.props.theme
     }
+
+    console.log(widgetOptions)
 
     const tvWidget = new widget(widgetOptions);
     this.addEventListeners(tvWidget)
