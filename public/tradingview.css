@@ -95,3 +95,9 @@ html.feature-no-touch.theme-light .container-3_8ayT2Q-:hover .background-Q1Fcmxl
 .pane-legend-icon-container {
   display: none !important;
 }
+
+/* the resolution buttons */
+.wrap-18oKCBRc- {
+  display: flex;
+  justify-content: center
+}

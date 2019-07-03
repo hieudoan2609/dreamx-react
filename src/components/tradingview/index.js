@@ -6,7 +6,8 @@ import { widget } from './charting_library/charting_library.min';
 import Datafeed from './datafeed'
 
 const config = {
-    supported_resolutions: ["5", "15", "60", "D"]
+    supported_resolutions: ["5", "15", "60", "D"],
+    resolution_human_readable_labels: { "5": "5m", "15": "15m", "60": "1H", "D": "1D" }
 };
 
 class TradingView extends Component {
@@ -87,8 +88,6 @@ class TradingView extends Component {
       theme: this.props.theme
     }
 
-    console.log(widgetOptions)
-
     const tvWidget = new widget(widgetOptions);
     this.addEventListeners(tvWidget)
     this.tvWidget = tvWidget;
@@ -97,7 +96,20 @@ class TradingView extends Component {
   addEventListeners = (tvWidget) => {
     tvWidget.onChartReady(() => {
       this.loadTheme(this.props.theme)
+      this.addResolutionButtons(tvWidget)
       this.props.onLoaded()
+    })
+  }
+
+  addResolutionButtons = (tvWidget) => {
+    config.supported_resolutions.forEach((resolution) => {
+      const button = tvWidget.createButton()
+      button.addEventListener('click', () => {
+        const symbol = tvWidget.symbolInterval().symbol
+        const interval = resolution
+        tvWidget.setSymbol(symbol, interval)
+      });
+      button.textContent = config.resolution_human_readable_labels[resolution];
     })
   }
 
