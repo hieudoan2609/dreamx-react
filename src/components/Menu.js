@@ -120,6 +120,16 @@ class Menu extends Component {
     });
   };
 
+  renderLogo = () => {
+    const logo = this.props.theme === 'dark' ? this.props.logo.dark : this.props.logo.light
+
+    return (
+      <Link to={this.props.rootPath} className="brand">
+        <img src={logo} />
+      </Link>
+    )
+  }
+
   render() {
     const mobileMenuHiddenClass = this.state.mobileMenuHidden ? "hidden" : "";
 
@@ -130,9 +140,7 @@ class Menu extends Component {
             <div className="col-12">
               <div className="wrapper">
                 <div className="pull-left">
-                  <Link to={this.props.rootPath} className="brand">
-                    {this.props.logo}
-                  </Link>
+                  {this.renderLogo()}
 
                   <div className="items d-none d-md-flex">
                     {this.renderNavItems()}
@@ -185,7 +193,7 @@ class Menu extends Component {
 Menu.propTypes = {
   navItems: PropTypes.array.isRequired, // [ { label, pathname }, ... ] navItems must be top-level links and will be highlighted on all sub-routes except for the root link
   toggleTheme: PropTypes.func.isRequired,
-  // logo: PropTypes.string.isRequired, // a logo is required but its proptype is disabled because it can be an object when testing with jest
+  logo: PropTypes.object.isRequired,  // { dark: string, light: string }
   theme: PropTypes.string.isRequired,
   rootPath: PropTypes.string.isRequired // will be used for both nav brand and root item
 };

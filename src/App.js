@@ -19,7 +19,10 @@ import {
 } from "./actions";
 import { ReactComponent as Logo } from './images/dream.svg'
 
-const logo = <Logo/>
+const logo = {
+  dark: '/dream-dark.png',
+  light: '/dream-light.png'
+}
 
 class App extends Component {
   state = {
