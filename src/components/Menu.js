@@ -149,7 +149,7 @@ class Menu extends Component {
                       className="highlighter"
                       style={{
                         width: this.state.highlighterWidth,
-                        left: this.state.highlighterOffsetLeft
+                        transform: `translateX(${this.state.highlighterOffsetLeft}px)`
                       }}
                     />
                   </div>
