@@ -135,7 +135,7 @@ class Trade extends Component {
             <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.fee))} {this.props.quote.symbol}</b>
           </small>
           <small className="total">
-            Total: <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.amountMinusFee))} {this.props.quote.symbol}</b>
+            Total: <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.total))} {this.props.base.symbol}</b>
           </small>
         </div>
       )
