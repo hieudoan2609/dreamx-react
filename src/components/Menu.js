@@ -125,7 +125,7 @@ class Menu extends Component {
 
     return (
       <Link to={this.props.rootPath} className="brand">
-        <img src={logo} />
+        <img src={logo} alt="DreamX - Decentralized Cryptocurrency Exchange" />
       </Link>
     )
   }

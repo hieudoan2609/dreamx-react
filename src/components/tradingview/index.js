@@ -94,7 +94,8 @@ class TradingView extends Component {
   }
 
   addEventListeners = (tvWidget) => {
-    tvWidget.onChartReady(() => {
+    tvWidget.onChartReady(async () => {
+      await tvWidget.headerReady()
       this.loadTheme(this.props.theme)
       this.addResolutionButtons(tvWidget)
       this.props.onLoaded()
