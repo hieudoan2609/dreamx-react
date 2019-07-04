@@ -69,16 +69,14 @@ export const updateTransfersAsync = newTransfers => {
     newTransfers.map(t => convertKeysToCamelCase(t));
     const { transfers } = getState();
 
-    const updatedTransfers = transfers.all;
-    for (let transfer of newTransfers) {
-      const oldTransfer = updatedTransfers.filter(t => t.id === transfer.id)[0];
-      if (!oldTransfer) {
-        updatedTransfers.push(transfer);
-      } else {
-        const oldTransfersIndex = updatedTransfers
-          .map(t => t.id)
-          .indexOf(oldTransfer.id);
-        updatedTransfers[oldTransfersIndex] = transfer;
+    const updatedTransfers = []
+    for (let newTransfer of newTransfers) {
+      updatedTransfers.push(newTransfer)
+    }
+    for (let transfer of transfers.all) {
+      const newTransfer = updatedTransfers.filter(t => t.id === transfer.id && t.type === transfer.type)[0]
+      if (!newTransfer) {
+        updatedTransfers.push(transfer)
       }
     }
 
