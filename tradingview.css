@@ -116,22 +116,7 @@ html.theme-light .button-2ioYhFEY-.isInteractive-20uLObIc-.hovered-3perbaxJ-, ht
 
 /* GENERIC */
 
-.button-13wlLwhJ- {
-  display: flex !important;
-}
-
 /* volume toggle */
 .pane-legend-minbtn.apply-common-tooltip.apply {
   display: none;
-}
-
-/* 3 icons next to volume */
-.pane-legend-icon-container {
-  display: none !important;
-}
-
-/* the resolution buttons */
-.wrap-18oKCBRc- {
-  display: flex;
-  justify-content: center
 }
