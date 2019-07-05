@@ -41,9 +41,11 @@ class TradingView extends Component {
     switch(theme) {
       case 'light':
         overrides["paneProperties.background"] = "#ffffff"
+        overrides["scalesProperties.textColor"] = "rgba(0, 0, 0, 0.54)"
         break
       case 'dark':
         overrides["paneProperties.background"] = "#384256"
+        overrides["scalesProperties.textColor"] = "hsla(0,0%,100%,.7)"
         break
       default:
         throw new Error('unknown theme')
@@ -77,7 +79,9 @@ class TradingView extends Component {
         "context_menus",
         "header_interval_dialog_button",
         "left_toolbar",
-        "header_resolutions"
+        "header_resolutions",
+        "symbol_search_hot_key",
+        "edit_buttons_in_legend"
       ],
       enabled_features: [
         "hide_left_toolbar_by_default",
