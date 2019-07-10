@@ -365,6 +365,7 @@ export const matchSellOrders = ({ order, sellBook, makerMinimum, takerMinimum })
   const takeAmount = Web3Utils.toBN(order.takeAmount)
   let filledTakeAmount = Web3Utils.toBN(0)
   let remainingTakeAmount = Web3Utils.toBN(order.takeAmount)
+  let remainingGiveAmount = Web3Utils.toBN(order.giveAmount)
   // find matched orders
   const matched = sellBook.filter(o => {
     const orderPrice = Web3Utils.toBN(getOrderVolume(o).price)
@@ -403,6 +404,7 @@ export const matchSellOrders = ({ order, sellBook, makerMinimum, takerMinimum })
     }
     const matchedOrderFilled = Web3Utils.toBN(matchedOrder.filled)
     const matchedOrderGiveAmount = Web3Utils.toBN(matchedOrder.giveAmount)
+    const matchedOrderTakeAmount = Web3Utils.toBN(matchedOrder.takeAmount)
     const matchedOrderRemainingGiveAmount = matchedOrderGiveAmount.sub(matchedOrderFilled)
     let trade, tradeAmount
     if (remainingTakeAmount.gt(matchedOrderRemainingGiveAmount)) {
@@ -410,27 +412,36 @@ export const matchSellOrders = ({ order, sellBook, makerMinimum, takerMinimum })
     } else {
       tradeAmount = remainingTakeAmount
     }
-    if (tradeAmount.lt(takerMinimum)) {
+    const tradeAmountEquivalentInGiveToken = calculateGiveAmount(tradeAmount, matchedOrderTakeAmount, matchedOrderGiveAmount)
+    if (tradeAmountEquivalentInGiveToken.lt(takerMinimum)) {
       continue
     }
-    trade = { orderHash: matchedOrder.orderHash, amount: tradeAmount.toString() }
+    trade = { orderHash: matchedOrder.orderHash, amount: tradeAmount, amountGive: tradeAmountEquivalentInGiveToken }
     filledTakeAmount = filledTakeAmount.add(tradeAmount)
     remainingTakeAmount = remainingTakeAmount.sub(tradeAmount)
+    remainingGiveAmount = remainingGiveAmount.sub(tradeAmountEquivalentInGiveToken)
     result.trades.push(trade)
   }
   // create a rest order if there is still remaining volume
   if (filledTakeAmount.lt(takeAmount)) {
     // remaining volume is below maker's minimum, cancel trades until it is back above
-    while (remainingTakeAmount.lt(makerMinimum)) {
+    while (remainingGiveAmount.lt(makerMinimum)) {
       const lastTrade = result.trades.pop()
-      const tradeAmount = Web3Utils.toBN(lastTrade.amount)
+      const tradeAmount = lastTrade.amount
+      const tradeAmountEquivalentInGiveToken = lastTrade.amountGive
       filledTakeAmount = filledTakeAmount.sub(tradeAmount)
       remainingTakeAmount = remainingTakeAmount.add(tradeAmount)
+      remainingGiveAmount = remainingGiveAmount.add(tradeAmountEquivalentInGiveToken)
     }
     let restOrderGiveAmount = calculateGiveAmount(remainingTakeAmount, giveAmount, takeAmount)
     let restOrderTakeAmount = remainingTakeAmount
     const restOrder = { type: order.type, giveAmount: restOrderGiveAmount.toString(), giveTokenAddress: order.giveTokenAddress, takeAmount: restOrderTakeAmount.toString(), takeTokenAddress: order.takeTokenAddress }
     result.orders.push(restOrder)
+  }
+  // remove amountGive and convert amount to string before returning
+  for (let trade of result.trades) {
+    delete trade.amountGive
+    trade.amount = trade.amount.toString()
   }
   return result
 }

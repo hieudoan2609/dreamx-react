@@ -263,20 +263,20 @@ describe("matchSellOrders", () => {
 
   test("rest order must meet maker's minimum", () => {
     const sellBook = generateTestOrders([
-      { type: 'sell', price: '1', amount: '0.05', filled: '0', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "SELL#0" },
-      { type: 'sell', price: '1', amount: '0.05', filled: '0', createdAt: "2018-06-19T20:25:59.459Z", orderHash: "SELL#1" },
-      { type: 'sell', price: '1', amount: '0.05', filled: '0', createdAt: "2017-06-19T20:25:59.459Z", orderHash: "SELL#2" },
-      { type: 'sell', price: '1.5', amount: '0.5', filled: '0', createdAt: "2016-06-19T20:25:59.459Z", orderHash: "SELL#3" },
-      { type: 'sell', price: '1.5', amount: '0.5', filled: '0', createdAt: "2015-06-19T20:25:59.459Z", orderHash: "SELL#4" }
+      { type: 'sell', price: '5', amount: '0.01', filled: '0', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "SELL#0" },
+      { type: 'sell', price: '5', amount: '0.01', filled: '0', createdAt: "2018-06-19T20:25:59.459Z", orderHash: "SELL#1" },
+      { type: 'sell', price: '5', amount: '0.01', filled: '0', createdAt: "2017-06-19T20:25:59.459Z", orderHash: "SELL#2" },
+      { type: 'sell', price: '6.5', amount: '0.5', filled: '0', createdAt: "2016-06-19T20:25:59.459Z", orderHash: "SELL#3" },
+      { type: 'sell', price: '6.5', amount: '0.5', filled: '0', createdAt: "2015-06-19T20:25:59.459Z", orderHash: "SELL#4" }
     ])
     const order = generateTestOrders([
-      { type: 'buy', price: '1', amount: '0.24' }
+      { type: 'buy', price: '5', amount: '0.04' }
     ])[0]
     const expectedTrades = generateTestTrades([
-      { orderHash: 'SELL#2', amount: '0.05' }
+      { orderHash: 'SELL#2', amount: '0.01' }
     ])
     const expectedOrders = generateTestOrders([
-      { type: 'buy', price: '1', amount: '0.19' }
+      { type: 'buy', price: '5', amount: '0.03' }
     ])
     const expectedMatchResults = { trades: expectedTrades, orders: expectedOrders }
     const receivedMatchResults = matchSellOrders({ order, sellBook, makerMinimum, takerMinimum })
@@ -285,20 +285,20 @@ describe("matchSellOrders", () => {
 
   test("trades must meet taker's minimum", () => {
     const sellBook = generateTestOrders([
-      { type: 'sell', price: '1', amount: '0.05', filled: '0', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "SELL#0" },
-      { type: 'sell', price: '1', amount: '0.04', filled: '0', createdAt: "2018-06-19T20:25:59.459Z", orderHash: "SELL#1" },
-      { type: 'sell', price: '1', amount: '0.04', filled: '0', createdAt: "2017-06-19T20:25:59.459Z", orderHash: "SELL#2" },
-      { type: 'sell', price: '1.5', amount: '0.5', filled: '0', createdAt: "2016-06-19T20:25:59.459Z", orderHash: "SELL#3" },
-      { type: 'sell', price: '1.5', amount: '0.5', filled: '0', createdAt: "2015-06-19T20:25:59.459Z", orderHash: "SELL#4" }
+      { type: 'sell', price: '5', amount: '0.01', filled: '0', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "SELL#0" },
+      { type: 'sell', price: '5', amount: '0.009', filled: '0', createdAt: "2018-06-19T20:25:59.459Z", orderHash: "SELL#1" },
+      { type: 'sell', price: '5', amount: '0.009', filled: '0', createdAt: "2017-06-19T20:25:59.459Z", orderHash: "SELL#2" },
+      { type: 'sell', price: '5.5', amount: '0.5', filled: '0', createdAt: "2016-06-19T20:25:59.459Z", orderHash: "SELL#3" },
+      { type: 'sell', price: '5.5', amount: '0.5', filled: '0', createdAt: "2015-06-19T20:25:59.459Z", orderHash: "SELL#4" }
     ])
     const order = generateTestOrders([
-      { type: 'buy', price: '1', amount: '0.3' }
+      { type: 'buy', price: '5', amount: '0.04' }
     ])[0]
     const expectedTrades = generateTestTrades([
-      { orderHash: 'SELL#0', amount: '0.05' }
+      { orderHash: 'SELL#0', amount: '0.01' }
     ])
     const expectedOrders = generateTestOrders([
-      { type: 'buy', price: '1', amount: '0.25' }
+      { type: 'buy', price: '5', amount: '0.03' }
     ])
     const expectedMatchResults = { trades: expectedTrades, orders: expectedOrders }
     const receivedMatchResults = matchSellOrders({ order, sellBook, makerMinimum, takerMinimum })
