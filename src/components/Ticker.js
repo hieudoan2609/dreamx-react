@@ -2,6 +2,9 @@ import React, { Component } from "react";
 // import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
+import {
+  truncateNumberOutput
+} from "../helpers";
 
 import "./Ticker.scss";
 import Search from "./Search";
@@ -31,7 +34,7 @@ class Ticker extends Component {
             onClick={() => this.changeMarket(t.marketSymbol)}
           >
             <div className="name">{t.tickerSymbol}</div>
-            <div className="price">{t.last ? t.last : "N/A"}</div>
+            <div className="price">{t.last ? truncateNumberOutput(t.last, 8, 10) : "N/A"}</div>
           </div>
         </div>
       );
