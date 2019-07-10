@@ -237,7 +237,7 @@ export const calculateTakeAmount = (giveAmount, totalGiveAmount, totalTakeAmount
     return zero
   }
 
-  return giveAmount.mul(totalTakeAmount).div(totalGiveAmount)
+  return giveAmount.mul(totalTakeAmount).divRound(totalGiveAmount)
 }
 
 export const calculateGiveAmount = (takeAmount, totalGiveAmount, totalTakeAmount) => {
@@ -245,7 +245,7 @@ export const calculateGiveAmount = (takeAmount, totalGiveAmount, totalTakeAmount
     return zero
   }
 
-  return takeAmount.mul(totalGiveAmount).div(totalTakeAmount)
+  return takeAmount.mul(totalGiveAmount).divRound(totalTakeAmount)
 }
 
 export const findMatchedOrders = ({ order, orderBook, makerMinimum, takerMinimum }) => {
@@ -331,7 +331,7 @@ export const matchBuyOrders = ({ order, buyBook, makerMinimum, takerMinimum }) =
     result.trades.push(trade)
   }
   // create a rest order if there is still remaining volume
-  if (!filledGiveAmount.eq(giveAmount)) {
+  if (filledGiveAmount.lt(giveAmount)) {
     // remaining volume is below maker's minimum, cancel trades until it is back above
     while (remainingGiveAmount.lt(makerMinimum)) {
       const lastTrade = result.trades.pop()
@@ -414,7 +414,7 @@ export const matchSellOrders = ({ order, sellBook, makerMinimum, takerMinimum })
     result.trades.push(trade)
   }
   // create a rest order if there is still remaining volume
-  if (!filledTakeAmount.eq(takeAmount)) {
+  if (filledTakeAmount.lt(takeAmount)) {
     // remaining volume is below maker's minimum, cancel trades until it is back above
     while (remainingTakeAmount.lt(makerMinimum)) {
       const lastTrade = result.trades.pop()
