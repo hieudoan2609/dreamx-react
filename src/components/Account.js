@@ -76,9 +76,9 @@ class Account extends Component {
         name: row.name,
         symbol: row.symbol
       };
-      row.availableBalance = web3.utils.fromWei(row.availableBalance);
-      row.inOrders = web3.utils.fromWei(row.inOrders);
-      row.totalBalance = web3.utils.fromWei(row.totalBalance);
+      row.availableBalance = truncateNumberOutput(web3.utils.fromWei(row.availableBalance), 8, 10);
+      row.inOrders = truncateNumberOutput(web3.utils.fromWei(row.inOrders), 8, 10);
+      row.totalBalance = truncateNumberOutput(web3.utils.fromWei(row.totalBalance), 8, 10);
       row.actions = (
         <div className="actions">
           <div
@@ -115,7 +115,7 @@ class Account extends Component {
       )[0];
       const status = transfer.blockNumber ? "Completed" : "Pending";
       const coin = token.symbol;
-      const amount = truncateNumberOutput(Web3Utils.fromWei(transfer.amount));
+      const amount = truncateNumberOutput(Web3Utils.fromWei(transfer.amount), 8, 10);
       const date = transfer.createdAt;
 
       let transactionHash;
@@ -197,10 +197,10 @@ class Account extends Component {
           {capitalize(accountOrder.type)}
         </div>
       );
-      const price = Web3Utils.fromWei(accountOrder.price)
-      const amount = Web3Utils.fromWei(accountOrder.amount)
-      const filled = Web3Utils.fromWei(accountOrder.amountFilled)
-      const total = `${Web3Utils.fromWei(accountOrder.total)} ETH`;
+      const price = truncateNumberOutput(Web3Utils.fromWei(accountOrder.price), 8, 10)
+      const amount = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amount), 8, 10)
+      const filled = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amountFilled), 8, 10)
+      const total = `${truncateNumberOutput(Web3Utils.fromWei(accountOrder.total), 8, 10)} ETH`;
       const status = accountOrder.status === 'closed' ? "Closed" : "Open";
       const market = accountOrder.marketSymbolFormatted;
       const date = accountOrder.createdAt;
@@ -260,7 +260,9 @@ class Account extends Component {
     const { accountTrades } = this.props;
 
     const extractedData = accountTrades.filtered.map(t => {
-      const { price, amount } = t;
+      let { price, amount } = t;
+      price = truncateNumberOutput(price, 8, 10)
+      amount = truncateNumberOutput(amount, 8, 10)
       let type
       if (t.type === 'buy') {
         if (t.makerAddress === this.props.account.address) {
@@ -275,10 +277,10 @@ class Account extends Component {
           type = <div className={`pill buy`}>Buy</div>
         }
       }
-      const total = `${t.total} ETH`;
+      const total = `${truncateNumberOutput(t.total, 8, 10)} ETH`;
       const market = t.marketSymbolFormatted;
       const date = t.createdAt;
-      const fee = `${truncateNumberOutput(t.fee)} ETH`;
+      const fee = `${truncateNumberOutput(t.fee, 8, 10)} ETH`;
 
       return {
         market,

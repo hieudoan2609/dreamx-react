@@ -69,7 +69,7 @@ class Trade extends Component {
       <div className="balance">
         <div className="header">BALANCE</div>
         <div className="value">
-          {truncateNumberOutput(Web3Utils.fromWei(balance))} {symbol}
+          {truncateNumberOutput(Web3Utils.fromWei(balance), 8, 10)} {symbol}
         </div>
       </div>
     );

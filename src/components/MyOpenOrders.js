@@ -5,7 +5,8 @@ import PropTypes from "prop-types";
 import "./MyOpenOrders.scss";
 import ScrollableTable from "./ScrollableTable";
 import {
-  capitalize
+  capitalize,
+  truncateNumberOutput
 } from "../helpers";
 import {
   accountOrdersCancelAllAsync,
@@ -28,15 +29,15 @@ class MyOpenOrders extends Component {
         continue
       }
 
-      const price = Web3Utils.fromWei(accountOrder.price)
-      const amount = Web3Utils.fromWei(accountOrder.amount)
-      const filled = Web3Utils.fromWei(accountOrder.amountFilled)
+      const price = truncateNumberOutput(Web3Utils.fromWei(accountOrder.price), 8, 10)
+      const amount = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amount), 8, 10)
+      const filled = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amountFilled), 8, 10)
       const type = (
         <div className={`pill ${accountOrder.type}`}>
           {capitalize(accountOrder.type)}
         </div>
       );
-      const total = `${Web3Utils.fromWei(accountOrder.total)} ETH`;
+      const total = `${truncateNumberOutput(Web3Utils.fromWei(accountOrder.total), 8, 10)} ETH`;
       const date = accountOrder.createdAt;
       const cancelAll = (
         <div className="actions">
