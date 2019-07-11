@@ -56,7 +56,7 @@ const initializeCableSubscriptions = accountAddress => {
       }
     );
 
-    setSingleton("accountTransfersSubscription", accountTransfersSubscription);
+    setSingleton("AccountTransfersChannel", accountTransfersSubscription);
   };
 };
 

@@ -1,8 +1,6 @@
 /*
 available singletons:
 {
-  accountBalancesSubscription,
-  accountTransfersSubscription,
   cable,
   exchange,
   tokens,

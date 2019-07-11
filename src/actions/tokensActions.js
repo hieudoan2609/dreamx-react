@@ -91,7 +91,7 @@ const initializeCableSubscriptions = accountAddress => {
       }
     );
 
-    setSingleton("accountBalancesSubscription", accountBalancesSubscription);
+    setSingleton("AccountBalancesChannel", accountBalancesSubscription);
   };
 };
 

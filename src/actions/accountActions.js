@@ -16,7 +16,7 @@ import {
   accountTradesLoadAsync
 } from ".";
 import { transferHide } from "./";
-import { setSingleton } from "../singletons";
+import singletons, { setSingleton } from "../singletons";
 import Exchange from "../ABI/Exchange.json";
 import ERC20 from "../ABI/ERC20.json";
 
@@ -73,7 +73,7 @@ export const accountLoginAsync = () => {
 
 export const accountLogout = () => {
   return async dispatch => {
-    dispatchLogoutActions(dispatch);
+    logout(dispatch);
   };
 };
 
@@ -94,17 +94,25 @@ const addMetamaskListeners = dispatch => {
     window.ethereum.autoRefreshOnNetworkChange = false;
     window.ethereum.removeAllListeners();
     window.ethereum.on("networkChanged", function(network) {
-      dispatchLogoutActions(dispatch);
+      logout(dispatch);
     });
     window.ethereum.on("accountsChanged", function(accounts) {
-      dispatchLogoutActions(dispatch);
+      logout(dispatch);
     });
   }
 };
 
-const dispatchLogoutActions = dispatch => {
+const logout = dispatch => {
+  unsubscribeAccountChannels()
   dispatch(transferHide());
   dispatch({
     type: ACCOUNT_LOGOUT
   });
 };
+
+const unsubscribeAccountChannels = () => {
+  singletons.AccountBalancesChannel.unsubscribe()
+  singletons.AccountOrdersChannel.unsubscribe()
+  singletons.AccountTradesChannel.unsubscribe()
+  singletons.AccountTransfersChannel.unsubscribe()
+}
