@@ -25,7 +25,11 @@ export const marketTradesLoadAsync = (marketSymbol) => {
 
 const initializeCableSubscriptions = marketSymbol => {
   return dispatch => {
-    const { cable } = singletons;
+    const { cable, MarketTradesChannel } = singletons;
+
+    if (MarketTradesChannel) {
+      MarketTradesChannel.unsubscribe()
+    }
 
     const marketTradesSubscription = cable.subscriptions.create(
       { channel: "MarketTradesChannel", market_symbol: marketSymbol },

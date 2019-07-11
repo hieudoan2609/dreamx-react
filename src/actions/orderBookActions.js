@@ -57,7 +57,11 @@ export const orderBookLoadAsync = (marketSymbol) => {
 
 const initializeCableSubscriptions = marketSymbol => {
   return dispatch => {
-    const { cable } = singletons;
+    const { cable, MarketOrdersChannel } = singletons;
+
+    if (MarketOrdersChannel) {
+      MarketOrdersChannel.unsubscribe()
+    }
 
     const marketOrdersSubscription = cable.subscriptions.create(
       { channel: "MarketOrdersChannel", market_symbol: marketSymbol },
