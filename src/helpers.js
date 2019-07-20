@@ -237,7 +237,7 @@ export const calculateTakeAmount = (giveAmount, totalGiveAmount, totalTakeAmount
     return zero
   }
 
-  return giveAmount.mul(totalTakeAmount).divRound(totalGiveAmount)
+  return giveAmount.mul(totalTakeAmount).div(totalGiveAmount)
 }
 
 export const calculateGiveAmount = (takeAmount, totalGiveAmount, totalTakeAmount) => {
@@ -245,7 +245,7 @@ export const calculateGiveAmount = (takeAmount, totalGiveAmount, totalTakeAmount
     return zero
   }
 
-  return takeAmount.mul(totalGiveAmount).divRound(totalTakeAmount)
+  return takeAmount.mul(totalGiveAmount).div(totalTakeAmount)
 }
 
 export const findMatchedOrders = ({ order, orderBook, makerMinimum, takerMinimum }) => {

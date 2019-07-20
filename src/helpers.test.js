@@ -6,17 +6,6 @@ const makerMinimum = Web3Utils.toWei("0.15")
 const takerMinimum = Web3Utils.toWei("0.05")
 
 describe("matchBuyOrders", () => {
-  test("should handle overly-precise values", () => {
-    const buyBook = generateTestOrders([
-      { type: 'buy', price: '3.276272186626994725', amount: '0.05974419359164815', filled: '0', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "BUY#0" }
-    ])
-    const order = generateTestOrders([
-      { type: 'sell', price: '3.27627218', amount: '0.05' }
-    ])[0]
-    const receivedMatchResults = matchBuyOrders({ order, buyBook, makerMinimum, takerMinimum })
-    expect(receivedMatchResults.trades.length).not.toEqual(0)
-  })
-
   test("return the submitted order when there are no matched orders", () => {
     const buyBook = generateTestOrders([
       { type: 'buy', price: '0.9', amount: '1', filled: '0', createdAt: "2019-06-19T20:25:59.459Z", orderHash: "BUY#0" },
