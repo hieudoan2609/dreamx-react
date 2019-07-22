@@ -64,7 +64,6 @@ export const truncateNumberOutput = (num, decimalPoints = 8, maxDigit) => {
   let result = fraction ? `${whole}.${fraction}`.replace(trailingZeroes, "") : whole;
   if (maxDigit) {
     result = fraction ? result.substring(0, maxDigit + 1) : result.substring(0, maxDigit)
-    result = parseFloat(result).toString()
   }
   return result;
 };
