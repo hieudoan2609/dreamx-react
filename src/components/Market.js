@@ -47,15 +47,14 @@ class Market extends Component {
   };
 
   redirectToDefaultMarketIfMarketSymbolInvalid = () => {
-    const defaultTicker = this.props.tickers.all[0];
+    const { DEFAULT_MARKET } = config
     const allMarkets = this.props.markets.all;
 
-    if (!defaultTicker || allMarkets.length < 1) {
+    if (allMarkets.length < 1) {
       return;
     }
 
     const currentMarket = this.props.match.params.marketSymbol;
-    const defaultMarket = defaultTicker.marketSymbol;
 
     const currentMarketExists = allMarkets.filter(
       m => m.symbol === currentMarket
@@ -64,7 +63,7 @@ class Market extends Component {
       : false;
 
     if (!currentMarket || !currentMarketExists) {
-      this.props.history.push(`/market/${defaultMarket}`);
+      this.props.history.push(`/market/${DEFAULT_MARKET}`);
       return;
     }
   };
