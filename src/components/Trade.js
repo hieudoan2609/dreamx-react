@@ -77,14 +77,14 @@ class Trade extends Component {
 
   calculateFeeAndTotal = (amountWei, priceWei) => {
     const { currentTab } = this.state;
-    let { makerFee } = this.props;
+    let { takerFee } = this.props;
     const oneEther = Web3Utils.toBN(1000000000000000000);
 
     let total, fee, totalMinusFee, amountMinusFee;
     if (amountWei && amountWei !== "0" && priceWei && priceWei !== "0") {
-      [ amountWei, priceWei, makerFee ] = [ Web3Utils.toBN(amountWei), Web3Utils.toBN(priceWei), Web3Utils.toBN(makerFee) ];
+      [ amountWei, priceWei, takerFee ] = [ Web3Utils.toBN(amountWei), Web3Utils.toBN(priceWei), Web3Utils.toBN(takerFee) ];
       total = priceWei.mul(amountWei).div(oneEther);
-      fee = currentTab === "buy" ? amountWei.mul(makerFee).div(oneEther) : total.mul(makerFee).div(oneEther);
+      fee = currentTab === "buy" ? amountWei.mul(takerFee).div(oneEther) : total.mul(takerFee).div(oneEther);
       totalMinusFee = total.sub(fee);
       amountMinusFee = amountWei.sub(fee);
     } else {
@@ -115,7 +115,7 @@ class Trade extends Component {
   };
 
   calculateFeePercent = () => {
-    const fee = Web3Utils.toBN(this.props.makerFee)
+    const fee = Web3Utils.toBN(this.props.takerFee)
     const oneHundred = Web3Utils.toBN(100)
     const one = Web3Utils.toBN(1)
     const feePercent = Web3Utils.fromWei(fee.mul(oneHundred).div(one))
@@ -380,7 +380,7 @@ Trade.propTypes = {
   loggedIn: PropTypes.bool.isRequired,
   base: PropTypes.object, // { symbol, balance, address }
   quote: PropTypes.object, // { symbol, balance, address }
-  makerFee: PropTypes.string.isRequired,
+  takerFee: PropTypes.string.isRequired,
   makerMinimum: PropTypes.string.isRequired,
   takerMinimum: PropTypes.string.isRequired,
   registerTradeComponent: PropTypes.func.isRequired,

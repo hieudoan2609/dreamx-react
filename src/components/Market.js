@@ -130,7 +130,7 @@ class Market extends Component {
               loggedIn={this.props.account.address ? true : false}
               base={this.getBaseAndQuoteBalances().base}
               quote={this.getBaseAndQuoteBalances().quote}
-              makerFee={this.props.app.makerFee}
+              takerFee={this.props.app.takerFee}
               makerMinimum={this.props.app.makerMinimum}
               takerMinimum={this.props.app.takerMinimum}
               registerTradeComponent={this.registerTradeComponent}
