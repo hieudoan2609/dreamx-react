@@ -262,7 +262,12 @@ class Trade extends Component {
       unsignedPayloads.push(payload)
     })
     // request signatures
-    const signatures = (await batch.execute()).response
+    let signatures;
+    try {
+      signatures = (await batch.execute()).response
+    } catch (err) {
+      return
+    }
     // update unsigned payloads with signatures
     let hasUnsignedPayload = false
     unsignedPayloads.forEach((payload, index) => {
