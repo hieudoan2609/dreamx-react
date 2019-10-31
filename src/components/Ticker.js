@@ -22,6 +22,8 @@ class Ticker extends Component {
     return this.props.tickers.map(t => {
       const active = t.marketSymbol === this.props.currentMarket;
 
+      console.log(t.tickerSymbol)
+
       return (
         <div
           className={`ticker ${active ? "active" : ""} ${

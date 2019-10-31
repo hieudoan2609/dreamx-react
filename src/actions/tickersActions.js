@@ -23,7 +23,7 @@ export const tickersLoadAsync = () => {
         t.tickerName = quoteToken.name;
         return t;
       }),
-      getSorting("desc", "baseVolume")
+      getSorting("ask", "marketSymbol")
     );
 
     dispatch(initializeCableSubscriptions());
