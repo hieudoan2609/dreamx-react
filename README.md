@@ -1,7 +1,7 @@
 # Deployment
 
-* deploying to github pages: https://facebook.github.io/create-react-app/docs/deployment
-* adding domain: https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare/
+* `yarn deploy`
+* purge CloudFlare's cache
 
 # Running the test suite
 

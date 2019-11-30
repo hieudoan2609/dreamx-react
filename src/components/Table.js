@@ -8,10 +8,16 @@ import Paginator from "./Paginator";
 import { formatAttrNameToUserFriendly } from '../helpers'
 
 function desc(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
+  let [valA, valB] = [a[orderBy], b[orderBy]]
+
+  if (!isNaN(valA) && !isNaN(valB)) {
+    [valA, valB] = [parseFloat(valA), parseFloat(valB)]
+  }
+
+  if (valB < valA) {
     return -1;
   }
-  if (b[orderBy] > a[orderBy]) {
+  if (valB > valA) {
     return 1;
   }
   return 0;
