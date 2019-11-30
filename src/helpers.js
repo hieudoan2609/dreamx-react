@@ -514,13 +514,13 @@ export const processTrade = (getState, trade) => {
   )[0];
   trade.marketSymbol = market.symbol;
   trade.marketSymbolFormatted = `${market.quoteToken.symbol}/${market.baseToken.symbol}`;
-  trade.type = trade.giveTokenAddress === market.baseToken.address ? "buy" : "sell";
+  trade.type = trade.giveTokenAddress === market.baseToken.address ? "sell" : "buy";
   trade.price =
-    trade.type === "sell"
+    trade.type === "buy"
       ? parseFloat(trade.takeAmount) / parseFloat(trade.giveAmount)
       : parseFloat(trade.giveAmount) / parseFloat(trade.takeAmount);
   trade.amount =
-    trade.type === "sell"
+    trade.type === "buy"
       ? Web3Utils.fromWei(trade.giveAmount)
       : Web3Utils.fromWei(trade.takeAmount);
   trade.fee =
@@ -528,7 +528,7 @@ export const processTrade = (getState, trade) => {
       ? Web3Utils.fromWei(trade.makerFee)
       : Web3Utils.fromWei(trade.takerFee);
   trade.total =
-    trade.type === "sell"
+    trade.type === "buy"
       ? Web3Utils.fromWei(trade.takeAmount)
       : Web3Utils.fromWei(trade.giveAmount);
   return trade;
