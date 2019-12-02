@@ -3,11 +3,12 @@ import React, { Component } from "react";
 import * as Web3Utils from "web3-utils";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import engine from 'dreamx-match-engine'
 
 import "./Trade.scss";
 import TabMenu from "./TabMenu";
 import Button from "./Button";
-import { truncateNumberInput, truncateNumberOutput, findMatchedOrders } from "../helpers";
+import { truncateNumberInput, truncateNumberOutput } from "../helpers";
 import singletons from "../singletons";
 import config from "../config";
 import Loading from './Loading'
@@ -223,7 +224,7 @@ class Trade extends Component {
     }
 
     const order = this.generateOrderFromInput()
-    const matchedResults = findMatchedOrders({ order, orderBook: this.props.orderBook, makerMinimum, takerMinimum })
+    const matchedResults = engine.match({ order, orderBook: this.props.orderBook, makerMinimum, takerMinimum })
     const payloads = await this.generatePayloadsAsync(matchedResults)
 
     if (!payloads) {
