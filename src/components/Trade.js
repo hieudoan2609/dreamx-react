@@ -25,7 +25,8 @@ const INITIAL_STATE = {
   pending: false,
   feedback: {}, // { type, message }
   totalMinusFee: "0",
-  amountMinusFee: "0"
+  amountMinusFee: "0",
+  TabMenu: undefined
 };
 
 class Trade extends Component {
@@ -39,9 +40,16 @@ class Trade extends Component {
     this.props.registerTradeComponent(undefined)
   }
 
+  registerTabMenuComponent = (TabMenu) => {
+    this.setState({ TabMenu })
+  }
+
   handleTabChange = tab => {
     const { price, priceWei, amount, amountWei, fee, total, feedback, totalMinusFee, amountMinusFee } = INITIAL_STATE
-    this.setState({ currentTab: tab, price, priceWei, amount, amountWei, fee, total, feedback, totalMinusFee, amountMinusFee });
+    const currentTab = this.state.currentTab
+    if (tab !== currentTab) {
+      this.setState({ currentTab: tab, price, priceWei, amount, amountWei, fee, total, feedback, totalMinusFee, amountMinusFee });
+    }
   };
 
   renderNotLoggedInOverlay = () => {
@@ -114,6 +122,15 @@ class Trade extends Component {
     const { total, fee, totalMinusFee, amountMinusFee } = this.calculateFeeAndTotal( amountWei, priceWei );
     this.setState({ price, priceWei, total, fee, totalMinusFee, amountMinusFee });
   };
+
+  setTabAndPrice = (tab, price) => {
+    const { amountWei } = this.state;
+    price = truncateNumberInput(price)
+    const priceWei = price ? Web3Utils.toWei(price) : "0"
+    const { total, fee, totalMinusFee, amountMinusFee } = this.calculateFeeAndTotal( amountWei, priceWei );
+    this.state.TabMenu.updateHighlighter(tab)
+    this.setState({ currentTab: tab, price, priceWei, total, fee, totalMinusFee, amountMinusFee });
+  }
 
   calculateFeePercent = () => {
     const fee = Web3Utils.toBN(this.props.takerFee)
@@ -348,13 +365,16 @@ class Trade extends Component {
         />
         
         {this.renderNotLoggedInOverlay()}
+
         <TabMenu
           items={this.state.tabs}
           currentItem={this.state.currentTab}
           theme={this.props.theme}
           onChange={this.handleTabChange}
           disabled={this.state.pending}
+          registerComponent={this.registerTabMenuComponent}
         />
+
         <div className="body">
           {this.renderBalance()}
 

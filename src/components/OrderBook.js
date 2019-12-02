@@ -28,7 +28,9 @@ class OrderBook extends Component {
     const currentScrolled = window.pageYOffset;
     const tradeTop = this.props.tradeRef.current.getBoundingClientRect().top + currentScrolled - offset;
     if (this.props.Trade) {
-      this.props.Trade.onPriceChange(row.price)
+      const tab = this.props.type === 'buy' ? 'sell' : 'buy'
+      const price = row.price
+      this.props.Trade.setTabAndPrice(tab, price)
       window.scrollTo(0, tradeTop)
     }
   }

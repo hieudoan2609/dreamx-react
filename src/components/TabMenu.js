@@ -9,14 +9,27 @@ class TabMenu extends Component {
     highlighterOffsetLeft: 0
   };
 
+  componentDidMount = () => {
+    this.props.registerComponent(this)
+  }
+
+  componentWillUnmount = () => {
+    this.props.registerComponent(undefined)
+  }
+
   handleOnClick = e => {
     if (this.props.disabled) {
       return
     }
 
-    this.setState({ highlighterOffsetLeft: e.target.offsetLeft });
+    this.updateHighlighter(e.target.id);
     this.props.onChange(e.target.id);
   };
+
+  updateHighlighter = (activeTabId) => {
+    const activeTab = document.getElementById(activeTabId);
+    this.setState({ highlighterOffsetLeft: activeTab.offsetLeft });
+  }
 
   render() {
     const highlighterWidth = `${100 / this.props.items.length}%`;
@@ -61,7 +74,8 @@ TabMenu.propTypes = {
   items: PropTypes.array.isRequired, // [ { label, pathname }, ... ]
   currentItem: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  registerComponent: PropTypes.func.isRequired
 };
 
 export default TabMenu;
