@@ -10,11 +10,15 @@ class TabMenu extends Component {
   };
 
   componentDidMount = () => {
-    this.props.registerComponent(this)
+    if (this.props.registerComponent) {
+      this.props.registerComponent(this)
+    }
   }
 
   componentWillUnmount = () => {
-    this.props.registerComponent(undefined)
+    if (this.props.registerComponent) {
+      this.props.registerComponent(undefined)
+    }
   }
 
   handleOnClick = e => {
@@ -75,7 +79,7 @@ TabMenu.propTypes = {
   currentItem: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
-  registerComponent: PropTypes.func.isRequired
+  registerComponent: PropTypes.func
 };
 
 export default TabMenu;
