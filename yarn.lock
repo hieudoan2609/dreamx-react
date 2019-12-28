@@ -3361,9 +3361,9 @@ drbg.js@^1.0.1:
     create-hash "^1.1.2"
     create-hmac "^1.1.4"
 
-dreamx-match-engine@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/dreamx-match-engine/-/dreamx-match-engine-1.0.0.tgz#823af688bf0724cc4aa4cd5d4ea0a90d38e26975"
+dreamx-match-engine@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/dreamx-match-engine/-/dreamx-match-engine-1.0.1.tgz#b95d168ee37260c64f491d79c45d9b3122ab45ad"
   dependencies:
     lodash "^4.17.15"
     web3-utils "1.0.0-beta.55"
