@@ -76,9 +76,9 @@ class Account extends Component {
         name: row.name,
         symbol: row.symbol
       };
-      row.availableBalance = truncateNumberOutput(web3.utils.fromWei(row.availableBalance), 8, 10);
-      row.inOrders = truncateNumberOutput(web3.utils.fromWei(row.inOrders), 8, 10);
-      row.totalBalance = truncateNumberOutput(web3.utils.fromWei(row.totalBalance), 8, 10);
+      row.availableBalance = truncateNumberOutput(web3.utils.fromWei(row.availableBalance.toString()), 8, 10);
+      row.inOrders = truncateNumberOutput(web3.utils.fromWei(row.inOrders.toString()), 8, 10);
+      row.totalBalance = truncateNumberOutput(web3.utils.fromWei(row.totalBalance.toString()), 8, 10);
       row.actions = (
         <div className="actions">
           <div
@@ -115,7 +115,7 @@ class Account extends Component {
       )[0];
       const status = transfer.blockNumber ? "Completed" : "Pending";
       const coin = token.symbol;
-      const amount = truncateNumberOutput(Web3Utils.fromWei(transfer.amount), 8, 10);
+      const amount = truncateNumberOutput(Web3Utils.fromWei(transfer.amount.toString()), 8, 10);
       const date = transfer.createdAt;
 
       let transactionHash;
@@ -197,10 +197,10 @@ class Account extends Component {
           {capitalize(accountOrder.type)}
         </div>
       );
-      const price = truncateNumberOutput(Web3Utils.fromWei(accountOrder.price), 8, 10)
-      const amount = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amount), 8, 10)
-      const filled = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amountFilled), 8, 10)
-      const total = `${truncateNumberOutput(Web3Utils.fromWei(accountOrder.total), 8, 10)} ETH`;
+      const price = truncateNumberOutput(Web3Utils.fromWei(accountOrder.price.fromWei.toString()), 8, 10)
+      const amount = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amount.fromWei.toString()), 8, 10)
+      const filled = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amountFilled.fromWei.toString()), 8, 10)
+      const total = `${truncateNumberOutput(Web3Utils.fromWei(accountOrder.total.fromWei.toString()), 8, 10)} ETH`;
       const status = accountOrder.status === 'closed' ? "Closed" : "Open";
       const market = accountOrder.marketSymbolFormatted;
       const date = accountOrder.createdAt;
@@ -339,11 +339,11 @@ class Account extends Component {
     const receivingAmount = withdrawAmount.sub(feeAmount);
 
     const feeAmountFormatted = truncateNumberOutput(
-      web3.utils.fromWei(feeAmount)
+      web3.utils.fromWei(feeAmount.toString())
     );
     const feePercentageFormatted = truncateNumberOutput(feePercentage);
     const receivingAmountFormatted = truncateNumberOutput(
-      web3.utils.fromWei(receivingAmount)
+      web3.utils.fromWei(receivingAmount.toString())
     );
 
     return (

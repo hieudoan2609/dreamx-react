@@ -193,7 +193,7 @@ const withdrawEntireBalanceAsync = (dispatch, getState) => {
   const token = tokens.all.filter(t => t.symbol === tokenSymbol)[0];
 
   const amountWei = token.availableBalance;
-  const amount = web3.utils.fromWei(amountWei);
+  const amount = web3.utils.fromWei(amountWei.toString());
 
   dispatch({
     type: TRANSFER_AMOUNT_INPUT,
@@ -211,7 +211,7 @@ const depositEntireBalanceAsync = async (dispatch, getState) => {
   const tokenSymbol = transfer.symbol;
 
   const amountWei = await getOnchainBalanceAsync(accountAddress, tokenSymbol);
-  const amount = web3.utils.fromWei(amountWei);
+  const amount = web3.utils.fromWei(amountWei.toString());
 
   dispatch({
     type: TRANSFER_AMOUNT_INPUT,
@@ -246,7 +246,7 @@ const withdrawAsync = async (dispatch, getState) => {
   const amountWei = transfer.amountWei;
   const contractAddress = app.contractAddress;
   const minimumAmount = token.withdrawMinimum;
-  if (parseInt(availableBalance) < parseInt(amountWei)) {
+  if (parseInt(availableBalance) < parseInt(amountWei.toString())) {
     dispatch({
       type: TRANSFER_ERROR,
       payload: { error: "Insufficient balance." }
@@ -258,7 +258,7 @@ const withdrawAsync = async (dispatch, getState) => {
       type: TRANSFER_ERROR,
       payload: {
         error: `Amount is too small, minimal amount is ${web3.utils.fromWei(
-          minimumAmount
+          minimumAmount.toString()
         )}.`
       }
     });

@@ -15,7 +15,7 @@ class OrderBook extends Component {
     }
 
     const decimalPoints = 2
-    const total = truncateNumberOutput(Web3Utils.fromWei(this.props.total), decimalPoints)
+    const total = truncateNumberOutput(Web3Utils.fromWei(this.props.total.toString()), decimalPoints)
     return (
       <div className="right">
         Total: {total} {this.props.quote.symbol}
