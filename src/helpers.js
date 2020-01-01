@@ -266,15 +266,15 @@ export const processTrade = (getState, trade) => {
       : parseFloat(trade.giveAmount) / parseFloat(trade.takeAmount);
   trade.amount =
     trade.type === "buy"
-      ? Web3Utils.fromWei(trade.giveAmount)
-      : Web3Utils.fromWei(trade.takeAmount);
+      ? Web3Utils.fromWei(trade.giveAmount.toString())
+      : Web3Utils.fromWei(trade.takeAmount.toString());
   trade.fee =
     trade.makerAddress === account.address
-      ? Web3Utils.fromWei(trade.makerFee)
-      : Web3Utils.fromWei(trade.takerFee);
+      ? Web3Utils.fromWei(trade.makerFee.toString())
+      : Web3Utils.fromWei(trade.takerFee.toString());
   trade.total =
     trade.type === "buy"
-      ? Web3Utils.fromWei(trade.takeAmount)
-      : Web3Utils.fromWei(trade.giveAmount);
+      ? Web3Utils.fromWei(trade.takeAmount.toString())
+      : Web3Utils.fromWei(trade.giveAmount.toString());
   return trade;
 }
