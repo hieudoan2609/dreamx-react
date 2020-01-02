@@ -58,7 +58,7 @@ const updateMarketTradesAsync = (newTrades) => {
       updatedTrades.push(processTrade(getState, newTrade))
     }
     for (let trade of marketTrades.all) {
-      const newTrade = updatedTrades.filter(t => t.transactionHash === trade.transactionHash)[0]
+      const newTrade = updatedTrades.filter(t => t.id === trade.id)[0]
       if (!newTrade) {
         updatedTrades.push(trade)
       }
