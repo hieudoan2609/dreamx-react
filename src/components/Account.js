@@ -197,10 +197,10 @@ class Account extends Component {
           {capitalize(accountOrder.type)}
         </div>
       );
-      const price = truncateNumberOutput(Web3Utils.fromWei(accountOrder.price.fromWei.toString()), 8, 10)
-      const amount = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amount.fromWei.toString()), 8, 10)
-      const filled = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amountFilled.fromWei.toString()), 8, 10)
-      const total = `${truncateNumberOutput(Web3Utils.fromWei(accountOrder.total.fromWei.toString()), 8, 10)} ETH`;
+      const price = truncateNumberOutput(Web3Utils.fromWei(accountOrder.price.toString()), 8, 10)
+      const amount = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amount.toString()), 8, 10)
+      const filled = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amountFilled.toString()), 8, 10)
+      const total = `${truncateNumberOutput(Web3Utils.fromWei(accountOrder.total.toString()), 8, 10)} ETH`;
       const status = accountOrder.status === 'closed' ? "Closed" : "Open";
       const market = accountOrder.marketSymbolFormatted;
       const date = accountOrder.createdAt;

@@ -16,7 +16,7 @@ export const accountOrdersLoadAsync = accountAddress => {
   return async (dispatch, getState) => {
     const { API_HTTP_ROOT } = config;
 
-    const ordersResponse = await axios.get(`${API_HTTP_ROOT}/orders?account_address=${accountAddress}&per_page=1000`)
+    const ordersResponse = await axios.get(`${API_HTTP_ROOT}/orders?account_address=${accountAddress}`)
     const accountOrders = ordersResponse.data.records.map(accountOrder => processOrder(getState, accountOrder));
 
     dispatch(initializeCableSubscriptions(accountAddress))

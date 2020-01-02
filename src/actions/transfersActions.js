@@ -26,12 +26,18 @@ export const transfersLoadAccountAsync = accountAddress => {
       const transfersResponse = await axios.get(
         `${API_HTTP_ROOT}/transfers/${accountAddress}`
       );
-      transfers = transfersResponse.data.records.map(t =>
-        convertKeysToCamelCase(t)
-      );
+      const deposits = transfersResponse.data.deposits.records
+      const withdraws = transfersResponse.data.withdraws.records
+      transfers = deposits.concat(withdraws).map(t => convertKeysToCamelCase(t)).sort((a, b) => {
+        const dateA = new Date(a.createdAt)
+        const dateB = new Date(b.createdAt)
+        return dateB - dateA
+      })
     } catch {
       transfers = [];
     }
+
+    console.log(transfers)
 
     dispatch(initializeCableSubscriptions(accountAddress));
 
