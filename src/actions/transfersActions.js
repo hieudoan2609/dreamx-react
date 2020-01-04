@@ -37,8 +37,6 @@ export const transfersLoadAccountAsync = accountAddress => {
       transfers = [];
     }
 
-    console.log(transfers)
-
     dispatch(initializeCableSubscriptions(accountAddress));
 
     dispatch({
