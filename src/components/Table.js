@@ -14,6 +14,11 @@ function desc(a, b, orderBy) {
     [valA, valB] = [parseFloat(valA), parseFloat(valB)]
   }
 
+  // sort react elements by their text value
+  if (React.isValidElement(valA) && React.isValidElement(valB)) {
+    [valA, valB] = [valA.props.children, valB.props.children]
+  }
+
   if (valB < valA) {
     return -1;
   }
