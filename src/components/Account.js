@@ -113,7 +113,7 @@ class Account extends Component {
       const token = tokens.all.filter(
         t => t.address === transfer.tokenAddress
       )[0];
-      const status = transfer.blockNumber ? "Completed" : "Pending";
+      const status = transfer.status === 'confirmed' ? 'Completed': 'Pending';
       const coin = token.symbol;
       const amount = truncateNumberOutput(Web3Utils.fromWei(transfer.amount.toString()), 8, 10);
       const date = transfer.createdAt;
