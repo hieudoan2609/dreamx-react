@@ -16,7 +16,7 @@ class Ticker extends Component {
 
   renderTickers = () => {
     if (this.props.tickers.length === 0) {
-      return <div className="not-found">No tickers could be found.</div>;
+      return <div className="not-found">No markets could be found</div>;
     }
 
     return this.props.tickers.map(t => {

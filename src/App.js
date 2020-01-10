@@ -18,11 +18,6 @@ import {
   alertModalHide
 } from "./actions";
 
-const logo = {
-  dark: '/dream-dark.png',
-  light: '/dream-light.png'
-}
-
 class App extends Component {
   state = {
     navItems: [
@@ -59,7 +54,6 @@ class App extends Component {
       <BrowserRouter>
         <div className={`App ${this.props.app.theme}`}>
           <Menu
-            logo={logo}
             navItems={this.state.navItems}
             toggleTheme={this.props.toggleTheme}
             theme={this.props.app.theme}
