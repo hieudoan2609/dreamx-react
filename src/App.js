@@ -97,9 +97,15 @@ class App extends Component {
           rootPath='/'
         />
 
-        <Offline 
-          theme={this.props.app.theme}
-        />
+        <div className="container">
+          <div className="row">
+            <div className="col-12">
+              <Offline 
+                theme={this.props.app.theme}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     )
   }

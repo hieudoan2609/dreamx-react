@@ -36,7 +36,7 @@ export const initializeAppAsync = () => {
     initializeAppSingletons();
     try {
       const contract = await axios.get(
-        `${config.API_HTTP_ROOT}/return_contract_address`
+        `${config.API_HTTP_ROOT}lol/return_contract_address`
       );
       const fees = await axios.get(`${config.API_HTTP_ROOT}/fees`);
       await dispatch(tokensLoadAsync());
