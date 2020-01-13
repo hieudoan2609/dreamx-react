@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 
 import Market from "./components/Market";
+import Offline from "./components/Offline";
 import Account from "./components/Account";
 import Menu from "./components/Menu";
 import AlertModal from "./components/AlertModal";
@@ -34,9 +35,11 @@ class App extends Component {
 
   componentDidMount = async () => {
     this.props.loadTheme();
-    await this.props.initializeAppAsync();
-    await this.props.accountLoginAsync();
-    await this.props.marketLoadAsync()
+    const initialized = await this.props.initializeAppAsync();
+    if (initialized) {
+      await this.props.accountLoginAsync();
+      await this.props.marketLoadAsync()
+    }
     this.props.appLoaded()
   };
 
@@ -49,9 +52,9 @@ class App extends Component {
     );
   }
 
-  render() {
+  renderMarket = () => {
     return (
-      <BrowserRouter>
+      <React.Fragment>
         <div className={`App ${this.props.app.theme}`}>
           <Menu
             navItems={this.state.navItems}
@@ -80,6 +83,32 @@ class App extends Component {
             </div>
           </div>
         </div>
+      </React.Fragment>
+    )
+  }
+
+  renderOfflinePage = () => {
+    return (
+      <div className={`App ${this.props.app.theme}`}>
+        <Menu
+          navItems={[]}
+          toggleTheme={this.props.toggleTheme}
+          theme={this.props.app.theme}
+          rootPath='/'
+        />
+
+        <Offline 
+          theme={this.props.app.theme}
+        />
+      </div>
+    )
+  }
+
+  render() {
+    return (
+      <BrowserRouter>
+        {this.props.app.offline && this.renderOfflinePage()}
+        {!this.props.app.offline && this.renderMarket()}
       </BrowserRouter>
     );
   }

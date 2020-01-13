@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { APP_LOADED, APP_TOGGLE_THEME, APP_INITIALIZE } from "../actions/types";
+import { APP_LOADED, APP_TOGGLE_THEME, APP_INITIALIZE, APP_OFFLINE } from "../actions/types";
 import { tokensLoadAsync, marketsLoadAsync, tickersLoadAsync } from ".";
 import { getNetworkNameFromId } from "../helpers";
 import config from "../config";
@@ -34,25 +34,31 @@ export const loadTheme = () => {
 export const initializeAppAsync = () => {
   return async dispatch => {
     initializeAppSingletons();
-    const contract = await axios.get(
-      `${config.API_HTTP_ROOT}/return_contract_address`
-    );
-    const fees = await axios.get(`${config.API_HTTP_ROOT}/fees`);
-    await dispatch(tokensLoadAsync());
-    await dispatch(marketsLoadAsync());
-    await dispatch(tickersLoadAsync());
-    dispatch({
-      type: APP_INITIALIZE,
-      payload: {
-        contractAddress: contract.data.address,
-        networkId: contract.data.network_id,
-        networkName: getNetworkNameFromId(contract.data.network_id),
-        makerFee: fees.data.maker_fee,
-        makerMinimum: fees.data.maker_minimum,
-        takerFee: fees.data.taker_fee,
-        takerMinimum: fees.data.taker_minimum
-      }
-    });
+    try {
+      const contract = await axios.get(
+        `${config.API_HTTP_ROOT}/return_contract_address`
+      );
+      const fees = await axios.get(`${config.API_HTTP_ROOT}/fees`);
+      await dispatch(tokensLoadAsync());
+      await dispatch(marketsLoadAsync());
+      await dispatch(tickersLoadAsync());
+      dispatch({
+        type: APP_INITIALIZE,
+        payload: {
+          contractAddress: contract.data.address,
+          networkId: contract.data.network_id,
+          networkName: getNetworkNameFromId(contract.data.network_id),
+          makerFee: fees.data.maker_fee,
+          makerMinimum: fees.data.maker_minimum,
+          takerFee: fees.data.taker_fee,
+          takerMinimum: fees.data.taker_minimum
+        }
+      });
+      return true
+    } catch {
+      dispatch({ type: APP_OFFLINE })
+      return false
+    }
   };
 };
 

@@ -10,6 +10,7 @@ export const ACCOUNT_LOADED = "ACCOUNT_LOADED";
 
 export const APP_LOADING = "APP_LOADING";
 export const APP_LOADED = "APP_LOADED";
+export const APP_OFFLINE = "APP_OFFLINE";
 export const APP_TOGGLE_THEME = "APP_TOGGLE_THEME";
 export const APP_INITIALIZE = "APP_INITIALIZE";
 

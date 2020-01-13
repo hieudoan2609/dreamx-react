@@ -2,7 +2,8 @@ import {
   APP_TOGGLE_THEME,
   APP_INITIALIZE,
   APP_LOADING,
-  APP_LOADED
+  APP_LOADED,
+  APP_OFFLINE
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -34,6 +35,8 @@ export default (state = INITIAL_STATE, action) => {
         takerFee: action.payload.takerFee,
         takerMinimum: action.payload.takerMinimum
       };
+    case APP_OFFLINE:
+      return { ...state, offline: true };
     case APP_TOGGLE_THEME:
       return { ...state, theme: action.payload.theme };
     default:
