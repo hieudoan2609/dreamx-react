@@ -10,7 +10,13 @@ export const marketsLoadAsync = () => {
 
     let markets;
     const marketsResponse = await axios.get(`${API_HTTP_ROOT}/markets`);
-    markets = marketsResponse.data.records.map(t => convertKeysToCamelCase(t));
+    markets = marketsResponse.data.records.map(market => {
+      market = convertKeysToCamelCase(market)
+      const [baseTokenSymbol, quoteTokenSymbol] = market.symbol.split("_")
+      market.baseTokenSymbol = baseTokenSymbol
+      market.quoteTokenSymbol = quoteTokenSymbol
+      return market
+    });
 
     dispatch({
       type: MARKETS_LOAD,

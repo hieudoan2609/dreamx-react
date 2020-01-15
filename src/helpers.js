@@ -196,15 +196,15 @@ export const processOrder = (getState, order) => {
   order = convertKeysToCamelCase(order)
   const market = markets.all.filter(
     m =>
-      (m.baseToken.address === order.giveTokenAddress &&
-        m.quoteToken.address === order.takeTokenAddress) ||
-      (m.quoteToken.address === order.giveTokenAddress &&
-        m.baseToken.address === order.takeTokenAddress)
+      (m.baseTokenAddress === order.giveTokenAddress &&
+        m.quoteTokenAddress === order.takeTokenAddress) ||
+      (m.quoteTokenAddress === order.giveTokenAddress &&
+        m.baseTokenAddress === order.takeTokenAddress)
   )[0];
   order.marketSymbol = market.symbol;
-  order.marketSymbolFormatted = `${market.quoteToken.symbol}/${market.baseToken.symbol}`;
+  order.marketSymbolFormatted = `${market.quoteTokenSymbol}/${market.baseTokenSymbol}`;
   order.type =
-    order.giveTokenAddress === market.baseToken.address
+    order.giveTokenAddress === market.baseTokenAddress
       ? "buy"
       : "sell";
   const { price, amount, filled, total } = getOrderVolume(order)
@@ -252,14 +252,14 @@ export const processTrade = (getState, trade) => {
   trade = convertKeysToCamelCase(trade)
   const market = markets.all.filter(
     m =>
-      (m.baseToken.address === trade.giveTokenAddress &&
-        m.quoteToken.address === trade.takeTokenAddress) ||
-      (m.quoteToken.address === trade.giveTokenAddress &&
-        m.baseToken.address === trade.takeTokenAddress)
+      (m.baseTokenAddress === trade.giveTokenAddress &&
+        m.quoteTokenAddress === trade.takeTokenAddress) ||
+      (m.quoteTokenAddress === trade.giveTokenAddress &&
+        m.baseTokenAddress === trade.takeTokenAddress)
   )[0];
   trade.marketSymbol = market.symbol;
-  trade.marketSymbolFormatted = `${market.quoteToken.symbol}/${market.baseToken.symbol}`;
-  trade.type = trade.giveTokenAddress === market.baseToken.address ? "sell" : "buy";
+  trade.marketSymbolFormatted = `${market.quoteTokenSymbol}/${market.baseTokenSymbol}`;
+  trade.type = trade.giveTokenAddress === market.baseTokenAddress ? "sell" : "buy";
   trade.price =
     trade.type === "buy"
       ? parseFloat(trade.takeAmount) / parseFloat(trade.giveAmount)
