@@ -11,11 +11,7 @@ import {
 const INITIAL_STATE = {
   address: "",
   metamask: "running",
-  loading: true,
-  balances: [],
-  transfers: [],
-  trades: [],
-  orders: []
+  loading: true
 };
 
 export default (state = INITIAL_STATE, action) => {
