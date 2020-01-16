@@ -64,25 +64,21 @@ class Trade extends Component {
 
   renderBalance = () => {
     if (!this.props.base || !this.props.quote) {
-      return (
-        <div className="balance">
-          <div className="header">BALANCE</div>
-          <div className="value">Not available.</div>
-        </div>
-      );
+      return
     }
 
-    let balance, symbol;
+    let balance, symbol, precision;
     if (this.state.currentTab === "buy") {
-      [balance, symbol] = [this.props.base.balance, this.props.base.symbol];
+      [balance, symbol, precision] = [this.props.base.balance, this.props.base.symbol, this.props.base.amountPrecision];
     } else {
-      [balance, symbol] = [this.props.quote.balance, this.props.quote.symbol];
+      [balance, symbol, precision] = [this.props.quote.balance, this.props.quote.symbol, this.props.quote.amountPrecision];
     }
+
     return (
       <div className="balance">
         <div className="header">BALANCE</div>
         <div className="value">
-          {truncateNumberOutput(Web3Utils.fromWei(balance.toString()), 8, 10)} {symbol}
+          {truncateNumberOutput(Web3Utils.fromWei(balance.toString()), precision)} {symbol}
         </div>
       </div>
     );
@@ -150,16 +146,19 @@ class Trade extends Component {
       return;
     }
 
-    const feeSymbol = this.state.currentTab === 'buy' ? this.props.quote.symbol : this.props.base.symbol
+    const baseToken = this.props.base
+    const quoteToken = this.props.quote
+    const sell = this.state.currentTab === 'sell'
+    const feeToken = sell ? baseToken : quoteToken
 
     return (
       <div className="fee-and-total">
         <small className="fee">
           Fee ({this.calculateTakerFeePercentage()}%):{" "}
-          <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.fee))} {feeSymbol}</b>
+          <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.fee), feeToken.amountPrecision)} {feeToken.symbol}</b>
         </small>
         <small className="total">
-          Total: <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.total))} {this.props.base.symbol}</b>
+          Total: <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.total), baseToken.amountPrecision)} {baseToken.symbol}</b>
         </small>
       </div>
     )

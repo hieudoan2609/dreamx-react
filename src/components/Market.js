@@ -92,8 +92,8 @@ class Market extends Component {
       return { base: undefined, quote: undefined };
     }
 
-    const base = { symbol: baseToken.symbol, balance: baseToken.availableBalance, address: baseToken.address, amountPrecision: baseToken.amountPrecision };
-    const quote = { symbol: quoteToken.symbol, balance: quoteToken.availableBalance, address: quoteToken.address, amountPrecision: quoteToken.amountPrecision };
+    const base = { symbol: baseToken.symbol, balance: baseToken.availableBalance, address: baseToken.address, amountPrecision: baseToken.amountPrecision, decimals: baseToken.decimals };
+    const quote = { symbol: quoteToken.symbol, balance: quoteToken.availableBalance, address: quoteToken.address, amountPrecision: quoteToken.amountPrecision, decimals: quoteToken.decimals };
     return { base, quote };
   };
 

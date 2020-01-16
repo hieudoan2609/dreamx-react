@@ -35,6 +35,8 @@ export const accountLoginAsync = () => {
       return;
     }
 
+    window.ethereum.autoRefreshOnNetworkChange = false
+
     if (!window.ethereum.networkVersion) {
       dispatch({
         type: ACCOUNT_METAMASK_NOTREADY
