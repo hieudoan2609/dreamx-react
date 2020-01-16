@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import { connect } from "react-redux";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import "./Chart.scss";
@@ -8,15 +8,20 @@ import Loading from './Loading'
 import TradingView from './tradingview'
 
 class Chart extends Component {
+  getPricescale = () => {
+    return 10 ** this.props.market.pricePrecision
+  }
+
   renderChart = () => {
-    if (!this.props.apiHttpRoot || !this.props.cable || !this.props.currentMarket) {
+    if (!this.props.apiHttpRoot || !this.props.cable || !this.props.marketSymbol) {
       return
     }
 
     const exchangeName = "DreamX"
     const apiHttpRoot = this.props.apiHttpRoot
     const cable = this.props.cable
-    const symbol = `${exchangeName}:${this.props.currentMarket.replace('_', '/')}`
+    const symbol = `${exchangeName}:${this.props.marketSymbol.replace('_', '/')}`
+
     return (
       <TradingView
         apiHttpRoot={apiHttpRoot}
@@ -25,6 +30,7 @@ class Chart extends Component {
         theme={this.props.theme}
         onLoading={this.props.onTradingviewLoading}
         onLoaded={this.props.onTradingviewLoaded}
+        getPricescale={this.getPricescale}
       />
     )
   }
@@ -42,10 +48,11 @@ class Chart extends Component {
         <div className="ticker">
           <Ticker
             theme={this.props.theme}
-            tickers={this.props.tickers}
-            currentMarket={this.props.currentMarket}
+            tickers={this.props.tickers.filtered}
+            marketSymbol={this.props.marketSymbol}
             searchValue={this.props.searchValue}
             handleSearchInput={this.props.handleSearchInput}
+            market={this.props.market}
           />
         </div>
         <div className="chart">
@@ -56,9 +63,9 @@ class Chart extends Component {
   }
 }
 
-// const mapStateToProps = ({ chart }) => {
-//  return { chart };
-// };
+const mapStateToProps = state => {
+ return state;
+};
 
 // const mapActionsToProps = {
 //  getChartData
@@ -66,8 +73,7 @@ class Chart extends Component {
 
 Chart.propTypes = {
   theme: PropTypes.string.isRequired,
-  tickers: PropTypes.array.isRequired,
-  currentMarket: PropTypes.string.isRequired,
+  marketSymbol: PropTypes.string.isRequired,
   searchValue: PropTypes.string.isRequired,
   handleSearchInput: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
@@ -77,4 +83,4 @@ Chart.propTypes = {
   onTradingviewLoaded: PropTypes.func.isRequired
 };
 
-export default Chart;
+export default connect(mapStateToProps)(Chart);

@@ -5,12 +5,26 @@ import PropTypes from "prop-types";
 import { widget } from './charting_library/charting_library.min';
 import Datafeed from './datafeed'
 
-const config = {
-    supported_resolutions: ["5", "15", "60", "D"],
-    resolution_human_readable_labels: { "5": "5m", "15": "15m", "60": "1H", "D": "1D" }
-};
+// const config = {
+//     supported_resolutions: ["5", "15", "60", "D"],
+//     resolution_human_readable_labels: { "5": "5m", "15": "15m", "60": "1H", "D": "1D" },
+//     getPricescale
+// };
 
 class TradingView extends Component {
+  state = {
+    config: {
+      supported_resolutions: ["5", "15", "60", "D"],
+      resolution_human_readable_labels: { "5": "5m", "15": "15m", "60": "1H", "D": "1D" },
+      getPricescale: this.props.getPricescale
+    }
+  }
+
+  constructor(props) {
+    super(props);
+    this.trade = React.createRef();
+  }
+
   static defaultProps = {
     interval: '60',
     containerId: 'tv_chart_container',
@@ -58,7 +72,7 @@ class TradingView extends Component {
     const widgetOptions = {
       debug: false,
       symbol: this.props.symbol,
-      datafeed: new Datafeed(this.props.apiHttpRoot, this.props.cable, config),
+      datafeed: new Datafeed(this.props.apiHttpRoot, this.props.cable, this.state.config),
       interval: this.props.interval,
       container_id: this.props.containerId,
       library_path: this.props.libraryPath,
@@ -107,9 +121,9 @@ class TradingView extends Component {
   }
 
   addResolutionButtons = (tvWidget) => {
-    config.supported_resolutions.forEach((resolution) => {
+    this.state.config.supported_resolutions.forEach((resolution) => {
       const button = tvWidget.createButton()
-      button.textContent = config.resolution_human_readable_labels[resolution];
+      button.textContent = this.state.config.resolution_human_readable_labels[resolution];
       button.addEventListener('click', () => {
         const symbol = tvWidget.symbolInterval().symbol
         const interval = resolution
@@ -142,7 +156,8 @@ TradingView.propTypes = {
   symbol: PropTypes.string.isRequired,
   onLoading: PropTypes.func.isRequired,
   onLoaded: PropTypes.func.isRequired,
-  theme: PropTypes.string.isRequired
+  theme: PropTypes.string.isRequired,
+  getPricescale: PropTypes.func.isRequired
 };
 
 export default TradingView;

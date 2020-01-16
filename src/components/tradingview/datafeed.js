@@ -24,7 +24,7 @@ class Datafeed {
       has_intraday: true,
       timezone: 'Etc/UTC',
       minmov: '1',
-      pricescale: 100000000,
+      pricescale: this.config.getPricescale(),
       intraday_multipliers: ['5', '15', '60', 'D'],
       supported_resolution:  this.config.supported_resolution,
       volume_precision: 2,

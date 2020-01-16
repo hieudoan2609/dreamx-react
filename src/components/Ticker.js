@@ -15,12 +15,16 @@ class Ticker extends Component {
   };
 
   renderTickers = () => {
+    if (this.props.market.loading) {
+      return
+    }
+
     if (this.props.tickers.length === 0) {
       return <div className="not-found">No markets could be found</div>;
     }
 
     return this.props.tickers.map(t => {
-      const active = t.marketSymbol === this.props.currentMarket;
+      const active = t.marketSymbol === this.props.marketSymbol;
 
       return (
         <div
@@ -34,7 +38,7 @@ class Ticker extends Component {
             onClick={() => this.changeMarket(t.marketSymbol)}
           >
             <div className="name">{t.tickerSymbol}</div>
-            <div className="price">{t.last ? truncateNumberOutput(t.last, 8, 10) : "N/A"}</div>
+            <div className="price">{t.last ? truncateNumberOutput(t.last, this.props.market.pricePrecision) : "N/A"}</div>
           </div>
         </div>
       );
@@ -69,9 +73,10 @@ class Ticker extends Component {
 Ticker.propTypes = {
   theme: PropTypes.string.isRequired,
   tickers: PropTypes.array.isRequired,
-  currentMarket: PropTypes.string.isRequired,
+  marketSymbol: PropTypes.string.isRequired,
   searchValue: PropTypes.string.isRequired,
-  handleSearchInput: PropTypes.func.isRequired
+  handleSearchInput: PropTypes.func.isRequired,
+  market: PropTypes.object.isRequired
 };
 
 export default withRouter(Ticker);

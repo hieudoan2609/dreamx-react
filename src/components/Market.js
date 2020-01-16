@@ -114,8 +114,7 @@ class Market extends Component {
             <Chart
               theme={this.props.app.theme}
               loading={isChartLoading}
-              tickers={this.props.tickers.filtered}
-              currentMarket={this.props.market.currentMarket}
+              marketSymbol={this.props.market.currentMarket}
               searchValue={this.props.tickers.searchValue}
               handleSearchInput={this.props.tickersHandleSearchInput}
               apiHttpRoot={API_HTTP_ROOT}
