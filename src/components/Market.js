@@ -132,6 +132,7 @@ class Market extends Component {
               base={this.getBaseAndQuoteBalances().base}
               quote={this.getBaseAndQuoteBalances().quote}
               takerFee={this.props.app.takerFee}
+              makerFee={this.props.app.makerFee}
               makerMinimum={this.props.app.makerMinimum}
               takerMinimum={this.props.app.takerMinimum}
               registerTradeComponent={this.registerTradeComponent}

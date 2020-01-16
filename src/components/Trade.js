@@ -139,7 +139,7 @@ class Trade extends Component {
     this.setState({ currentTab: tab, price, priceWei, total, fee, totalMinusFee, amountMinusFee });
   }
 
-  calculateFeePercent = () => {
+  calculateTakerFeePercentage = () => {
     const fee = Web3Utils.toBN(this.props.takerFee)
     const oneHundred = Web3Utils.toBN(100)
     const one = Web3Utils.toBN(1)
@@ -152,31 +152,17 @@ class Trade extends Component {
       return;
     }
 
-    if (this.state.currentTab === "buy") {
-      return (
-        <div className="fee-and-total">
-          <small className="fee">
-            Fee ({this.calculateFeePercent()}%):{" "}
-            <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.fee))} {this.props.quote.symbol}</b>
-          </small>
-          <small className="total">
-            Total: <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.total))} {this.props.base.symbol}</b>
-          </small>
-        </div>
-      )
-    } else {
-      return (
-        <div className="fee-and-total">
-          <small className="fee">
-            Fee ({this.calculateFeePercent()}%):{" "}
-            <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.fee))} {this.props.base.symbol}</b>
-          </small>
-          <small className="total">
-            Total: <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.totalMinusFee))} {this.props.base.symbol}</b>
-          </small>
-        </div>
-      )
-    }
+    return (
+      <div className="fee-and-total">
+        <small className="fee">
+          Fee ({this.calculateTakerFeePercentage()}%):{" "}
+          <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.fee))} {this.props.quote.symbol}</b>
+        </small>
+        <small className="total">
+          Total: <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.total))} {this.props.base.symbol}</b>
+        </small>
+      </div>
+    )
   }
 
   renderAmountAndPrice = () => {
@@ -414,6 +400,7 @@ Trade.propTypes = {
   base: PropTypes.object, // { symbol, balance, address }
   quote: PropTypes.object, // { symbol, balance, address }
   takerFee: PropTypes.string.isRequired,
+  makerFee: PropTypes.string.isRequired,
   makerMinimum: PropTypes.string.isRequired,
   takerMinimum: PropTypes.string.isRequired,
   registerTradeComponent: PropTypes.func.isRequired,
