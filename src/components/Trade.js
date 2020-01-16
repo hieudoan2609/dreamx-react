@@ -113,9 +113,7 @@ class Trade extends Component {
 
   onAmountChange = value => {
     const { priceWei } = this.state;
-    const { market, tokens } = this.props
-    const quoteToken = tokens.all.filter(token => token.symbol === market.quoteSymbol)[0]
-    const amount = truncateNumberInput(value, 10, quoteToken.amountPrecision);
+    const amount = truncateNumberInput(value, 10, this.props.quote.amountPrecision);
     const amountWei = amount ? Web3Utils.toWei(amount) : "0";
     const { total, fee, totalMinusFee, amountMinusFee } = this.calculateFeeAndTotal( amountWei, priceWei );
     this.setState({ amount, amountWei, total, fee, totalMinusFee, amountMinusFee });
@@ -152,11 +150,13 @@ class Trade extends Component {
       return;
     }
 
+    const feeSymbol = this.state.currentTab === 'buy' ? this.props.quote.symbol : this.props.base.symbol
+
     return (
       <div className="fee-and-total">
         <small className="fee">
           Fee ({this.calculateTakerFeePercentage()}%):{" "}
-          <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.fee))} {this.props.quote.symbol}</b>
+          <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.fee))} {feeSymbol}</b>
         </small>
         <small className="total">
           Total: <b>{truncateNumberOutput(Web3Utils.fromWei(this.state.total))} {this.props.base.symbol}</b>
