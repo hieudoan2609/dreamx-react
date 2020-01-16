@@ -113,8 +113,9 @@ class Trade extends Component {
 
   onAmountChange = value => {
     const { priceWei } = this.state;
-    const { market } = this.props
-    const amount = truncateNumberInput(value, 10, market.amountPrecision);
+    const { market, tokens } = this.props
+    const quoteToken = tokens.all.filter(token => token.symbol === market.quoteSymbol)[0]
+    const amount = truncateNumberInput(value, 10, quoteToken.amountPrecision);
     const amountWei = amount ? Web3Utils.toWei(amount) : "0";
     const { total, fee, totalMinusFee, amountMinusFee } = this.calculateFeeAndTotal( amountWei, priceWei );
     this.setState({ amount, amountWei, total, fee, totalMinusFee, amountMinusFee });

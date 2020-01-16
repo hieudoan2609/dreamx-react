@@ -7,6 +7,9 @@ import {
 } from "../actions/types";
 import config from "../config";
 import singletons, { setSingleton } from "../singletons";
+import {
+  convertKeysToCamelCase
+} from "../helpers"
 
 export const tokensClearSearch = () => {
   return dispatch => {
@@ -40,26 +43,17 @@ export const tokensHandleSearchInput = e => {
 export const tokensLoadAsync = () => {
   return async dispatch => {
     const { API_HTTP_ROOT } = config;
-    const tokens = await axios.get(`${API_HTTP_ROOT}/tokens`);
 
-    let tokensWithInitialBalances = [];
-    for (let token of tokens.data.records) {
+    let tokens = (await axios.get(`${API_HTTP_ROOT}/tokens`)).data.records;
+    tokens = tokens.map(token => {
+      token = convertKeysToCamelCase(token)
       token.totalBalance = token.availableBalance = token.inOrders = "0";
-      token.decimals = parseInt(token.decimals);
-      [token.withdrawMinimum, token.withdrawFee] = [
-        token.withdraw_minimum,
-        token.withdraw_fee
-      ];
-      delete token.withdraw_minimum;
-      delete token.withdraw_fee;
-      tokensWithInitialBalances.push(token);
-    }
+      return token
+    })
 
     dispatch({
       type: TOKENS_LOAD,
-      payload: {
-        data: tokensWithInitialBalances
-      }
+      payload: { data: tokens }
     });
   };
 };
