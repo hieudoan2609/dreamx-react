@@ -41,6 +41,7 @@ class Market extends Component {
     const marketChanged = currentMarket !== previousMarket && currentMarket !== existingMarket;
     const appLoaded = !this.props.app.loading
     if (marketChanged && appLoaded) {
+      this.state.Trade.resetState();
       this.props.marketLoadAsync();
       window.scrollTo(0, 0);
     }

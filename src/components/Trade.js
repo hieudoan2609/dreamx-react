@@ -32,6 +32,10 @@ const INITIAL_STATE = {
 class Trade extends Component {
   state = INITIAL_STATE;
 
+  resetState = () => {
+    this.setState(INITIAL_STATE)
+  }
+
   componentDidMount = () => {
     this.props.registerTradeComponent(this)
   }
@@ -109,7 +113,8 @@ class Trade extends Component {
 
   onAmountChange = value => {
     const { priceWei } = this.state;
-    const amount = truncateNumberInput(value);
+    const { market } = this.props
+    const amount = truncateNumberInput(value, 10, market.amountPrecision);
     const amountWei = amount ? Web3Utils.toWei(amount) : "0";
     const { total, fee, totalMinusFee, amountMinusFee } = this.calculateFeeAndTotal( amountWei, priceWei );
     this.setState({ amount, amountWei, total, fee, totalMinusFee, amountMinusFee });
@@ -117,7 +122,8 @@ class Trade extends Component {
 
   onPriceChange = value => {
     const { amountWei } = this.state;
-    const price = truncateNumberInput(value);
+    const { market } = this.props
+    const price = truncateNumberInput(value, 10, market.pricePrecision);
     const priceWei = price ? Web3Utils.toWei(price) : "0";
     const { total, fee, totalMinusFee, amountMinusFee } = this.calculateFeeAndTotal( amountWei, priceWei );
     this.setState({ price, priceWei, total, fee, totalMinusFee, amountMinusFee });

@@ -5,6 +5,8 @@ const INITIAL_STATE = {
   loading: true,
   baseSymbol: "",
   quoteSymbol: "",
+  pricePrecision: 0,
+  amountPrecision: 0
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -14,7 +16,15 @@ export default (state = INITIAL_STATE, action) => {
     case MARKET_LOADED:
       return { ...state, loading: false }
     case MARKET_LOAD:
-      return { ...state, currentMarket: action.payload.currentMarket, loading: false, baseSymbol: action.payload.baseSymbol, quoteSymbol: action.payload.quoteSymbol };
+      return { 
+        ...state, 
+        currentMarket: action.payload.currentMarket, 
+        loading: false, 
+        baseSymbol: action.payload.baseSymbol, 
+        quoteSymbol: action.payload.quoteSymbol,
+        pricePrecision: action.payload.pricePrecision,
+        amountPrecision: action.payload.amountPrecision
+      };
     default:
       return state;
   }
