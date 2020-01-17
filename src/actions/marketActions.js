@@ -19,7 +19,6 @@ export const marketLoadAsync = () => {
     const baseSymbol = marketSymbol.split("_")[0]
     const quoteSymbol = marketSymbol.split("_")[1]
     const pricePrecision = market.pricePrecision
-    const amountPrecision = market.amountPrecision
     await dispatch(orderBookLoadAsync(marketSymbol))
     await dispatch(marketTradesLoadAsync(marketSymbol))
     dispatch({
@@ -28,8 +27,7 @@ export const marketLoadAsync = () => {
         currentMarket,
         baseSymbol,
         quoteSymbol,
-        pricePrecision,
-        amountPrecision
+        pricePrecision
       }
     });
   };

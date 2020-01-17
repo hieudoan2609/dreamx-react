@@ -17,7 +17,7 @@ import * as Web3Utils from 'web3-utils'
 
 class MyOpenOrders extends Component {
   extractOpenOrdersData = () => {
-    if (!this.props.account.address) {
+    if (!this.props.account.address || !this.props.base || !this.props.quote || !this.props.market) {
       return [];
     }
 
@@ -29,15 +29,18 @@ class MyOpenOrders extends Component {
         continue
       }
 
-      const price = truncateNumberOutput(Web3Utils.fromWei(accountOrder.price.toString()), 8, 10)
-      const amount = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amount.toString()), 8, 10)
-      const filled = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amountFilled.toString()), 8, 10)
+      const basePrecision = this.props.base.amountPrecision
+      const quotePrecision = this.props.quote.amountPrecision
+      const pricePrecision = this.props.market.pricePrecision
+      const price = truncateNumberOutput(Web3Utils.fromWei(accountOrder.price.toString()), pricePrecision)
+      const amount = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amount.toString()), quotePrecision)
+      const filled = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amountFilled.toString()), quotePrecision)
       const type = (
         <div className={`pill ${accountOrder.type}`}>
           {capitalize(accountOrder.type)}
         </div>
       );
-      const total = `${truncateNumberOutput(Web3Utils.fromWei(accountOrder.total.toString()), 8, 10)} ETH`;
+      const total = `${truncateNumberOutput(Web3Utils.fromWei(accountOrder.total.toString()), basePrecision)} ${this.props.base.symbol}`;
       const date = accountOrder.createdAt;
       const cancelAll = (
         <div className="actions">

@@ -5,8 +5,7 @@ const INITIAL_STATE = {
   loading: true,
   baseSymbol: "",
   quoteSymbol: "",
-  pricePrecision: 0,
-  amountPrecision: 0
+  pricePrecision: 0
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -22,8 +21,7 @@ export default (state = INITIAL_STATE, action) => {
         loading: false, 
         baseSymbol: action.payload.baseSymbol, 
         quoteSymbol: action.payload.quoteSymbol,
-        pricePrecision: action.payload.pricePrecision,
-        amountPrecision: action.payload.amountPrecision
+        pricePrecision: action.payload.pricePrecision
       };
     default:
       return state;

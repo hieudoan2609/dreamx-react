@@ -145,6 +145,8 @@ class Market extends Component {
             <MyOpenOrders 
               theme={this.props.app.theme} 
               loading={isLoading}
+              base={this.getBaseAndQuoteBalances().base}
+              quote={this.getBaseAndQuoteBalances().quote}
             />
           </div>
         </div>
