@@ -50,7 +50,7 @@ class Account extends Component {
   };
 
   extractAssetsData = () => {
-    if (!this.props.account.address) {
+    if (!this.props.account.address || !this.props.tokens.all) {
       return [];
     }
 
@@ -66,6 +66,7 @@ class Account extends Component {
       ])
     );
     for (let row of extractedData) {
+      const token = this.props.tokens.all.filter(token => token.symbol === row.symbol)[0]
       const depositModalPayload = {
         type: "deposit",
         name: row.name,
@@ -76,9 +77,9 @@ class Account extends Component {
         name: row.name,
         symbol: row.symbol
       };
-      row.availableBalance = truncateNumberOutput(web3.utils.fromWei(row.availableBalance.toString()), 8, 10);
-      row.inOrders = truncateNumberOutput(web3.utils.fromWei(row.inOrders.toString()), 8, 10);
-      row.totalBalance = truncateNumberOutput(web3.utils.fromWei(row.totalBalance.toString()), 8, 10);
+      row.availableBalance = truncateNumberOutput(web3.utils.fromWei(row.availableBalance.toString()), token.amountPrecision);
+      row.inOrders = truncateNumberOutput(web3.utils.fromWei(row.inOrders.toString()), token.amountPrecision);
+      row.totalBalance = truncateNumberOutput(web3.utils.fromWei(row.totalBalance.toString()), token.amountPrecision);
       row.actions = (
         <div className="actions">
           <div
