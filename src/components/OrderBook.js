@@ -1,6 +1,6 @@
 import * as Web3Utils from 'web3-utils'
 import React, { Component } from "react";
-// import { connect } from "react-redux";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import Loading from './Loading'
@@ -10,16 +10,43 @@ import "./OrderBook.scss";
 
 class OrderBook extends Component {
   renderTotal = () => {
-    if (this.props.bookData.length === 0 || !this.props.base || !this.props.quote) {
+    if (this.props.bookData.length === 0 || !this.props.quote) {
       return
     }
 
-    const decimalPoints = 2
-    const total = truncateNumberOutput(Web3Utils.fromWei(this.props.total.toString()), decimalPoints)
+    const precision = this.props.quote.amountPrecision
+    const total = truncateNumberOutput(Web3Utils.fromWei(this.props.total.toString()), precision)
     return (
       <div className="right">
         Total: {total} {this.props.quote.symbol}
       </div>
+    )
+  }
+
+  renderOffers = () => {
+    const order = this.props.type === 'buy' ? 'desc' : 'asc'
+
+    let data;
+    if (!this.props.quote || !this.props.base || !this.props.market) {
+      data = []
+    } else {
+      const basePrecision = this.props.base.amountPrecision
+      const quotePrecision = this.props.quote.amountPrecision
+      const pricePrecision = this.props.market.pricePrecision
+      data = extractBookData(this.props.bookData, basePrecision, quotePrecision, pricePrecision)
+    }
+    
+    return (
+      <ScrollableTable
+        theme={this.props.theme}
+        data={data}
+        dataName={`${this.props.type} orders`}
+        defaultOrderBy='price'
+        defaultOrder={order}
+        manuallySortable={false}
+        height={500}
+        onRowClick={this.onRowClick}
+      />
     )
   }
 
@@ -36,8 +63,6 @@ class OrderBook extends Component {
   }
 
   render() {
-    const order = this.props.type === 'buy' ? 'desc' : 'asc'
-
     return (
       <div className={`OrderBook card ${this.props.theme} ${this.props.type}`}>
         <Loading
@@ -54,25 +79,16 @@ class OrderBook extends Component {
           </div>
         </div>
         <div className="body">
-          <ScrollableTable
-            theme={this.props.theme}
-            data={extractBookData(this.props.bookData)}
-            dataName={`${this.props.type} orders`}
-            defaultOrderBy='price'
-            defaultOrder={order}
-            manuallySortable={false}
-            height={500}
-            onRowClick={this.onRowClick}
-          />
+          {this.renderOffers()}
         </div>
       </div>
     );
   }
 }
 
-// const mapStateToProps = (state) => {
-//  return state;
-// };
+const mapStateToProps = (state) => {
+ return state;
+};
 
 // const mapActionsToProps = {};
 
@@ -87,4 +103,4 @@ OrderBook.propTypes = {
   Trade: PropTypes.object // ref to Trade component
 };
 
-export default OrderBook;
+export default connect(mapStateToProps)(OrderBook);

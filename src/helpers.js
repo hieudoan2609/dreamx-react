@@ -154,7 +154,8 @@ export const getOrderVolume = (order) => {
   return { price, amount, filled, total }
 }
 
-export const extractBookData = (bookOrders) => {
+export const extractBookData = (bookOrders, basePrecision, quotePrecision, pricePrecision) => {
+  console.log(basePrecision, quotePrecision, pricePrecision)
   const prices = {}
   for (let order of bookOrders) {
     let { price, amount, total } = getOrderVolume(order)
@@ -182,10 +183,10 @@ export const extractBookData = (bookOrders) => {
 
   const extractedData = []
   for (let priceWei of Object.keys(prices)) {
-    const price = truncateNumberOutput(Web3Utils.fromWei(priceWei), 8, 10)
+    const price = truncateNumberOutput(Web3Utils.fromWei(priceWei), pricePrecision)
     let { amount, total } = prices[priceWei]
-    amount = truncateNumberOutput(Web3Utils.fromWei(amount), 2)
-    total = truncateNumberOutput(Web3Utils.fromWei(total), 2)
+    amount = truncateNumberOutput(Web3Utils.fromWei(amount), quotePrecision)
+    total = truncateNumberOutput(Web3Utils.fromWei(total), basePrecision)
     extractedData.push({ price, amount, total })
   }
   return extractedData
