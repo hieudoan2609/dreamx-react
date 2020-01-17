@@ -155,7 +155,6 @@ export const getOrderVolume = (order) => {
 }
 
 export const extractBookData = (bookOrders, basePrecision, quotePrecision, pricePrecision) => {
-  console.log(basePrecision, quotePrecision, pricePrecision)
   const prices = {}
   for (let order of bookOrders) {
     let { price, amount, total } = getOrderVolume(order)
