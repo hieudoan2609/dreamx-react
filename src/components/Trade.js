@@ -109,7 +109,7 @@ class Trade extends Component {
 
   onAmountChange = value => {
     const { priceWei } = this.state;
-    const amount = truncateNumberInput(value, 10, this.props.quote.amountPrecision);
+    const amount = truncateNumberInput(value, 12, this.props.quote.amountPrecision);
     const amountWei = amount ? Web3Utils.toWei(amount) : "0";
     const { total, fee, totalMinusFee, amountMinusFee } = this.calculateFeeAndTotal( amountWei, priceWei );
     this.setState({ amount, amountWei, total, fee, totalMinusFee, amountMinusFee });
@@ -118,7 +118,7 @@ class Trade extends Component {
   onPriceChange = value => {
     const { amountWei } = this.state;
     const { market } = this.props
-    const price = truncateNumberInput(value, 10, market.pricePrecision);
+    const price = truncateNumberInput(value, 12, market.pricePrecision);
     const priceWei = price ? Web3Utils.toWei(price) : "0";
     const { total, fee, totalMinusFee, amountMinusFee } = this.calculateFeeAndTotal( amountWei, priceWei );
     this.setState({ price, priceWei, total, fee, totalMinusFee, amountMinusFee });
@@ -126,7 +126,6 @@ class Trade extends Component {
 
   setTabAndPrice = (tab, price) => {
     const { amountWei } = this.state;
-    price = truncateNumberInput(price)
     const priceWei = price ? Web3Utils.toWei(price) : "0"
     const { total, fee, totalMinusFee, amountMinusFee } = this.calculateFeeAndTotal( amountWei, priceWei );
     this.state.TabMenu.updateHighlighter(tab)

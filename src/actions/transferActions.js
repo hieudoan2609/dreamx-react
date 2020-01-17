@@ -46,7 +46,7 @@ export const transferHandleAmountChange = e => {
     }
 
     const token = tokens.all.filter(token => transfer.symbol === token.symbol)[0]
-    let amount = truncateNumberInput(e.target.value, 10, token.amountPrecision);
+    let amount = truncateNumberInput(e.target.value, 12, token.amountPrecision);
     const amountWei = amount ? web3.utils.toWei(amount) : "0";
 
     dispatch({
@@ -202,8 +202,9 @@ const withdrawEntireBalanceAsync = (dispatch, getState) => {
   const tokenSymbol = transfer.symbol;
   const token = tokens.all.filter(t => t.symbol === tokenSymbol)[0];
 
-  const amountWei = token.availableBalance;
-  const amount = web3.utils.fromWei(amountWei.toString());
+  let amountWei = token.availableBalance;
+  const amount = truncateNumberInput(web3.utils.fromWei(amountWei.toString()), 12, token.amountPrecision);
+  amountWei = web3.utils.toWei(amount);
 
   dispatch({
     type: TRANSFER_AMOUNT_INPUT,
@@ -216,12 +217,14 @@ const withdrawEntireBalanceAsync = (dispatch, getState) => {
 
 const depositEntireBalanceAsync = async (dispatch, getState) => {
   const { web3 } = singletons;
-  const { account, transfer } = getState();
+  const { account, transfer, tokens } = getState();
   const accountAddress = account.address;
   const tokenSymbol = transfer.symbol;
+  const token = tokens.all.filter(t => t.symbol === tokenSymbol)[0];
 
-  const amountWei = await getOnchainBalanceAsync(accountAddress, tokenSymbol);
-  const amount = web3.utils.fromWei(amountWei.toString());
+  let amountWei = await getOnchainBalanceAsync(accountAddress, tokenSymbol);
+  const amount = truncateNumberInput(web3.utils.fromWei(amountWei.toString()), 12, token.amountPrecision);
+  amountWei = web3.utils.toWei(amount);
 
   dispatch({
     type: TRANSFER_AMOUNT_INPUT,
