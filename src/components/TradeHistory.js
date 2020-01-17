@@ -9,9 +9,15 @@ import { truncateNumberOutput } from '../helpers'
 
 class TradeHistory extends Component {
   extractTradesData = () => {
+    if (!this.props.market || !this.props.quote) {
+      return []
+    }
+
+    const quotePrecision = this.props.quote.amountPrecision
+    const pricePrecision = this.props.market.pricePrecision
     const trades = this.props.marketTrades.all.map(t => {
-      const price = <span className={t.type}>{truncateNumberOutput(t.price, 8, 10)}</span>
-      const amount = truncateNumberOutput(t.amount, 2)
+      const price = <span className={t.type}>{truncateNumberOutput(t.price, pricePrecision)}</span>
+      const amount = truncateNumberOutput(t.amount, quotePrecision)
       const time = t.createdAt
       return { price, amount, time }
     })

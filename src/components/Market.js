@@ -182,6 +182,7 @@ class Market extends Component {
             <TradeHistory 
               theme={this.props.app.theme} 
               loading={isLoading}
+              quote={this.getBaseAndQuoteBalances().quote}
             />
           </div>
         </div>
