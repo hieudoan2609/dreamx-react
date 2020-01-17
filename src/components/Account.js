@@ -115,7 +115,7 @@ class Account extends Component {
         t => t.address === transfer.tokenAddress
       )[0];
       const coin = token.symbol;
-      const amount = truncateNumberOutput(Web3Utils.fromWei(transfer.amount.toString()), 8, 10);
+      const amount = truncateNumberOutput(Web3Utils.fromWei(transfer.amount.toString()), token.amountPrecision);
       const date = transfer.createdAt;
 
       let transactionHash;
@@ -185,7 +185,7 @@ class Account extends Component {
   };
 
   extractAccountOrdersData = () => {
-    if (!this.props.account.address) {
+    if (!this.props.account.address || !this.props.market) {
       return [];
     }
 
@@ -197,10 +197,14 @@ class Account extends Component {
           {capitalize(accountOrder.type)}
         </div>
       );
-      const price = truncateNumberOutput(Web3Utils.fromWei(accountOrder.price.toString()), 8, 10)
-      const amount = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amount.toString()), 8, 10)
-      const filled = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amountFilled.toString()), 8, 10)
-      const total = `${truncateNumberOutput(Web3Utils.fromWei(accountOrder.total.toString()), 8, 10)} ETH`;
+      const [baseSymbol, quoteSymbol] = accountOrder.marketSymbol.split("_")
+      const quotePrecision = this.props.tokens.all.filter(token => token.symbol === quoteSymbol)[0].amountPrecision
+      const basePrecision = this.props.tokens.all.filter(token => token.symbol === baseSymbol)[0].amountPrecision
+      const pricePrecision = this.props.market.pricePrecision
+      const price = truncateNumberOutput(Web3Utils.fromWei(accountOrder.price.toString()), pricePrecision)
+      const amount = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amount.toString()), quotePrecision)
+      const filled = truncateNumberOutput(Web3Utils.fromWei(accountOrder.amountFilled.toString()), quotePrecision)
+      const total = `${truncateNumberOutput(Web3Utils.fromWei(accountOrder.total.toString()), basePrecision)} ${baseSymbol}`;
       const status = accountOrder.status === 'closed' ? "Closed" : "Open";
       const market = accountOrder.marketSymbolFormatted;
       const date = accountOrder.createdAt;
@@ -260,9 +264,13 @@ class Account extends Component {
     const { accountTrades } = this.props;
 
     const extractedData = accountTrades.filtered.map(t => {
+      const [baseSymbol, quoteSymbol] = t.marketSymbol.split("_")
+      const quotePrecision = this.props.tokens.all.filter(token => token.symbol === quoteSymbol)[0].amountPrecision
+      const basePrecision = this.props.tokens.all.filter(token => token.symbol === baseSymbol)[0].amountPrecision
+      const pricePrecision = this.props.market.pricePrecision
       let { price, amount } = t;
-      price = truncateNumberOutput(price, 8, 10)
-      amount = truncateNumberOutput(amount, 8, 10)
+      price = truncateNumberOutput(price, pricePrecision)
+      amount = truncateNumberOutput(amount, quotePrecision)
       let type
       if (t.type === 'buy') {
         if (t.makerAddress === this.props.account.address) {
@@ -277,10 +285,10 @@ class Account extends Component {
           type = <div className={`pill buy`}>Buy</div>
         }
       }
-      const total = `${truncateNumberOutput(t.total, 8, 10)} ETH`;
+      const total = `${truncateNumberOutput(t.total, basePrecision)} ${baseSymbol}`;
       const market = t.marketSymbolFormatted;
       const date = t.createdAt;
-      const fee = `${truncateNumberOutput(t.fee, 8, 10)} ETH`;
+      const fee = `${truncateNumberOutput(t.fee, basePrecision)} ${baseSymbol}`;
 
       return {
         market,
