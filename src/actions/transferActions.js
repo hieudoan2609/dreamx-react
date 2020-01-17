@@ -37,16 +37,26 @@ export const transferHide = () => {
 };
 
 export const transferHandleAmountChange = e => {
-  const { web3 } = singletons;
-  let amount = truncateNumberInput(e.target.value);
-  const amountWei = amount ? web3.utils.toWei(amount) : "0";
-  return {
-    type: TRANSFER_AMOUNT_INPUT,
-    payload: {
-      amount,
-      amountWei
+  return async (dispatch, getState) => {
+    const { transfer, tokens } = getState();
+    const { web3 } = singletons;
+
+    if (!transfer || !tokens.all) {
+      return
     }
-  };
+
+    const token = tokens.all.filter(token => transfer.symbol === token.symbol)[0]
+    let amount = truncateNumberInput(e.target.value, 10, token.amountPrecision);
+    const amountWei = amount ? web3.utils.toWei(amount) : "0";
+
+    dispatch({
+      type: TRANSFER_AMOUNT_INPUT,
+      payload: {
+        amount,
+        amountWei
+      }
+    });
+  }
 };
 
 export const transferHandleSubmitAsync = () => {
