@@ -81,10 +81,10 @@ export const accountLogout = () => {
 
 const initializeAccountSingletons = (app, tokens) => {
   const web3 = new Web3(Web3.givenProvider);
-  const exchangeInstance = new web3.eth.Contract(Exchange, app.contractAddress);
+  const exchangeInstance = new web3.eth.Contract(Exchange.abi, app.contractAddress);
   const tokenInstances = {};
   for (let token of tokens.all) {
-    tokenInstances[token.symbol] = new web3.eth.Contract(ERC20, token.address);
+    tokenInstances[token.symbol] = new web3.eth.Contract(ERC20.abi, token.address);
   }
   setSingleton("web3", web3);
   setSingleton("exchange", exchangeInstance);
