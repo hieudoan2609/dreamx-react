@@ -106,29 +106,25 @@ const depositAsync = async (dispatch, getState) => {
   }
 
   const amountWei = web3.utils.toWei(transfer.amount.toString());
-  const approved = await requestDepositApprovalAsync({
-    accountAddress,
-    amountWei,
-    tokenSymbol,
-    exchangeAddress
-  });
-  if (!approved) {
-    dispatch({
-      type: TRANSFER_PENDING_OFF
-    });
-    return;
-  }
 
-  const sent = await sendDepositTransactionAsync({
-    accountAddress,
-    amountWei,
-    tokenSymbol
-  });
-  if (!sent) {
-    dispatch({
-      type: TRANSFER_PENDING_OFF
-    });
-    return;
+  if (tokenSymbol === 'ETH') {
+    try {
+      await depositEthAsync({ accountAddress, amountWei });
+    } catch {
+      dispatch({
+        type: TRANSFER_PENDING_OFF
+      });
+      return;
+    }
+  } else {
+    try {
+      await approveTokenAsync({ accountAddress, amountWei, tokenSymbol, exchangeAddress });
+    } catch {
+      dispatch({
+        type: TRANSFER_PENDING_OFF
+      });
+      return;
+    }
   }
 
   dispatch({
@@ -136,51 +132,31 @@ const depositAsync = async (dispatch, getState) => {
   });
 };
 
-const sendDepositTransactionAsync = ({
-  accountAddress,
-  amountWei,
-  tokenSymbol
-}) => {
+const depositEthAsync = ({ accountAddress, amountWei }) => {
   return new Promise(async (resolve, reject) => {
-    const { exchange, tokens } = singletons;
-    const value = tokenSymbol === "ETH" ? amountWei : 0;
-    const tokenAddress = tokens[tokenSymbol].options.address;
-    setTimeout(() => {
-      exchange.methods
-        .deposit(tokenAddress, amountWei)
-        .send({ from: accountAddress, value })
-        .on("transactionHash", () => {
-          resolve(true);
-        })
-        .on("error", () => {
-          resolve(false);
-        });
-    }, 1000);
-  });
+    const { exchange } = singletons;
+    exchange.methods.deposit().send({ from: accountAddress, value: amountWei })
+      .on("transactionHash", () => {
+        resolve();
+      })
+      .on("error", () => {
+        reject()
+      });
+  })
 };
 
-const requestDepositApprovalAsync = ({
-  accountAddress,
-  amountWei,
-  tokenSymbol,
-  exchangeAddress
-}) => {
+const approveTokenAsync = ({ accountAddress, amountWei, tokenSymbol, exchangeAddress }) => {
   return new Promise((resolve, reject) => {
     const { tokens } = singletons;
-
-    if (tokenSymbol === "ETH") {
-      resolve(true);
-    } else {
-      tokens[tokenSymbol].methods
-        .approve(exchangeAddress, amountWei)
-        .send({ from: accountAddress })
-        .on("transactionHash", () => {
-          resolve(true);
-        })
-        .on("error", () => {
-          resolve(false);
-        });
-    }
+    tokens[tokenSymbol].methods
+      .approve(exchangeAddress, amountWei)
+      .send({ from: accountAddress })
+      .on("transactionHash", () => {
+        resolve(true);
+      })
+      .on("error", () => {
+        resolve(false);
+      });
   });
 };
 
