@@ -80,7 +80,6 @@ const depositAsync = async (dispatch, getState) => {
   const { transfer, account, app } = getState();
   const accountAddress = account.address;
   const tokenSymbol = transfer.symbol;
-  const exchangeAddress = app.contractAddress;
 
   if (transfer.amount === "" || parseInt(transfer.amountWei) === 0) {
     dispatch({
