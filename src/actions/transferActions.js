@@ -118,7 +118,8 @@ const depositAsync = async (dispatch, getState) => {
     }
   } else {
     try {
-      await approveTokenAsync({ accountAddress, amountWei, tokenSymbol, exchangeAddress });
+      await approveTokenAsync({ accountAddress, amountWei, tokenSymbol });
+      await depositTokenAsync({ accountAddress, amountWei, tokenSymbol })
     } catch {
       dispatch({
         type: TRANSFER_PENDING_OFF
@@ -135,7 +136,7 @@ const depositAsync = async (dispatch, getState) => {
 const depositEthAsync = ({ accountAddress, amountWei }) => {
   return new Promise(async (resolve, reject) => {
     const { exchange } = singletons;
-    exchange.methods.deposit().send({ from: accountAddress, value: amountWei })
+    exchange.methods.deposit().send({ from: accountAddress, value: amountWei, gasLimit: 200000 })
       .on("transactionHash", () => {
         resolve();
       })
@@ -145,12 +146,28 @@ const depositEthAsync = ({ accountAddress, amountWei }) => {
   })
 };
 
-const approveTokenAsync = ({ accountAddress, amountWei, tokenSymbol, exchangeAddress }) => {
+const approveTokenAsync = ({ accountAddress, amountWei, tokenSymbol }) => {
   return new Promise((resolve, reject) => {
-    const { tokens } = singletons;
+    const { tokens, exchange } = singletons;
     tokens[tokenSymbol].methods
-      .approve(exchangeAddress, amountWei)
-      .send({ from: accountAddress })
+      .approve(exchange.address, amountWei)
+      .send({ from: accountAddress, gasLimit: 200000 })
+      .on("transactionHash", () => {
+        resolve(true);
+      })
+      .on("error", () => {
+        resolve(false);
+      });
+  });
+};
+
+const depositTokenAsync = ({ accountAddress, amountWei, tokenSymbol }) => {
+  return new Promise(async (resolve, reject) => {
+    const { exchange, tokens } = singletons;
+    const tokenAddress = tokens[tokenSymbol].address;
+    exchange.methods
+      .depositToken(tokenAddress, amountWei)
+      .send({ from: accountAddress, gasLimit: 200000 })
       .on("transactionHash", () => {
         resolve(true);
       })
