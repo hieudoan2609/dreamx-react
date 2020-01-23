@@ -77,7 +77,7 @@ export const transferHandleSubmitAsync = () => {
 
 const depositAsync = async (dispatch, getState) => {
   const { web3 } = singletons;
-  const { transfer, account, app } = getState();
+  const { transfer, account } = getState();
   const accountAddress = account.address;
   const tokenSymbol = transfer.symbol;
 
