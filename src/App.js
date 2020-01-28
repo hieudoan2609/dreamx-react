@@ -7,6 +7,7 @@ import Market from "./components/Market";
 import Offline from "./components/Offline";
 import Account from "./components/Account";
 import Menu from "./components/Menu";
+import Footer from "./components/Footer";
 import AlertModal from "./components/AlertModal";
 import ModalWrapper from "./components/ModalWrapper";
 import {
@@ -82,6 +83,8 @@ class App extends Component {
               </div>
             </div>
           </div>
+
+          <Footer theme={this.props.app.theme} />
         </div>
       </React.Fragment>
     )

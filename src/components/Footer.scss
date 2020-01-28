@@ -1,0 +1,42 @@
+$shadow: 0px 5px 15px rgba(1, 1, 1, 0.1);
+$light-secondary-tint: white;
+$dark-secondary-tint: #384256;
+$light-primary: #EA6C2C;
+$light-primary-shade: #d26127;
+$dark-primary: #EA6C2C;
+$dark-primary-shade: #d26127;
+
+.Footer {
+  box-shadow: $shadow;
+  .container {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    .item {
+      margin-right: 20px;
+      a {
+        &:hover {
+          text-decoration: none !important;
+        }
+      }
+    }
+  }
+  &.dark {
+    background-color: $dark-secondary-tint;
+    a {
+      color: $dark-primary;
+      &:hover {
+        color: $dark-primary-shade;
+      }
+    }
+  }
+  &.light {
+    background-color: $light-secondary-tint;
+    a {
+      color: $light-primary;
+      &:hover {
+        color: $light-primary-shade;
+      }
+    }
+  }
+}
