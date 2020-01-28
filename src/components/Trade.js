@@ -25,8 +25,7 @@ const INITIAL_STATE = {
   pending: false,
   feedback: {}, // { type, message }
   totalMinusFee: "0",
-  amountMinusFee: "0",
-  TabMenu: undefined
+  amountMinusFee: "0"
 };
 
 class Trade extends Component {
