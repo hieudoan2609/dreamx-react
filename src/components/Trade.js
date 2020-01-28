@@ -33,6 +33,7 @@ class Trade extends Component {
 
   resetState = () => {
     this.setState(INITIAL_STATE)
+    this.state.TabMenu.updateHighlighter('buy')
   }
 
   componentDidMount = () => {
