@@ -14,7 +14,10 @@ $dark-primary-shade: #d26127;
     align-items: center;
     .item {
       margin-right: 20px;
+      display: flex;
+      align-items: center;
       a {
+        font-size: .8rem;
         &:hover {
           text-decoration: none !important;
         }
