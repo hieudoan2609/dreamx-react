@@ -53,6 +53,7 @@ class Chart extends Component {
             searchValue={this.props.searchValue}
             handleSearchInput={this.props.handleSearchInput}
             market={this.props.market}
+            markets={this.props.markets}
           />
         </div>
         <div className="chart">

@@ -25,6 +25,7 @@ class Ticker extends Component {
 
     return this.props.tickers.map(t => {
       const active = t.marketSymbol === this.props.marketSymbol;
+      const tickerMarket = this.props.markets.all.filter(m => m.symbol === t.marketSymbol)[0]
 
       return (
         <div
@@ -38,7 +39,7 @@ class Ticker extends Component {
             onClick={() => this.changeMarket(t.marketSymbol)}
           >
             <div className="name">{t.tickerSymbol}</div>
-            <div className="price">{t.last ? truncateNumberOutput(t.last, this.props.market.pricePrecision) : "N/A"}</div>
+            <div className="price">{t.last ? truncateNumberOutput(t.last, tickerMarket.pricePrecision) : "N/A"}</div>
           </div>
         </div>
       );
@@ -76,7 +77,8 @@ Ticker.propTypes = {
   marketSymbol: PropTypes.string.isRequired,
   searchValue: PropTypes.string.isRequired,
   handleSearchInput: PropTypes.func.isRequired,
-  market: PropTypes.object.isRequired
+  market: PropTypes.object.isRequired,
+  markets: PropTypes.object.isRequired
 };
 
 export default withRouter(Ticker);
