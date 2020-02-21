@@ -133,10 +133,7 @@ class Trade extends Component {
   }
 
   calculateTakerFeePercentage = () => {
-    const fee = Web3Utils.toBN(this.props.takerFee)
-    const oneHundred = Web3Utils.toBN(100)
-    const one = Web3Utils.toBN(1)
-    const feePercent = Web3Utils.fromWei(fee.mul(oneHundred).div(one))
+    const feePercent = Web3Utils.fromWei(this.props.takerFee)
     return feePercent;
   };
 
