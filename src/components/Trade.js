@@ -133,8 +133,8 @@ class Trade extends Component {
   }
 
   calculateTakerFeePercentage = () => {
-    const feePercent = Web3Utils.fromWei(this.props.takerFee)
-    return feePercent;
+    const feePercent = parseInt(this.props.takerFee) / 1000000000000000000 * 100
+    return feePercent.toString();
   };
 
   renderFeeAndTotal = () => {
