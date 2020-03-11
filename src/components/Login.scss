@@ -29,5 +29,8 @@ $dark-secondary-shade: #1f283d;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    .emphasized {
+        font-weight: bold;
+    }
   }
 }

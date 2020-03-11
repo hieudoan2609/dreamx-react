@@ -27,8 +27,11 @@ class Login extends Component {
         <div className="card-body">
           <h5 className="card-title">Woohoo!</h5>
           <p className="card-text">
-            You have now logged in. Your address is 0x
-            {address_first_four_digits}...{address_last_four_digits}
+            You have now logged in. Your address is
+            <span className="emphasized"> 0x{address_first_four_digits}...{address_last_four_digits}</span>
+          </p>
+          <p className="card-text text-danger">
+            DreamX is in beta. Use at your own risk!
           </p>
         </div>
       );
