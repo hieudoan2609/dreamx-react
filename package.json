@@ -10,7 +10,7 @@
     "axios": "0.18.1",
     "dreamx-match-engine": "^1.0.1",
     "gh-pages": "^2.0.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "moment": "^2.24.0",
     "node-sass": "^4.13.0",
     "react": "^16.8.6",
