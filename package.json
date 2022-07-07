@@ -11,7 +11,7 @@
     "dreamx-match-engine": "^1.0.1",
     "gh-pages": "^2.0.1",
     "lodash": "^4.17.11",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "node-sass": "^4.13.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
